@@ -11,4 +11,4 @@ const { mix } = require('laravel-mix');
  |
  */
 
-mix.js('resources/assets/js/calendars/calendar.js', 'public/js');
+mix.js('resources/assets/js/calendar.js', 'public/js');
