@@ -57,9 +57,4 @@
 <script src="{{ asset('bower_components/fullcalendar/dist/fullcalendar.min.js') }}"></script>
 <script src="{{ asset('bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js') }}"></script>
 <script src="{{ asset('bower_components/sweetalert/dist/sweetalert.min.js') }}"></script>
-<script>
-  var url = '{{ route('api.calendars.store') }}?token={{ $token }}';
-  var editUrl = '{{ route('calendars.index') }}/';
-</script>
-<script src="{{ asset('js/calendar.js') }}"></script>
 @endpush
