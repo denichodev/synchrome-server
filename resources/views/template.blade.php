@@ -6,6 +6,8 @@
   <title>{{ env('APP_NAME') }} | @yield('title')</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <!-- CSRF Token -->
+  <meta content="{{ csrf_token() }}" name="csrf-token">
   <!-- Bootstrap 3.3.6 -->
   <link rel="stylesheet" href="{{ asset('bower_components/AdminLTE/bootstrap/css/bootstrap.min.css') }}">
   <!-- Font Awesome -->
@@ -148,6 +150,7 @@
 </div>
 <!-- ./wrapper -->
 
+@stack('footer_scripts')
 <!-- jQuery 2.2.3 -->
 <script src="{{ asset('bower_components/AdminLTE/plugins/jQuery/jquery-2.2.3.min.js') }}"></script>
 <!-- Bootstrap 3.3.6 -->
@@ -157,7 +160,6 @@
 <!-- FastClick -->
 <script src="{{ asset('bower_components/AdminLTE/plugins/fastclick/fastclick.js') }}"></script>
 <!-- AdminLTE App -->
-<script src="{{ asset('bower_components/AdminLTE/dist/js/app.min.js') }}"></script>
-@stack('footer_scripts')
+<script src="{{ asset('bower_components/AdminLTE/dist/js/app.js') }}"></script>
 </body>
 </html>
