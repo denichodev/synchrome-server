@@ -9,13 +9,9 @@
 
 @section('content')
 <div id="cal">
-  <calendar state="create"></calendar>
+  <calendar></calendar>
 </div>
-@include('calendars.modals.new-event')
 @endsection
-
-@push('head_scripts')
-@endpush
 
 @push('footer_scripts')
 <script src="{{ asset('js/calendar.js') }}"></script>
