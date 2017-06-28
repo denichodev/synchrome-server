@@ -6,8 +6,6 @@
   <title>{{ env('APP_NAME') }} | @yield('title')</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-  <!-- CSRF Token -->
-  <meta content="{{ csrf_token() }}" name="csrf-token">
   <!-- Bootstrap 3.3.6 -->
   <link rel="stylesheet" href="{{ asset('bower_components/AdminLTE/bootstrap/css/bootstrap.min.css') }}">
   <!-- Font Awesome -->
