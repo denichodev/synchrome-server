@@ -13,6 +13,10 @@
 </div>
 @endsection
 
+@push('head_scripts')
+<meta name="jwt-token" content="{{ $token }}">
+@endpush
+
 @push('footer_scripts')
 <script src="{{ asset('js/calendar.js') }}"></script>
 @endpush
