@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use JWTAuth;
+use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 
 class JwtAuthMiddleware
@@ -24,6 +25,11 @@ class JwtAuthMiddleware
                         'error' => ['user_not_found']
                     ], 404);
             }
+        } catch (JWTException $e) {
+            return response()
+                ->json([
+                    'error' => ['token_required'],
+                ], 400);
         } catch (TokenInvalidException $e) {
             return response()
                 ->json([
