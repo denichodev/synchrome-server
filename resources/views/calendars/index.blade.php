@@ -56,3 +56,7 @@
 </div>
 <!-- /.box -->
 @endsection
+
+@push('footer_scripts')
+<script src="{{ asset('bower_components/AdminLTE/plugins/jQuery/jquery-2.2.3.min.js') }}"></script>
+@endpush
