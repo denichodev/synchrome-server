@@ -1,11 +1,10 @@
-require('./bootstrap')
-
+import './bootstrap'
 import VueFullCalendar from 'vue-full-calendar'
-import calendar from './components/Calendar.vue'
+import calendar from './components/Calendar'
 
 Vue.use(VueFullCalendar)
 
-const cal = new Vue({
+new Vue({
     el: '#cal',
     components: { calendar }
 })
