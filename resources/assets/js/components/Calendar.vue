@@ -61,7 +61,7 @@
 							<option value="draft">Draft</option>
 						</select>
 					</div>
-					<button type="button" class="btn btn-primary btn-lg btn-block">Save</button>
+					<button type="button" class="btn btn-primary btn-lg btn-block" @click="calendar.create">Save</button>
         </div>
       </div>
     </div>
