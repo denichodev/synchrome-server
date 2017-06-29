@@ -160,6 +160,7 @@
 				calendarEvent.fields.title = event.title,
 				calendarEvent.fields.start = moment(event.start, 'YYYY-MM-DD').format('YYYY-MM-DD')
 				calendarEvent.fields.end = moment(event.end, 'YYYY-MM-DD').format('YYYY-MM-DD')
+				calendarEvent.fields.end = calendarEvent.fields.end == '' ? moment(event.start, 'YYYY-MM-DD').format('YYYY-MM-DD') : moment(event.end, 'YYYY-MM-DD').format('YYYY-MM-DD')
 				this.config.showModal = true
 			},
 			cancelEvent() {
