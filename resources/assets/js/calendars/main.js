@@ -5,6 +5,7 @@ import validate from 'validate.js'
 const calendar = {
     fields: {
         title: '',
+        name: '',
         status: 'published',
         events: [
             {
@@ -60,6 +61,7 @@ const calendar = {
     getFields() {
         return {
             name: calendar.fields.title,
+            name: calendar.fields.name,
             status: calendar.fields.status,
             events: calendar.fields.events
         }
