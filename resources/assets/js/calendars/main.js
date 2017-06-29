@@ -69,6 +69,7 @@ const calendar = {
 
 const calendarEvent = {
     fields: {
+        originalId: '',
         id: '',
         title: '',
         start: '',
