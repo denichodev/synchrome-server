@@ -170,7 +170,6 @@
 
 				if (this.config.modalState == 'create') {
 					this.addEvent(calendarEvent)
-				} else {
 				} else if (this.config.modalState == 'edit') {
 					this.updateEvent(calendarEvent)
 				}
