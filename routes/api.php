@@ -15,4 +15,5 @@ use Illuminate\Http\Request;
 
 Route::group(['middleware' => ['api', 'jwt_auth'], 'prefix' => 'int'], function () {
     Route::post('calendar', 'Api\CalendarController@store')->name('api.calendars.store');
+    Route::get('calendar/{id}', 'Api\CalendarController@get')->name('api.calendars.get');
 });

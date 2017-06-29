@@ -70,4 +70,41 @@ class CalendarController extends Controller
                 ]);
         }
     }
+
+    public function get($id)
+    {
+        if (empty($id)) {
+            return response()
+                ->json([
+                    'error' => ['Calendar ID required']
+                ], 400);
+        }
+
+        $calendar = Calendar::find($id);
+
+        if (is_null($calendar)) {
+            return response()
+                ->json([
+                    'error' => ['Calendar with ID ' . $id. ' not found']
+                ], 404);
+        }
+
+        $events = $calendar->events->map(function ($item, $key) {
+            $item->originalId = $item->id;
+            $item->isEdited = false;
+
+            return collect($item)->only(['originalId', 'isEdited', 'title', 'start', 'end']);
+        });
+        $data = [
+            'name' => $calendar->name,
+            'status' => $calendar->status,
+            'events' => $events
+        ];
+
+        return response()
+            ->json([
+                'result' => 'success',
+                'data' => $data
+            ]);
+    }
 }
