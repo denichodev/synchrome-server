@@ -46,8 +46,8 @@ class CalendarController extends Controller
 
                 array_push($events, new Event([
                     'title' => $event['title'],
-                    'start_date' => $event['start'],
-                    'end_date' => ! empty($event['end']) ? $event['end'] : null,
+                    'start' => $event['start'],
+                    'end' => ! empty($event['end']) ? $event['end'] : null,
                     'isWeekday' => empty($event['end']) && ($numOfDay == 6 || $numOfDay == 7) ? true : false,
                     'numOfDay' => $numOfDay
                 ]));
