@@ -113,17 +113,13 @@
 
 							return item
 						})
-
 						calendar.fetchCalendar(data)
 						this.$refs.calendar.$emit('reload-events')
-
-						console.log(calendar.fields)
 					} else {
 						alert('Internal server error occured')
 					}
 				}, error => {
 					alert('Unable to fetch calendar')
-					console.log(error)
 				})
 			}
 		},
