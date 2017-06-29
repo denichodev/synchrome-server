@@ -33,11 +33,21 @@ class CalendarController extends Controller
         return view('calendars.create', compact('token'));
     }
 
+    public function edit($id)
     {
         try {
+            $calendar = Calendar::findOrFail($id);
         } catch (\Exception $e) {
-
+            abort(404);
         }
+
+        try {
+            $token = JWTAuth::fromUser(Auth::user());
+        } catch (JWTException $e) {
+            abort(500);
+        }
+
+        return view('calendars.edit', compact('calendar', 'token'));
     }
 
     public function destroy($id)
