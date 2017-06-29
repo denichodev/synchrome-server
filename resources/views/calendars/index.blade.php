@@ -35,7 +35,7 @@
               <td>{{ $cal->name }}</td>
               <td>{{ date_create($cal->start_date)->format('j F Y') . ' to ' . date_create($cal->end_date)->format('j F Y') }}</td>
               <td>
-                <a href="#" class="btn btn-xs btn-primary">View/Edit</a>
+                <a href="{{ route('calendars.edit', $cal->id) }}" class="btn btn-xs btn-primary">View/Edit</a>
                 <form action="{{ route('calendars.destroy', $cal->id) }}" method="POST" style="display: inline">
                     {{ csrf_field() }}  
                     <input type="hidden" name="_method" value="DELETE">
