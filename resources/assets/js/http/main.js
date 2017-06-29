@@ -23,5 +23,13 @@ export const http = {
         })
         .then(successCallback)
         .catch(errorCallback)
+    },
+    get(url, successCallback, errorCallback) {
+        return axios.request({
+            url,
+            method: 'get'
+        })
+        .then(successCallback)
+        .catch(errorCallback)
     }
 }
