@@ -4,6 +4,7 @@ import validate from 'validate.js'
 
 const calendar = {
     fields: {
+        id: '',
         name: '',
         status: 'published',
         events: []
@@ -59,6 +60,7 @@ const calendar = {
         }
     },
     fetchCalendar(calendar) {
+        this.fields.id = calendar.id
         this.fields.name = calendar.name
         this.fields.status = calendar.status
         this.fields.events = calendar.events
