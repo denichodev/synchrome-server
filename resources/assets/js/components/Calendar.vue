@@ -74,6 +74,7 @@
 </style>
 
 <script>
+	import _ from 'lodash'
 	import moment from 'moment'
 	import Datepicker from 'vuejs-datepicker'
 	import { calendar, calendarEvent } from '../calendars/main'
@@ -101,6 +102,31 @@
 				}
 			}
     },
+		beforeMount() {
+			if (this.id && this.state == 'edit') {
+				http.init()
+				http.get('calendar/' + this.id, response => {
+					if (response.data.result == 'success') {
+						const data = response.data.data
+						data.events = _.map(data.events, item => {
+							item.id = calendar.generateEventId()
+
+							return item
+						})
+
+						calendar.fetchCalendar(data)
+						this.$refs.calendar.$emit('reload-events')
+
+						console.log(calendar.fields)
+					} else {
+						alert('Internal server error occured')
+					}
+				}, error => {
+					alert('Unable to fetch calendar')
+					console.log(error)
+				})
+			}
+		},
 		methods: {
 			dayClick(date, jsEvent, view) {
 				calendarEvent.fields.start = calendarEvent.fields.end = moment(date, 'YYYY-MM-DD').format('YYYY-MM-DD')
