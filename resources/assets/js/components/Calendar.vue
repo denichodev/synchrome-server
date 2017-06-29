@@ -1,10 +1,10 @@
 <template>
-  <div class="row">
-    <div class="col-md-9">
+	<div class="row">
+		<div class="col-md-9">
 			<div v-if="loaders.isUpdating" class="callout callout-info">
-        <h4>Updating...</h4>
-        <p>Just a moment</p>
-      </div>
+				<h4>Updating...</h4>
+				<p>Just a moment</p>
+			</div>
 			<div v-if="loaders.isUpdated" class="alert alert-success alert-dismissible">
 				<button @click="loaders.isUpdated = false" type="button" class="close">&times;</button>
 				<h4><i class="icon fa fa-check"></i> Updated!</h4>
@@ -15,18 +15,18 @@
 				<h4><i class="icon fa fa-ban"></i> Error</h4>
 				An unexpected error occured.
 			</div>
-      <div class="box">
-        <div class="box-header">
-          <h3 v-if="state == 'create'" class="box-title">Add New Calendar</h3>
+			<div class="box">
+				<div class="box-header">
+					<h3 v-if="state == 'create'" class="box-title">Add New Calendar</h3>
 					<h3 v-if="state == 'edit'" class="box-title">Edit Calendar</h3>
-        </div>
-        <div class="box-body">
+				</div>
+				<div class="box-body">
 					<div class="form-group">
 						<input v-model="calendar.fields.name" type="text" class="form-control input-lg" placeholder="Calendar Title">
 					</div>
-          <full-calendar
+					<full-calendar
 						ref="calendar"
-            defaultView="month"
+						defaultView="month"
 						:event-sources="eventSources"
 						@day-click="dayClick"
 						@event-selected="eventClick"></full-calendar>
@@ -60,15 +60,15 @@
 								<button v-if="config.modalState == 'edit'" type="button" class="btn btn-danger pull-right" @click="removeEvent">Delete</button>
 							</div>
 						</modal>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="box">
-        <div class="box-header">
-          <h3 class="box-title">Publishing</h3>
-        </div>
-        <div class="box-body">
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="box">
+				<div class="box-header">
+					<h3 class="box-title">Publishing</h3>
+				</div>
+				<div class="box-body">
 					<div class="form-group">
 						<label>Status</label>
 						<select v-model="calendar.fields.status" class="form-control">
@@ -77,14 +77,14 @@
 						</select>
 					</div>
 					<button type="button" class="btn btn-primary btn-lg btn-block" @click="saveCalendar">Save</button>
-        </div>
-      </div>
-    </div>
-  </div>
+				</div>
+			</div>
+		</div>
+	</div>
 </template>
 
 <style>
-  @import '~fullcalendar/dist/fullcalendar.css';
+	@import '~fullcalendar/dist/fullcalendar.css';
 </style>
 
 <script>
@@ -95,7 +95,7 @@
 	import { modal, datepicker } from 'vue-strap'
 	import { http } from '../http/main'
 
-  export default {
+	export default {
 		props: [
 			'state',
 			'id'
@@ -104,7 +104,7 @@
 			modal,
 			Datepicker
 		},
-    data() {
+		data() {
 			return {
 				calendar: calendar,
 				event: calendarEvent,
@@ -121,7 +121,7 @@
 				},
 				deletedEvents: []
 			}
-    },
+		},
 		beforeMount() {
 			if (this.id && this.state == 'edit') {
 				http.init()
@@ -246,5 +246,5 @@
 				}
 			}
 		}
-  }
+	}
 </script>
