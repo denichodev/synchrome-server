@@ -1,6 +1,20 @@
 <template>
   <div class="row">
     <div class="col-md-9">
+			<div v-if="loaders.isUpdating" class="callout callout-info">
+        <h4>Updating...</h4>
+        <p>Just a moment</p>
+      </div>
+			<div v-if="loaders.isUpdated" class="alert alert-success alert-dismissible">
+				<button @click="loaders.isUpdated = false" type="button" class="close">&times;</button>
+				<h4><i class="icon fa fa-check"></i> Updated!</h4>
+				Calendar has been successfully updated.
+			</div>
+			<div v-if="loaders.isError" class="alert alert-danger alert-dismissible">
+				<button @click="loaders.isError = false" type="button" class="close">&times;</button>
+				<h4><i class="icon fa fa-ban"></i> Error</h4>
+				An unexpected error occured.
+			</div>
       <div class="box">
         <div class="box-header">
           <h3 v-if="state == 'create'" class="box-title">Add New Calendar</h3>
@@ -99,7 +113,13 @@
 					showModal: false,
 					modalState: 'create',
 					format: 'YYYY-MM-DD'
-				}
+				},
+				loaders: {
+					isUpdating: false,
+					isUpdated: false,
+					isError: false,
+				},
+				deletedEvents: []
 			}
     },
 		beforeMount() {
