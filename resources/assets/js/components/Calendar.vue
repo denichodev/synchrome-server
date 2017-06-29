@@ -151,6 +151,11 @@
 			},
 			eventClick(event, jsEvent, view) {
 				this.config.modalState = 'edit'
+				
+				if (_.has(event, 'originalId')) {
+					calendarEvent.fields.originalId = event.originalId
+				}
+
 				calendarEvent.fields.id = event.id
 				calendarEvent.fields.title = event.title,
 				calendarEvent.fields.start = moment(event.start, 'YYYY-MM-DD').format('YYYY-MM-DD')
@@ -170,10 +175,16 @@
 				event.title = calendarEvent.fields.title
 				event.start = moment(calendarEvent.fields.start).format('YYYY-MM-DD')
 				event.end = moment(calendarEvent.fields.end).format('YYYY-MM-DD')
+
+				if (_.has(event, 'originalId')) {
+					event.isEdited = true
+				}
+
 				this.config.modalState = 'create'
 			},
 			removeEvent() {
 				calendar.removeEvent(calendarEvent.fields.id)
+				this.deletedEvents.push({originalId: calendarEvent.fields.originalId})
 				calendarEvent.init()
 				this.config.showModal = false
 			},
