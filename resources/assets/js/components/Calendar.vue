@@ -205,15 +205,45 @@
 			},
 			saveCalendar() {
 				http.init()
-        http.post('calendar', calendar.getFields(), response => {
-					if (response.data.result == "success") {
-						window.location = '/dashboard/calendars/' + response.data.data.id
-					} else {
-						alert('Internal server error occured')
+
+				if (this.state == 'create') {
+					http.post('calendar', calendar.getFields(), response => {
+						if (response.data.result == "success") {
+							window.location = '/dashboard/calendars/' + response.data.data.id
+						} else {
+							this.loaders.isError = true
+						}
+					}, error => {
+						this.loaders.isError = true
+					})
+				} else if (this.state == 'edit') {
+					this.loaders.isUpdating = true
+					const newEvents = _.filter(calendar.fields.events, event => {
+						return ! _.has(event, 'originalId')
+					})
+					const updatedEvents = _.filter(calendar.fields.events, event => {
+						return event.isEdited
+					})
+					const data = {
+						_method: 'PATCH',
+						name: calendar.fields.name,
+						status: calendar.fields.status,
+						newEvents: newEvents,
+						updatedEvents: updatedEvents,
+						deletedEvents: this.deletedEvents
 					}
-        }, error => {
-          alert('Cannot complete desired request')
-        })
+
+					http.post('calendar/' + calendar.fields.id, data, response => {
+						if (response.data.result == 'success') {
+							this.loaders.isUpdating = false
+							this.loaders.isUpdated = true
+						} else {
+							this.loaders.isError = true
+						}
+					}, error => {
+						this.loaders.isError = true
+					})
+				}
 			}
 		}
   }
