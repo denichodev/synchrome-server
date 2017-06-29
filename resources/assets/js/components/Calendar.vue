@@ -152,13 +152,13 @@
 			saveCalendar() {
 				http.init()
         http.post('calendar', calendar.getFields(), response => {
-            if (response.data.result == "success") {
-                window.location = '/dashboard/calendars/' + response.data.data.id
-            } else {
-							alert('Internal server error occured')
-						}
+					if (response.data.result == "success") {
+						window.location = '/dashboard/calendars/' + response.data.data.id
+					} else {
+						alert('Internal server error occured')
+					}
         }, error => {
-            alert('Cannot complete desired request')
+          alert('Cannot complete desired request')
         })
 			}
 		}
