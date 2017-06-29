@@ -4,16 +4,9 @@ import validate from 'validate.js'
 
 const calendar = {
     fields: {
-        title: '',
         name: '',
         status: 'published',
-        events: [
-            {
-                id: 1,
-                title: 'New Year 2017',
-                start: moment('2017-01-01', 'YYYY-MM-DD').format('YYYY-MM-DD')
-            }
-        ]
+        events: []
     },
     findEvent(id) {
         event = _.find(this.fields.events, o => {
@@ -60,11 +53,15 @@ const calendar = {
     },
     getFields() {
         return {
-            name: calendar.fields.title,
             name: calendar.fields.name,
             status: calendar.fields.status,
             events: calendar.fields.events
         }
+    },
+    fetchCalendar(calendar) {
+        this.fields.name = calendar.name
+        this.fields.status = calendar.status
+        this.fields.events = calendar.events
     }
 }
 
@@ -86,16 +83,18 @@ const calendarEvent = {
             }
         },
         end: {
+            presence: true,
             datetime: {
                 dateOnly: true
             }
         }
     },
     getFields() {
-        if (this.fields.end == '' || this.fields.end == this.fields.start) {
+        if (this.fields.end == null || this.fields.end == '' || this.fields.end == this.fields.start) {
             return {
                 title: this.fields.title,
-                start: moment(this.fields.start, 'YYYY-MM-DD').format('YYYY-MM-DD')
+                start: moment(this.fields.start, 'YYYY-MM-DD').format('YYYY-MM-DD'),
+                end: moment(this.fields.start, 'YYYY-MM-DD').format('YYYY-MM-DD')
             }
         }
 
