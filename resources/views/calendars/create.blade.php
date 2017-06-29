@@ -9,7 +9,7 @@
 
 @section('content')
 <div id="cal">
-  <calendar></calendar>
+  <calendar state="create"></calendar>
 </div>
 @endsection
 

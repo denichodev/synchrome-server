@@ -1,7 +1,6 @@
 import _ from 'lodash'
 import moment from 'moment'
 import validate from 'validate.js'
-import { http } from '../http/main'
 
 const calendar = {
     fields: {
@@ -58,23 +57,12 @@ const calendar = {
             return o.id != id
         })
     },
-    create() {
-        var data = {
+    getFields() {
+        return {
             name: calendar.fields.title,
             status: calendar.fields.status,
-            events: calendar.fields.events,
+            events: calendar.fields.events
         }
-
-        http.init()
-        http.post('calendar', data, response => {
-            if (response.data.result == "success") {
-                window.location = '/dashboard/calendars/' + response.data.data.id
-            }
-        }, error => {
-            alert('Cannot complete desired request')
-
-            console.log(error)
-        })
     }
 }
 

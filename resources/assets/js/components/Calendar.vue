@@ -61,7 +61,7 @@
 							<option value="draft">Draft</option>
 						</select>
 					</div>
-					<button type="button" class="btn btn-primary btn-lg btn-block" @click="calendar.create">Save</button>
+					<button type="button" class="btn btn-primary btn-lg btn-block" @click="saveCalendar">Save</button>
         </div>
       </div>
     </div>
@@ -77,8 +77,13 @@
 	import Datepicker from 'vuejs-datepicker'
 	import { calendar, calendarEvent } from '../calendars/main'
 	import { modal, datepicker } from 'vue-strap'
+	import { http } from '../http/main'
 
   export default {
+		props: [
+			'state',
+			'id'
+		],
 		components: { 
 			modal,
 			Datepicker
@@ -143,6 +148,18 @@
 				}
 				this.config.showModal = false
 				calendarEvent.init()
+			},
+			saveCalendar() {
+				http.init()
+        http.post('calendar', calendar.getFields(), response => {
+            if (response.data.result == "success") {
+                window.location = '/dashboard/calendars/' + response.data.data.id
+            } else {
+							alert('Internal server error occured')
+						}
+        }, error => {
+            alert('Cannot complete desired request')
+        })
 			}
 		}
   }
