@@ -96,6 +96,7 @@ class CalendarController extends Controller
             return collect($item)->only(['originalId', 'isEdited', 'title', 'start', 'end']);
         });
         $data = [
+            'id' => $calendar->id,
             'name' => $calendar->name,
             'status' => $calendar->status,
             'events' => $events
