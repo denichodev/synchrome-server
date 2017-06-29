@@ -3,7 +3,7 @@ import axios from 'axios'
 export const http = {
     token: '',
     init() {
-        axios.defaults.baseURL = '/api'
+        axios.defaults.baseURL = '/api/int'
 
         let tokenMeta = document.head.querySelector('meta[name="jwt-token"]')
 
