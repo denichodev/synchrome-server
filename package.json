@@ -12,10 +12,11 @@
   "devDependencies": {
     "axios": "^0.15.3",
     "cross-env": "^3.2.3",
+    "eslint": "^4.1.1",
     "jquery": "^3.1.1",
+    "laravel-mix": "0.*",
     "lodash": "^4.17.4",
-    "vue": "^2.1.10",
-    "laravel-mix": "0.*"
+    "vue": "^2.1.10"
   },
   "dependencies": {
     "validate.js": "^0.11.1",
