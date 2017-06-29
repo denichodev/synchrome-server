@@ -3,11 +3,12 @@
     <div class="col-md-9">
       <div class="box">
         <div class="box-header">
-          <h3 class="box-title">Add New Calendar</h3>
+          <h3 v-if="state == 'create'" class="box-title">Add New Calendar</h3>
+					<h3 v-if="state == 'edit'" class="box-title">Edit Calendar</h3>
         </div>
         <div class="box-body">
 					<div class="form-group">
-						<input v-model="calendar.fields.title" type="text" class="form-control input-lg" placeholder="Calendar Title">
+						<input v-model="calendar.fields.name" type="text" class="form-control input-lg" placeholder="Calendar Title">
 					</div>
           <full-calendar
 						ref="calendar"
@@ -144,6 +145,7 @@
 				if (this.config.modalState == 'create') {
 					this.addEvent(calendarEvent)
 				} else {
+				} else if (this.config.modalState == 'edit') {
 					this.updateEvent(calendarEvent)
 				}
 				this.config.showModal = false
