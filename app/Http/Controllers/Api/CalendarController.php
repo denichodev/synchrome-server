@@ -153,6 +153,10 @@ class CalendarController extends Controller
         try {
             $userData = $request->all();
             DB::beginTransaction();
+            $calendar->update([
+                'name' => $userData['name'],
+                'status' => $userData['status']
+            ]);
             $this->batchUpdate(collect($userData['updatedEvents']));
             $this->batchDelete(collect($userData['deletedEvents']));
             $this->batchInsert($calendar, collect($userData['newEvents']));
