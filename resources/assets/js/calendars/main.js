@@ -30,14 +30,16 @@ const calendar = {
     return id
   },
   addEvent(title, start, end = null) {
+    let event = {}
+
     if (end == null) {
-      const event = {
+      event = {
         id: this.generateEventId(),
         title: title,
         start: moment(start, 'YYYY-MM-DD').format('YYYY-MM-DD')
       }
     } else {
-      const event = {
+      event = {
         id: this.generateEventId(),
         title: title,
         start: moment(start, 'YYYY-MM-DD').format('YYYY-MM-DD'),
