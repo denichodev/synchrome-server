@@ -16,7 +16,7 @@
     <div class="form-group pull-right">
       <a href="{{ route('calendars.create') }}" class="btn btn-primary"><i class="fa fa-plus"></i> &nbsp;Add New Calendar</a>
     </div>
-    <table class="table table-striped">
+    <table class="table table-striped table-bordered">
       <thead>
         <tr>
           <th>Calendar Name</th>
