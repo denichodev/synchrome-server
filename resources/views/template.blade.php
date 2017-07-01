@@ -110,6 +110,9 @@
         <li class="treeview">
           <a href="{{ route('calendars.index') }}"><i class="fa fa-calendar"></i> <span>Calendars</span></a>
         </li>
+        <li class="treeview">
+          <a href="{{ route('clusters.index') }}"><i class="fa fa-cloud"></i> <span>Clusters</span></a>
+        </li>
       </ul>
     </section>
     <!-- /.sidebar -->

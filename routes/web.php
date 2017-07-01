@@ -24,4 +24,15 @@ Route::group(['prefix' => 'dashboard', 'middleware' => 'auth'], function () {
         Route::get('{id}', 'CalendarController@edit')->name('calendars.edit');
         Route::delete('{id}', 'CalendarController@destroy')->name('calendars.destroy');
     });
+
+    Route::group(['prefix' => 'clusters'], function () {
+        Route::get('/', 'ClusterController@index')->name('clusters.index');
+        Route::get('add-new', 'ClusterController@create')->name('clusters.create');
+        Route::post('add-new', 'ClusterController@store')->name('clusters.store');
+        Route::get('{id}', 'ClusterController@edit')->name('clusters.edit');
+        Route::patch('{id}', 'ClusterController@update')->name('clusters.update');
+        Route::delete('{id}', 'ClusterController@destroy')->name('clusters.destroy');
+        Route::post('generate-key/{id}', 'ClusterController@generateKey')->name('clusters.generate_key');
+        Route::post('disable-key/{keyId}', 'ClusterController@disableKey')->name('clusters.disable_key');
+    });
 });
