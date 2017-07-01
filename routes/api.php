@@ -18,3 +18,18 @@ Route::group(['middleware' => ['api', 'jwt_auth'], 'prefix' => 'int'], function 
     Route::get('calendar/{id}', 'Api\Internal\CalendarController@get')->name('api.int.calendars.get');
     Route::patch('calendar/{id}', 'Api\Internal\CalendarController@update')->name('api.int.calendars.update');
 });
+
+Route::group(['middleware' => ['api', 'cluster']], function () {
+    Route::get('/', function (Request $request) {
+        $key = Key::findByKey($request->get('key'));
+
+        return response()
+            ->json([
+                'result' => 'success',
+                'data' => [
+                    'api_version' => env('APP_VERSION'),
+                    'user' => $key->cluster->name
+                ]
+            ]);
+    });
+});
