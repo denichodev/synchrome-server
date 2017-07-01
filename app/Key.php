@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use DB;
 
 class Key extends Model
 {
@@ -40,5 +41,12 @@ class Key extends Model
     public static function findByKey($key)
     {
         return Key::where('key', $key)->first();
+    }
+
+    public function taps()
+    {
+        return DB::table('taps')
+            ->where('key', $this->key)
+            ->count();
     }
 }

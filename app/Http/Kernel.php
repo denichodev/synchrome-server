@@ -56,5 +56,6 @@ class Kernel extends HttpKernel
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'jwt_auth' => \App\Http\Middleware\JwtAuthMiddleware::class,
+        'cluster' => \App\Http\Middleware\ClusterMiddleware::class,
     ];
 }
