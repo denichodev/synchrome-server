@@ -27,4 +27,18 @@ class Key extends Model
 
         return $key;
     }
+
+    public static function isValid($key)
+    {
+        if (is_null(Key::where(['key' => $key, 'status' => true])->first())) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public static function findByKey($key)
+    {
+        return Key::where('key', $key)->first();
+    }
 }
