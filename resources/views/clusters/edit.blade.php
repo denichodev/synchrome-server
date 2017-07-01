@@ -59,7 +59,7 @@
           <tr>
             <td>{{ $key->key }}</td>
             <td>{{ date_create($key->created_at)->format('j F Y @ H:i') }}</td>
-            <td>0</td>
+            <td>{{ $key->taps() }}</td>
             <td>
               @if($key->status)
                 <span class="label label-success">Active</span>
