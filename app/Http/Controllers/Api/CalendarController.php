@@ -11,6 +11,7 @@ class CalendarController extends Controller
     public function index()
     {
         $calendars = Calendar::with(['events'])
+            ->where('status', 'published')
             ->orderBy('name', 'ASC')
             ->get();
 
