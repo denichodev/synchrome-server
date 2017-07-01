@@ -32,4 +32,12 @@ Route::group(['middleware' => ['api', 'cluster']], function () {
                 ]
             ]);
     });
+
+    Route::any('{catchall}', function() {
+        return response()
+            ->json([
+                'result' => 'failed',
+                'errors' => ['Route not found']
+            ], 404);
+    })->where('catchall', '(.*)');
 });
