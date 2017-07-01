@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Internal;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
