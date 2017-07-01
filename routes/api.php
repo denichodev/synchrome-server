@@ -34,6 +34,8 @@ Route::group(['middleware' => ['api', 'cluster']], function () {
             ]);
     });
 
+    Route::get('calendar', 'Api\CalendarController@index')->name('api.calendars.index');
+
     Route::any('{catchall}', function() {
         return response()
             ->json([
