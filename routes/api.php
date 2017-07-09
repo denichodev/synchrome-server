@@ -18,6 +18,7 @@ Route::group(['middleware' => ['api', 'jwt_auth'], 'prefix' => 'int'], function 
     Route::post('calendar', 'Api\Internal\CalendarController@store')->name('api.int.calendars.store');
     Route::get('calendar/{id}', 'Api\Internal\CalendarController@get')->name('api.int.calendars.get');
     Route::patch('calendar/{id}', 'Api\Internal\CalendarController@update')->name('api.int.calendars.update');
+    Route::get('calendar/event/category', 'Api\Internal\EventCategoryController@index')->name('api.int.calendars.events.categories.index');
 });
 
 Route::group(['middleware' => ['api', 'cluster']], function () {
