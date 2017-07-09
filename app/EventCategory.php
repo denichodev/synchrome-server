@@ -11,6 +11,7 @@ class EventCategory extends Model
         'color',
         'textColor'
     ];
+    public $timestamps = false;
 
     public function events()
     {
