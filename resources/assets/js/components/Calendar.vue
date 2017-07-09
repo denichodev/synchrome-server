@@ -158,132 +158,132 @@
             alert('Unable to fetch calendar')
         })
       }
-  },
-  methods: {
-    dayClick(date, jsEvent, view) {
-      calendarEvent.fields.start = calendarEvent.fields.end = moment(date, 'YYYY-MM-DD').format('YYYY-MM-DD')
-
-      this.config.showModal = true
     },
-    eventClick(event, jsEvent, view) {
-      this.config.modalState = 'edit'
+    methods: {
+      dayClick(date, jsEvent, view) {
+        calendarEvent.fields.start = calendarEvent.fields.end = moment(date, 'YYYY-MM-DD').format('YYYY-MM-DD')
 
-      if (_.has(event, 'originalId')) {
-        calendarEvent.fields.originalId = event.originalId
-      }
+        this.config.showModal = true
+      },
+      eventClick(event, jsEvent, view) {
+        this.config.modalState = 'edit'
 
-      if (event.eventCategoryId == 1) {
-        calendarEvent.fields.isWorkday = true
-      } else {
-        calendarEvent.fields.isWorkday = false
-        calendarEvent.fields.title = event.title
-      }
-
-      calendarEvent.fields.id = event.id
-      calendarEvent.fields.start = moment(event.start, 'YYYY-MM-DD').format('YYYY-MM-DD')
-      calendarEvent.fields.end = calendarEvent.fields.end == '' ? moment(event.start, 'YYYY-MM-DD').format('YYYY-MM-DD') : moment(event.end, 'YYYY-MM-DD').format('YYYY-MM-DD')
-      calendarEvent.fields.eventCategoryId = event.eventCategoryId
-      this.config.showModal = true
-    },
-    cancelEvent() {
-      this.config.showModal = false
-      calendarEvent.init()
-    },
-    addEvent(calendarEvent) {
-      let category = calendar.findEventCategory(calendarEvent.fields.eventCategoryId)
-      calendar.addEvent(calendarEvent.fields.title, calendarEvent.fields.start, calendarEvent.fields.end, category.color, category.textColor, calendarEvent.fields.eventCategoryId)
-    },
-    updateEvent(calendarEvent) {
-      let event = calendar.findEvent(calendarEvent.fields.id)
-      let category = calendar.findEventCategory(calendarEvent.fields.eventCategoryId)
-
-      event.title = calendarEvent.fields.title
-      event.start = moment(calendarEvent.fields.start).format('YYYY-MM-DD')
-      event.end = moment(calendarEvent.fields.end).format('YYYY-MM-DD')
-      event.eventCategoryId = calendarEvent.fields.eventCategoryId
-      event.color = category.color
-      event.textColor = category.textColor
-
-      if (_.has(event, 'originalId')) {
-        event.isEdited = true
-      }
-
-      this.config.modalState = 'create'
-    },
-    removeEvent() {
-      calendar.removeEvent(calendarEvent.fields.id)
-      this.deletedEvents.push({originalId: calendarEvent.fields.originalId})
-      calendarEvent.init()
-      this.config.showModal = false
-    },
-    saveEvent() {
-      if (! calendarEvent.validate()) {
-        alert('Fill in all required fields')
-
-        return false
-      }
-
-      if (this.config.modalState == 'create') {
-        this.addEvent(calendarEvent)
-      } else if (this.config.modalState == 'edit') {
-        this.updateEvent(calendarEvent)
-      }
-
-      this.config.showModal = false
-      calendarEvent.init()
-    },
-    saveCalendar() {
-      http.init()
-
-      if (this.state == 'create') {
-        http.post('calendar', calendar.getFields(), response => {
-          if (response.data.result == "success") {
-            window.location = '/dashboard/calendars/' + response.data.data.id
-          } else {
-            this.loaders.isError = true
-          }
-        }, error => {
-          this.loaders.isError = true
-        })
-      } else if (this.state == 'edit') {
-        this.loaders.isUpdating = true
-        const newEvents = _.filter(calendar.fields.events, event => {
-          return ! _.has(event, 'originalId')
-        })
-        const updatedEvents = _.filter(calendar.fields.events, event => {
-          return event.isEdited
-        })
-        const data = {
-          _method: 'PATCH',
-          name: calendar.fields.name,
-          status: calendar.fields.status,
-          newEvents: newEvents,
-          updatedEvents: updatedEvents,
-          deletedEvents: this.deletedEvents
+        if (_.has(event, 'originalId')) {
+          calendarEvent.fields.originalId = event.originalId
         }
 
-        http.post('calendar/' + calendar.fields.id, data, response => {
-          if (response.data.result == 'success') {
-              this.loaders.isUpdating = false
-              this.loaders.isUpdated = true
-          } else {
+        if (event.eventCategoryId == 1) {
+          calendarEvent.fields.isWorkday = true
+        } else {
+          calendarEvent.fields.isWorkday = false
+          calendarEvent.fields.title = event.title
+        }
+
+        calendarEvent.fields.id = event.id
+        calendarEvent.fields.start = moment(event.start, 'YYYY-MM-DD').format('YYYY-MM-DD')
+        calendarEvent.fields.end = calendarEvent.fields.end == '' ? moment(event.start, 'YYYY-MM-DD').format('YYYY-MM-DD') : moment(event.end, 'YYYY-MM-DD').format('YYYY-MM-DD')
+        calendarEvent.fields.eventCategoryId = event.eventCategoryId
+        this.config.showModal = true
+      },
+      cancelEvent() {
+        this.config.showModal = false
+        calendarEvent.init()
+      },
+      addEvent(calendarEvent) {
+        let category = calendar.findEventCategory(calendarEvent.fields.eventCategoryId)
+        calendar.addEvent(calendarEvent.fields.title, calendarEvent.fields.start, calendarEvent.fields.end, category.color, category.textColor, calendarEvent.fields.eventCategoryId)
+      },
+      updateEvent(calendarEvent) {
+        let event = calendar.findEvent(calendarEvent.fields.id)
+        let category = calendar.findEventCategory(calendarEvent.fields.eventCategoryId)
+
+        event.title = calendarEvent.fields.title
+        event.start = moment(calendarEvent.fields.start).format('YYYY-MM-DD')
+        event.end = moment(calendarEvent.fields.end).format('YYYY-MM-DD')
+        event.eventCategoryId = calendarEvent.fields.eventCategoryId
+        event.color = category.color
+        event.textColor = category.textColor
+
+        if (_.has(event, 'originalId')) {
+          event.isEdited = true
+        }
+
+        this.config.modalState = 'create'
+      },
+      removeEvent() {
+        calendar.removeEvent(calendarEvent.fields.id)
+        this.deletedEvents.push({originalId: calendarEvent.fields.originalId})
+        calendarEvent.init()
+        this.config.showModal = false
+      },
+      saveEvent() {
+        if (! calendarEvent.validate()) {
+          alert('Fill in all required fields')
+
+          return false
+        }
+
+        if (this.config.modalState == 'create') {
+          this.addEvent(calendarEvent)
+        } else if (this.config.modalState == 'edit') {
+          this.updateEvent(calendarEvent)
+        }
+
+        this.config.showModal = false
+        calendarEvent.init()
+      },
+      saveCalendar() {
+        http.init()
+
+        if (this.state == 'create') {
+          http.post('calendar', calendar.getFields(), response => {
+            if (response.data.result == "success") {
+              window.location = '/dashboard/calendars/' + response.data.data.id
+            } else {
               this.loaders.isError = true
+            }
+          }, error => {
+            this.loaders.isError = true
+          })
+        } else if (this.state == 'edit') {
+          this.loaders.isUpdating = true
+          const newEvents = _.filter(calendar.fields.events, event => {
+            return ! _.has(event, 'originalId')
+          })
+          const updatedEvents = _.filter(calendar.fields.events, event => {
+            return event.isEdited
+          })
+          const data = {
+            _method: 'PATCH',
+            name: calendar.fields.name,
+            status: calendar.fields.status,
+            newEvents: newEvents,
+            updatedEvents: updatedEvents,
+            deletedEvents: this.deletedEvents
           }
-        }, error => {
-          this.loaders.isError = true
-        })
+
+          http.post('calendar/' + calendar.fields.id, data, response => {
+            if (response.data.result == 'success') {
+                this.loaders.isUpdating = false
+                this.loaders.isUpdated = true
+            } else {
+                this.loaders.isError = true
+            }
+          }, error => {
+            this.loaders.isError = true
+          })
+        }
       }
-    }
-  },
-  watch: {
-    'event.fields.eventCategoryId': val => {
-      if (val == 1) {
-        calendarEvent.fields.title = calendar.findEventCategory(val).name
-        calendarEvent.fields.isWorkday = true
-      } else {
-        calendarEvent.fields.isWorkday = false
+    },
+    watch: {
+      'event.fields.eventCategoryId': val => {
+        if (val == 1) {
+          calendarEvent.fields.title = calendar.findEventCategory(val).name
+          calendarEvent.fields.isWorkday = true
+        } else {
+          calendarEvent.fields.isWorkday = false
+        }
       }
     }
   }
-}
 </script>
