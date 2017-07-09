@@ -38,8 +38,14 @@
             </div>
             <div slot="modal-body" class="modal-body">
               <div class="form-group">
+                <label>Category</label>
+                <select class="form-control" v-model="event.fields.eventCategoryId">
+                  <option v-for="cat in calendar.fields.eventCategories" v-bind:value="cat.id">{{ cat.name }}</option>
+                </select>
+              </div>
+              <div class="form-group">
                 <label>Event Title</label>
-                <input type="text" class="form-control" v-model="event.fields.title">
+                <input type="text" class="form-control" v-model="event.fields.title" :disabled="this.event.fields.isWorkday">
               </div>
               <div class="form-group">
                 <div class="row">
@@ -112,7 +118,8 @@
         config: {
           showModal: false,
           modalState: 'create',
-          format: 'YYYY-MM-DD'
+          format: 'YYYY-MM-DD',
+          isEventWorkday: true
         },
         loaders: {
           isUpdating: false,
@@ -123,8 +130,17 @@
       }
     },
     beforeMount() {
+      http.init()
+      http.get('/calendar/event/category', response => {
+        if (response.data.result == 'success') {
+          let eventCategories = response.data.data
+          calendar.fields.eventCategories = eventCategories
+        }
+      }, error => {
+        alert('Unable to fetch event categories')
+      })
+
       if (this.id && this.state == 'edit') {
-        http.init()
         http.get('calendar/' + this.id, response => {
           if (response.data.result == 'success') {
             const data = response.data.data
@@ -156,10 +172,17 @@
         calendarEvent.fields.originalId = event.originalId
       }
 
+      if (event.eventCategoryId == 1) {
+        calendarEvent.fields.isWorkday = true
+      } else {
+        calendarEvent.fields.isWorkday = false
+        calendarEvent.fields.title = event.title
+      }
+
       calendarEvent.fields.id = event.id
-      calendarEvent.fields.title = event.title,
       calendarEvent.fields.start = moment(event.start, 'YYYY-MM-DD').format('YYYY-MM-DD')
       calendarEvent.fields.end = calendarEvent.fields.end == '' ? moment(event.start, 'YYYY-MM-DD').format('YYYY-MM-DD') : moment(event.end, 'YYYY-MM-DD').format('YYYY-MM-DD')
+      calendarEvent.fields.eventCategoryId = event.eventCategoryId
       this.config.showModal = true
     },
     cancelEvent() {
@@ -167,14 +190,19 @@
       calendarEvent.init()
     },
     addEvent(calendarEvent) {
-      calendar.addEvent(calendarEvent.fields.title, calendarEvent.fields.start, calendarEvent.fields.end)
+      let category = calendar.findEventCategory(calendarEvent.fields.eventCategoryId)
+      calendar.addEvent(calendarEvent.fields.title, calendarEvent.fields.start, calendarEvent.fields.end, category.color, category.textColor, calendarEvent.fields.eventCategoryId)
     },
     updateEvent(calendarEvent) {
-      event = calendar.findEvent(calendarEvent.fields.id)
+      let event = calendar.findEvent(calendarEvent.fields.id)
+      let category = calendar.findEventCategory(calendarEvent.fields.eventCategoryId)
 
       event.title = calendarEvent.fields.title
       event.start = moment(calendarEvent.fields.start).format('YYYY-MM-DD')
       event.end = moment(calendarEvent.fields.end).format('YYYY-MM-DD')
+      event.eventCategoryId = calendarEvent.fields.eventCategoryId
+      event.color = category.color
+      event.textColor = category.textColor
 
       if (_.has(event, 'originalId')) {
         event.isEdited = true
@@ -244,6 +272,16 @@
         }, error => {
           this.loaders.isError = true
         })
+      }
+    }
+  },
+  watch: {
+    'event.fields.eventCategoryId': val => {
+      if (val == 1) {
+        calendarEvent.fields.title = calendar.findEventCategory(val).name
+        calendarEvent.fields.isWorkday = true
+      } else {
+        calendarEvent.fields.isWorkday = false
       }
     }
   }

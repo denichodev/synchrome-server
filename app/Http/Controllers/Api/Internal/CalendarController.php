@@ -21,6 +21,7 @@ class CalendarController extends Controller
             'events' => 'required|array',
             'events.*.title' => 'required',
             'events.*.start' => 'required|date',
+            'events.*.eventCategoryId' => 'required',
             'status' => 'required|in:draft,published'
         ]);
 
@@ -49,8 +50,9 @@ class CalendarController extends Controller
                     'title' => $event['title'],
                     'start' => $event['start'],
                     'end' => ! empty($event['end']) ? $event['end'] : null,
-                    'isWeekday' => empty($event['end']) && ($numOfDay == 6 || $numOfDay == 7) ? true : false,
-                    'numOfDay' => $numOfDay
+                    'isWeekday' => (empty($event['end']) || $event['start'] == $event['end']) && ($numOfDay == 6 || $numOfDay == 7) ? true : false,
+                    'numOfDay' => $numOfDay,
+                    'eventCategoryId' => $event['eventCategoryId']
                 ]));
             }
 
@@ -93,8 +95,10 @@ class CalendarController extends Controller
         $events = $calendar->events->map(function ($item, $key) {
             $item->originalId = $item->id;
             $item->isEdited = false;
+            $item->color = $item->category->color;
+            $item->textColor = $item->category->textColor;
 
-            return collect($item)->only(['originalId', 'isEdited', 'title', 'start', 'end']);
+            return collect($item)->only(['originalId', 'isEdited', 'title', 'start', 'end', 'color', 'textColor', 'eventCategoryId']);
         });
         $data = [
             'id' => $calendar->id,
@@ -125,12 +129,14 @@ class CalendarController extends Controller
             'updatedEvents.*.originalId' => 'required',
             'updatedEvents.*.title' => 'required',
             'updatedEvents.*.start' => 'required|date',
+            'updatedEvents.*.eventCategoryId' => 'required',
             'deletedEvents' => 'array',
             'deletedEvents.*.originalId' => 'required',
             'updatedEvents.*.start' => 'required|date',
             'newEvents' => 'array',
             'newEvents.*.title' => 'required',
             'newEvents.*.start' => 'required|date',
+            'newEvents.*.eventCategoryId' => 'required',
             'status' => 'required|in:draft,published'
         ]);
 
@@ -187,8 +193,9 @@ class CalendarController extends Controller
                 'title' => $newEvent['title'],
                 'start' => $newEvent['start'],
                 'end' => ! empty($newEvent['end']) ? $newEvent['end'] : null,
-                'isWeekday' => empty($newEvent['end']) && ($numOfDay == 6 || $numOfDay == 7) ? true : false,
-                'numOfDay' => $numOfDay
+                'isWeekday' => (empty($event['end']) || $event['start'] == $event['end']) && ($numOfDay == 6 || $numOfDay == 7) ? true : false,
+                'numOfDay' => $numOfDay,
+                'eventCategoryId' => $newEvent['eventCategoryId']
             ]));
         });
 
@@ -205,8 +212,9 @@ class CalendarController extends Controller
                 'title' => $updatedEvent['title'],
                 'start' => $updatedEvent['start'],
                 'end' => empty($updatedEvent['end']) || $updatedEvent['end'] == $updatedEvent['start'] ? null : $updatedEvent['end'],
-                'isWeekday' => empty($updatedEvent['end']) && ($numOfDay == 6 || $numOfDay == 7) ? true : false,
-                'numOfDay' => $numOfDay
+                'isWeekday' => (empty($event['end']) || $event['start'] == $event['end']) && ($numOfDay == 6 || $numOfDay == 7) ? true : false,
+                'numOfDay' => $numOfDay,
+                'eventCategoryId' => $updatedEvent['eventCategoryId']
             ]);
         });
     }

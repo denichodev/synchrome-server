@@ -7,10 +7,11 @@ const calendar = {
     id: '',
     name: '',
     status: 'published',
-    events: []
+    events: [],
+    eventCategories: []
   },
   findEvent(id) {
-    event = _.find(this.fields.events, o => {
+    let event = _.find(this.fields.events, o => {
       return o.id == id
     })
 
@@ -29,21 +30,27 @@ const calendar = {
 
     return id
   },
-  addEvent(title, start, end = null) {
+  addEvent(title, start, end, color, textColor, eventCategoryId) {
     let event = {}
 
     if (end == null) {
       event = {
         id: this.generateEventId(),
         title: title,
-        start: moment(start, 'YYYY-MM-DD').format('YYYY-MM-DD')
+        start: moment(start, 'YYYY-MM-DD').format('YYYY-MM-DD'),
+        color: color,
+        textColor: textColor,
+        eventCategoryId: eventCategoryId
       }
     } else {
       event = {
         id: this.generateEventId(),
         title: title,
         start: moment(start, 'YYYY-MM-DD').format('YYYY-MM-DD'),
-        end: moment(end, 'YYYY-MM-DD').format('YYYY-MM-DD')
+        end: moment(end, 'YYYY-MM-DD').format('YYYY-MM-DD'),
+        color: color,
+        textColor: textColor,
+        eventCategoryId: eventCategoryId
       }
     }
 
@@ -66,6 +73,17 @@ const calendar = {
     this.fields.name = calendar.name
     this.fields.status = calendar.status
     this.fields.events = calendar.events
+  },
+  findEventCategory(id) {
+    let category = _.find(this.fields.eventCategories, o => {
+      return o.id == id
+    })
+
+    if (typeof category != 'undefined') {
+      return category
+    }
+
+    return null
   }
 }
 
@@ -73,9 +91,11 @@ const calendarEvent = {
   fields: {
     originalId: '',
     id: '',
-    title: '',
+    title: 'Workday',
     start: '',
-    end: ''
+    end: '',
+    eventCategoryId: 1,
+    isWorkday: true
   },
   rules: {
     title: {
@@ -111,9 +131,11 @@ const calendarEvent = {
   },
   init() {
     this.fields.id = ''
-    this.fields.title = ''
+    this.fields.title = calendar.findEventCategory(1).name
     this.fields.start = ''
     this.fields.end = ''
+    this.fields.eventCategoryId = 1
+    this.fields.isWorkday = true
   },
   initValidate() {
     validate.extend(validate.validators.datetime, {
