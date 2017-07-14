@@ -15,33 +15,8 @@ use App\Key;
 */
 
 Route::group(['middleware' => ['api', 'jwt_auth'], 'prefix' => 'int'], function () {
-    Route::post('calendar', 'Api\Internal\CalendarController@store')->name('api.int.calendars.store');
-    Route::get('calendar/{id}', 'Api\Internal\CalendarController@get')->name('api.int.calendars.get');
-    Route::patch('calendar/{id}', 'Api\Internal\CalendarController@update')->name('api.int.calendars.update');
-    Route::get('calendar/event/category', 'Api\Internal\EventCategoryController@index')->name('api.int.calendars.events.categories.index');
-});
-
-Route::group(['middleware' => ['api', 'cluster']], function () {
-    Route::get('/', function (Request $request) {
-        $key = Key::findByKey($request->get('key'));
-
-        return response()
-            ->json([
-                'result' => 'success',
-                'data' => [
-                    'api_version' => env('APP_VERSION'),
-                    'user' => $key->cluster->name
-                ]
-            ]);
-    });
-
-    Route::get('calendar', 'Api\CalendarController@index')->name('api.calendars.index');
-
-    Route::any('{catchall}', function() {
-        return response()
-            ->json([
-                'result' => 'failed',
-                'errors' => ['Route not found']
-            ], 404);
-    })->where('catchall', '(.*)');
+    Route::post('calendar', 'Api\CalendarController@store')->name('api.int.calendars.store');
+    Route::get('calendar/{id}', 'Api\CalendarController@get')->name('api.int.calendars.get');
+    Route::patch('calendar/{id}', 'Api\CalendarController@update')->name('api.int.calendars.update');
+    Route::get('calendar/event/category', 'Api\EventCategoryController@index')->name('api.int.calendars.events.categories.index');
 });
