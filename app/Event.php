@@ -10,8 +10,8 @@ class Event extends Model
         'title',
         'start',
         'end',
-        'isWeekday',
-        'numOfDay',
+        'is_weekday',
+        'num_of_day',
         'event_category_id'
     ];
 

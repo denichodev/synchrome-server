@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCalendarsTable extends Migration
+class UpdateEventCategoriesTableFixNamingConventions extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,8 @@ class CreateCalendarsTable extends Migration
      */
     public function up()
     {
-        Schema::create('calendars', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
-            $table->date('start');
-            $table->date('end');
-            $table->timestamps();
+        Schema::table('event_categories', function (Blueprint $table) {
+            $table->renameColumn('textColor', 'text_color');
         });
     }
 
@@ -29,6 +25,8 @@ class CreateCalendarsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('calendars');
+        Schema::table('event_categories', function (Blueprint $table) {
+            $table->renameColumn('text_color', 'textColor');
+        });
     }
 }

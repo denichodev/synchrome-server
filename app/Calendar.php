@@ -11,8 +11,8 @@ class Calendar extends Model
 
     protected $fillable = [
         'name',
-        'start_date',
-        'end_date',
+        'start',
+        'end',
         'status'
     ];
     protected $dates = ['deleted_at'];

@@ -9,7 +9,7 @@ class EventCategory extends Model
     protected $fillable = [
         'name',
         'color',
-        'textColor'
+        'text_color'
     ];
     public $timestamps = false;
 
