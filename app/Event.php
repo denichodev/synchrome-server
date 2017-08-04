@@ -12,11 +12,11 @@ class Event extends Model
         'end',
         'isWeekday',
         'numOfDay',
-        'eventCategoryId'
+        'event_category_id'
     ];
 
     public function category()
     {
-        return $this->belongsTo(EventCategory::class, 'eventCategoryId');
+        return $this->belongsTo(EventCategory::class);
     }
 }
