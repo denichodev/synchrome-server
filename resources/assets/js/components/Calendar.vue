@@ -39,8 +39,8 @@
             <div slot="modal-body" class="modal-body">
               <div class="form-group">
                 <label>Category</label>
-                <select class="form-control" v-model="event.fields.eventCategoryId">
-                  <option v-for="cat in calendar.fields.eventCategories" v-bind:value="cat.id">{{ cat.name }}</option>
+                <select class="form-control" v-model="event.fields.event_category_id">
+                  <option v-for="cat in calendar.fields.event_categories" v-bind:value="cat.id">{{ cat.name }}</option>
                 </select>
               </div>
               <div class="form-group">
@@ -106,7 +106,7 @@
       'state',
       'id'
     ],
-    components: { 
+    components: {
         modal,
         Datepicker
     },
@@ -133,8 +133,8 @@
       http.init()
       http.get('/calendar/event/category', response => {
         if (response.data.result == 'success') {
-          let eventCategories = response.data.data
-          calendar.fields.eventCategories = eventCategories
+          let event_categories = response.data.data
+          calendar.fields.event_categories = event_categories
         }
       }, error => {
         alert('Unable to fetch event categories')
@@ -155,6 +155,7 @@
             alert('Internal server error occured')
           }
         }, error => {
+            console.log(error)
             alert('Unable to fetch calendar')
         })
       }
@@ -172,7 +173,7 @@
           calendarEvent.fields.originalId = event.originalId
         }
 
-        if (event.eventCategoryId == 1) {
+        if (event.event_category_id == 1) {
           calendarEvent.fields.isWorkday = true
         } else {
           calendarEvent.fields.isWorkday = false
@@ -182,7 +183,7 @@
         calendarEvent.fields.id = event.id
         calendarEvent.fields.start = moment(event.start, 'YYYY-MM-DD').format('YYYY-MM-DD')
         calendarEvent.fields.end = calendarEvent.fields.end == '' ? moment(event.start, 'YYYY-MM-DD').format('YYYY-MM-DD') : moment(event.end, 'YYYY-MM-DD').format('YYYY-MM-DD')
-        calendarEvent.fields.eventCategoryId = event.eventCategoryId
+        calendarEvent.fields.event_category_id = event.event_category_id
         this.config.showModal = true
       },
       cancelEvent() {
@@ -190,17 +191,17 @@
         calendarEvent.init()
       },
       addEvent(calendarEvent) {
-        let category = calendar.findEventCategory(calendarEvent.fields.eventCategoryId)
-        calendar.addEvent(calendarEvent.fields.title, calendarEvent.fields.start, calendarEvent.fields.end, category.color, category.textColor, calendarEvent.fields.eventCategoryId)
+        let category = calendar.findEventCategory(calendarEvent.fields.event_category_id)
+        calendar.addEvent(calendarEvent.fields.title, calendarEvent.fields.start, calendarEvent.fields.end, category.color, category.textColor, calendarEvent.fields.event_category_id)
       },
       updateEvent(calendarEvent) {
         let event = calendar.findEvent(calendarEvent.fields.id)
-        let category = calendar.findEventCategory(calendarEvent.fields.eventCategoryId)
+        let category = calendar.findEventCategory(calendarEvent.fields.event_category_id)
 
         event.title = calendarEvent.fields.title
         event.start = moment(calendarEvent.fields.start).format('YYYY-MM-DD')
         event.end = moment(calendarEvent.fields.end).format('YYYY-MM-DD')
-        event.eventCategoryId = calendarEvent.fields.eventCategoryId
+        event.event_category_id = calendarEvent.fields.event_category_id
         event.color = category.color
         event.textColor = category.textColor
 
@@ -276,7 +277,7 @@
       }
     },
     watch: {
-      'event.fields.eventCategoryId': val => {
+      'event.fields.event_category_id': val => {
         if (val == 1) {
           calendarEvent.fields.title = calendar.findEventCategory(val).name
           calendarEvent.fields.isWorkday = true

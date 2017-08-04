@@ -21,14 +21,14 @@ class CalendarController extends Controller
             'events' => 'required|array',
             'events.*.title' => 'required',
             'events.*.start' => 'required|date',
-            'events.*.eventCategoryId' => 'required',
+            'events.*.event_category_id' => 'required',
             'status' => 'required|in:draft,published'
         ]);
 
         if ($validation->fails()) {
             return response()
                 ->json([
-                    'error' => ['bad_request']
+                    'error' => $validation->errors()
                 ], 400);
         }
 
@@ -52,7 +52,7 @@ class CalendarController extends Controller
                     'end' => ! empty($event['end']) ? $event['end'] : null,
                     'isWeekday' => (empty($event['end']) || $event['start'] == $event['end']) && ($numOfDay == 6 || $numOfDay == 7) ? true : false,
                     'numOfDay' => $numOfDay,
-                    'eventCategoryId' => $event['eventCategoryId']
+                    'event_category_id' => $event['event_category_id']
                 ]));
             }
 
@@ -98,7 +98,7 @@ class CalendarController extends Controller
             $item->color = $item->category->color;
             $item->textColor = $item->category->textColor;
 
-            return collect($item)->only(['originalId', 'isEdited', 'title', 'start', 'end', 'color', 'textColor', 'eventCategoryId']);
+            return collect($item)->only(['originalId', 'isEdited', 'title', 'start', 'end', 'color', 'textColor', 'event_category_id']);
         });
         $data = [
             'id' => $calendar->id,
@@ -129,14 +129,14 @@ class CalendarController extends Controller
             'updatedEvents.*.originalId' => 'required',
             'updatedEvents.*.title' => 'required',
             'updatedEvents.*.start' => 'required|date',
-            'updatedEvents.*.eventCategoryId' => 'required',
+            'updatedEvents.*.event_category_id' => 'required',
             'deletedEvents' => 'array',
             'deletedEvents.*.originalId' => 'required',
             'updatedEvents.*.start' => 'required|date',
             'newEvents' => 'array',
             'newEvents.*.title' => 'required',
             'newEvents.*.start' => 'required|date',
-            'newEvents.*.eventCategoryId' => 'required',
+            'newEvents.*.event_category_id' => 'required',
             'status' => 'required|in:draft,published'
         ]);
 
@@ -195,7 +195,7 @@ class CalendarController extends Controller
                 'end' => ! empty($newEvent['end']) ? $newEvent['end'] : null,
                 'isWeekday' => (empty($event['end']) || $event['start'] == $event['end']) && ($numOfDay == 6 || $numOfDay == 7) ? true : false,
                 'numOfDay' => $numOfDay,
-                'eventCategoryId' => $newEvent['eventCategoryId']
+                'event_category_id' => $newEvent['event_category_id']
             ]));
         });
 
@@ -214,7 +214,7 @@ class CalendarController extends Controller
                 'end' => empty($updatedEvent['end']) || $updatedEvent['end'] == $updatedEvent['start'] ? null : $updatedEvent['end'],
                 'isWeekday' => (empty($event['end']) || $event['start'] == $event['end']) && ($numOfDay == 6 || $numOfDay == 7) ? true : false,
                 'numOfDay' => $numOfDay,
-                'eventCategoryId' => $updatedEvent['eventCategoryId']
+                'event_category_id' => $updatedEvent['event_category_id']
             ]);
         });
     }

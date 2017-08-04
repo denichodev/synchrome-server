@@ -8,7 +8,7 @@ const calendar = {
     name: '',
     status: 'published',
     events: [],
-    eventCategories: []
+    event_categories: []
   },
   findEvent(id) {
     let event = _.find(this.fields.events, o => {
@@ -22,7 +22,7 @@ const calendar = {
     return null
   },
   generateEventId() {
-    let id = _.random(1, 720)  
+    let id = _.random(1, 720)
 
     if (this.findEvent(id) != null) {
       return this.generateEventId()
@@ -30,7 +30,7 @@ const calendar = {
 
     return id
   },
-  addEvent(title, start, end, color, textColor, eventCategoryId) {
+  addEvent(title, start, end, color, textColor, event_category_id) {
     let event = {}
 
     if (end == null) {
@@ -40,7 +40,7 @@ const calendar = {
         start: moment(start, 'YYYY-MM-DD').format('YYYY-MM-DD'),
         color: color,
         textColor: textColor,
-        eventCategoryId: eventCategoryId
+        event_category_id: event_category_id
       }
     } else {
       event = {
@@ -50,7 +50,7 @@ const calendar = {
         end: moment(end, 'YYYY-MM-DD').format('YYYY-MM-DD'),
         color: color,
         textColor: textColor,
-        eventCategoryId: eventCategoryId
+        event_category_id: event_category_id
       }
     }
 
@@ -75,7 +75,7 @@ const calendar = {
     this.fields.events = calendar.events
   },
   findEventCategory(id) {
-    let category = _.find(this.fields.eventCategories, o => {
+    let category = _.find(this.fields.event_categories, o => {
       return o.id == id
     })
 
@@ -94,7 +94,7 @@ const calendarEvent = {
     title: 'Workday',
     start: '',
     end: '',
-    eventCategoryId: 1,
+    event_category_id: 1,
     isWorkday: true
   },
   rules: {
@@ -134,7 +134,7 @@ const calendarEvent = {
     this.fields.title = calendar.findEventCategory(1).name
     this.fields.start = ''
     this.fields.end = ''
-    this.fields.eventCategoryId = 1
+    this.fields.event_category_id = 1
     this.fields.isWorkday = true
   },
   initValidate() {
