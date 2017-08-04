@@ -37,8 +37,8 @@ class CalendarController extends Controller
             DB::beginTransaction();
             $calendar = Calendar::create([
                 'name' => $userData['name'],
-                'start_date' => date('Y-01-01'),
-                'end_date' => date('Y-12-31'),
+                'start' => date('Y-01-01'),
+                'end' => date('Y-12-31'),
                 'status' => $userData['status']
             ]);
             $events = [];
