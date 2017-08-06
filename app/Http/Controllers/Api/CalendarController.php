@@ -226,6 +226,6 @@ class CalendarController extends Controller
             return $event['originalId'];
         });
 
-        Event::whereIn('id', $deletedEventIds)->delete();
+        Event::destroy($deletedEventIds);
     }
 }
