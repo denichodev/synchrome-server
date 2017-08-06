@@ -177,10 +177,12 @@ class CalendarController extends Controller
         } catch (\Exception $e) {
             DB::rollback();
 
+            throw $e;
+
             return response()
                 ->json([
                     'error' => [$e->getMessage()]
-                ]);
+                ], 500);
         }
     }
 
@@ -226,6 +228,8 @@ class CalendarController extends Controller
             return $event['originalId'];
         });
 
-        Event::destroy($deletedEventIds);
+        if (count($deletedEventIds) > 0) {
+            Event::destroy($deletedEventIds);
+        }
     }
 }
