@@ -14,6 +14,9 @@ class Event extends Model
         'num_of_day',
         'event_category_id'
     ];
+    protected $dates = [
+        'deleted_at'
+    ]
 
     public function category()
     {

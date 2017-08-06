@@ -161,7 +161,8 @@ class CalendarController extends Controller
             DB::beginTransaction();
             $calendar->update([
                 'name' => $userData['name'],
-                'status' => $userData['status']
+                'status' => $userData['status'],
+                'updated_at' => date('Y-m-d H:i:s')
             ]);
             $this->batchUpdate(collect($userData['updatedEvents']));
             $this->batchDelete(collect($userData['deletedEvents']));

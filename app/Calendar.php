@@ -13,7 +13,8 @@ class Calendar extends Model
         'name',
         'start',
         'end',
-        'status'
+        'status',
+        'updated_at'
     ];
     protected $dates = ['deleted_at'];
 
