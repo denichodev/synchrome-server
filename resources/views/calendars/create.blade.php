@@ -18,6 +18,5 @@
 @endpush
 
 @push('footer_scripts')
-<!-- <script src="{{ asset('js/calendar.js') }}"></script> -->
-<script src="{{ asset('js/reactCalendar.js') }}"></script>
+<script src="{{ asset('js/index.js') }}"></script>
 @endpush

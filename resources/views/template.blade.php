@@ -117,12 +117,9 @@
 
     <script src="{{ asset('js/coreui.js') }}"></script>
 
-
-
-
-
     <!-- Plugins and scripts required by this views -->
-
+    @stack('footer_scripts')
+    
 </body>
 
 </html>
