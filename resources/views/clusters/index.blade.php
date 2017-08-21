@@ -2,8 +2,8 @@
 @section('title', 'Clusters')
 @section('description', 'Add/modify clusters')
 @section('breadcrumb')
-<li><a href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-<li class="active"><a href="{{ route('clusters.index') }}"><i class="fa fa-cloud"></i> Clusters</a></li>
+<li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
+<li class="breadcrumb-item active">Clusters</li>
 @endsection
 
 @section('content')

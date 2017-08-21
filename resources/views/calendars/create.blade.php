@@ -9,7 +9,7 @@
 
 @section('content')
 <div id="cal">
-  <calendar state="create"></calendar>
+  <!-- <calendar state="create"></calendar> -->
 </div>
 @endsection
 
@@ -18,5 +18,6 @@
 @endpush
 
 @push('footer_scripts')
-<script src="{{ asset('js/calendar.js') }}"></script>
+<!-- <script src="{{ asset('js/calendar.js') }}"></script> -->
+<script src="{{ asset('js/reactCalendar.js') }}"></script>
 @endpush

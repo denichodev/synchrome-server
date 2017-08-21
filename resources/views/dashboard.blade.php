@@ -1,7 +1,7 @@
 @extends('template')
 @section('title', 'Dashboard')
 @section('breadcrumb')
-<li><a href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+<li class="breadcrumb-item active">Dashboard</li>
 @endsection
 
 @section('content')

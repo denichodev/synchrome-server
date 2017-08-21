@@ -1,3 +1,7 @@
 {
-  "/js/calendar.js": "/js/calendar.js"
+  "/js/calendar.js": "/js/calendar.js",
+  "/js/reactCalendar.js": "/js/reactCalendar.js",
+  "/mix.js": "/mix.js",
+  "/css/coreui.css": "/css/coreui.css",
+  "/js/index.js": "/js/index.js"
 }

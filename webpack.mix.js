@@ -11,4 +11,6 @@ const { mix } = require('laravel-mix');
  |
  */
 
-mix.js('resources/assets/js/calendar.js', 'public/js');
+mix
+  .sass('resources/assets/css/coreui.scss', 'public/css')
+  .react('resources/assets/js/index.js', 'public/js');
