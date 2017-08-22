@@ -1,0 +1,10 @@
+// GLOBAL CSS IMPORTS
+
+@import "~coreui.io/Static_Starter_GULP/scss/style.scss";
+@import '~fullcalendar/dist/fullcalendar.css';
+
+// GLOBAL CSS CONFIGURATION
+
+#calendar {
+  margin-top: 20px;
+}

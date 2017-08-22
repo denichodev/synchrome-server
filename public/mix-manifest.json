@@ -3,5 +3,6 @@
   "/js/reactCalendar.js": "/js/reactCalendar.js",
   "/mix.js": "/mix.js",
   "/css/coreui.css": "/css/coreui.css",
-  "/js/index.js": "/js/index.js"
+  "/js/index.js": "/js/index.js",
+  "/css/global.css": "/css/global.css"
 }
