@@ -9,7 +9,6 @@
 
 @section('content')
 <div id="cal">
-  <calendar state="edit" id="{{ $calendar->id }}"></calendar>
 </div>
 @endsection
 
@@ -18,5 +17,5 @@
 @endpush
 
 @push('footer_scripts')
-<script src="{{ asset('js/calendar.js') }}"></script>
+<script src="{{ asset('js/index.js') }}"></script>
 @endpush

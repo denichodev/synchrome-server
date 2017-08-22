@@ -9,7 +9,7 @@ class Calendar extends Component {
 
     this.state = {
       calendarTitle: '',
-      publishType: 'published'      
+      publishType: 'published'
     };
 
     this.handleTitleChange = this.handleTitleChange.bind(this);
@@ -40,12 +40,14 @@ class Calendar extends Component {
   }
 
   render() {
+    console.log(this.props);
+
     return (
       <div className="animated fadeIn">
         <div className="row">
           <div className="col-md-9">
             <div className="card">
-              <div className="card-header">Add New Calendar</div>
+              <div className="card-header">{this.props.edit ? `Edit Calendar ${this.props.id}` : 'Add New Calendar'}</div>
               <div className="card-block">
                 <div className="row">
                   <div className="col-sm-12 from-group">
@@ -98,6 +100,16 @@ class Calendar extends Component {
       </div>
     );
   }
+}
+
+Calendar.defaultProps = {
+  edit: false,
+  id: null
+}
+
+Calendar.propTypes = {
+  edit: PropTypes.bool.isRequired,
+  id: PropTypes.string
 }
 
 export default Calendar;
