@@ -8,9 +8,16 @@ import {
 import Calendar from './Calendar/Calendar';
 
 const EditCalendar = ({ match }) => {
-  return (
-    <Calendar edit id={match.params.id ? match.params.id : null} />
-  )
+  console.log(match.params.id);
+  if (match.params.id) {
+    console.log('true or not', match.params.id === 'add-new');
+    if (match.params.id !== 'add-new') {
+      return (
+        <Calendar edit={true} id={match.params.id} />
+      )
+    }
+  }
+  return null;
 }
 
 class App extends Component {

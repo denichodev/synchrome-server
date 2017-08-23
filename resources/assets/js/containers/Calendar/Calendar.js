@@ -40,7 +40,8 @@ class Calendar extends Component {
   }
 
   render() {
-    console.log(this.props);
+    console.log('props id', this.props.id);
+    console.log(document.head.querySelector('meta[name="jwt-token"]').content);
 
     return (
       <div className="animated fadeIn">
@@ -81,6 +82,25 @@ class Calendar extends Component {
                 <div className="card">
                   <div className="card-header">
                     Publishing  
+                  </div>
+                  <div className="card-block">
+                    <form className="form-group" onSubmit={this.handleSubmit}>
+                      <label htmlFor="publish-type"><strong>Status</strong></label>
+                      <select value={this.state.publishType} onChange={this.handlePublishOption} name="publish-type" id="publish-type" className="form-control">
+                        <option value="published" defaultValue>Published</option>
+                        <option value="draft">Draft</option>
+                      </select>
+                      <button style={{marginTop: '10px'}} type="submit" className="btn btn-block btn-primary btn-lg">Save</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-md-12">
+                <div className="card">
+                  <div className="card-header">
+                    Event  
                   </div>
                   <div className="card-block">
                     <form className="form-group" onSubmit={this.handleSubmit}>

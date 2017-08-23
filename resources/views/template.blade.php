@@ -26,6 +26,7 @@
 
     <!-- Main styles for this application -->
     <link href="{{ asset('css/global.css') }}" rel="stylesheet">
+    @stack('head_scripts')
 
 </head>
 
