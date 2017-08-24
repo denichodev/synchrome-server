@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+
+import { calendarActions } from '../../ducks/calendar';
 
 import EventCalendar from './EventCalendar';
 
@@ -16,6 +19,14 @@ class Calendar extends Component {
     this.handleCalendarSelection = this.handleCalendarSelection.bind(this);
     this.handlePublishOption = this.handlePublishOption.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleTestClick = this.handleTestClick.bind(this);
+  }
+
+  componentDidMount() {
+    const { edit, fetchCalendar, id } = this.props;
+    if (!edit) { return; }
+
+    fetchCalendar(id);
   }
 
   handleCalendarSelection(start, end) {
@@ -39,10 +50,43 @@ class Calendar extends Component {
     console.log(this.state);
   }
 
-  render() {
-    console.log('props id', this.props.id);
-    console.log(document.head.querySelector('meta[name="jwt-token"]').content);
+  handleTestClick() {
+    console.log('testing');
+    this.props.fetchCalendar(1);
+  }
 
+  renderEventCalendar() {
+    const eventsToShow = (this.props.calendar.events);
+    console.log('EVENTS TO BE DISPLAYED: ', eventsToShow);    
+    const { edit } = this.props;
+
+    console.log('props', this.props.id);
+    if (!edit) {
+      return (
+        <EventCalendar
+          height={530}
+          displayEventTime={false}
+          selectable
+          events={[]}
+          handleSelection={this.handleSelection}
+        />
+      )
+    }
+
+    if (edit && eventsToShow) {
+      return (
+        <EventCalendar
+          height={530}
+          displayEventTime={false}
+          selectable
+          events={eventsToShow}
+          handleSelection={this.handleSelection}
+        />
+      );
+    }
+  }
+
+  render() {
     return (
       <div className="animated fadeIn">
         <div className="row">
@@ -64,13 +108,7 @@ class Calendar extends Component {
                 <div className="row">
                   <div className="col-md-12">
                     {/* this.renderCalendarTitle() */}
-                    <EventCalendar
-                      height={530}
-                      displayEventTime={false}
-                      selectable
-                      events={[]}
-                      handleSelection={this.handleSelection}
-                    />
+                    {this.renderEventCalendar()}
                   </div>
                 </div>
               </div>
@@ -132,4 +170,12 @@ Calendar.propTypes = {
   id: PropTypes.string
 }
 
-export default Calendar;
+const mapStateToProps = state => ({
+  calendar: state.calendar
+});
+
+const mapDispatchToProps = dispatch => ({
+  fetchCalendar: id => dispatch(calendarActions.fetchCalendar(id))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Calendar);
