@@ -35,4 +35,10 @@ Route::group(['prefix' => 'dashboard', 'middleware' => 'auth'], function () {
         Route::post('generate-key/{id}', 'ClusterController@generateKey')->name('clusters.generate_key');
         Route::post('disable-key/{keyId}', 'ClusterController@disableKey')->name('clusters.disable_key');
     });
+
+    Route::group(['prefix' => 'employees'], function () {
+        Route::get('/', 'EmployeeController@index')->name('employees.index');
+        Route::get('add-new', 'EmployeeController@create')->name('employees.create');
+        Route::post('add-new', 'EmployeeController@store')->name('employees.store');
+    });
 });

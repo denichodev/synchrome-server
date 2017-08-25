@@ -14,9 +14,11 @@ use App\Key;
 |
 */
 
-Route::group(['middleware' => ['api', 'jwt_auth'], 'prefix' => 'int'], function () {
-    Route::post('calendar', 'Api\CalendarController@store')->name('api.int.calendars.store');
-    Route::get('calendar/{id}', 'Api\CalendarController@get')->name('api.int.calendars.get');
-    Route::patch('calendar/{id}', 'Api\CalendarController@update')->name('api.int.calendars.update');
-    Route::get('calendar/event/category', 'Api\EventCategoryController@index')->name('api.int.calendars.events.categories.index');
+Route::group(['middleware' => ['api']], function () {
+    Route::post('calendar', 'Api\CalendarController@store')->name('api.calendars.store');
+    Route::get('calendar/{id}', 'Api\CalendarController@get')->name('api.calendars.get');
+    Route::patch('calendar/{id}', 'Api\CalendarController@update')->name('api.calendars.update');
+    Route::get('calendar/event/category', 'Api\EventCategoryController@index')->name('api.calendars.events.categories.index');
+
+    Route::get('agency/{id}/echelons', 'Api\AgencyController@echelons')->name('api.agencies.echelons');
 });

@@ -28,13 +28,16 @@
       <nav class="sidebar-nav">
         <ul class="nav">
           <li class="nav-item">
-              <a class="nav-link" href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i> Dashboard </a>
+            <a class="nav-link" href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i> Dashboard </a>
           </li>
           <li class="nav-item">
-              <a class="nav-link" href="{{ route('calendars.index') }}"><i class="fa fa-calendar"></i> Calendars </a>
+            <a class="nav-link" href="{{ route('calendars.index') }}"><i class="fa fa-calendar"></i> Calendars </a>
           </li>
           <li class="nav-item">
-              <a class="nav-link" href="{{ route('clusters.index') }}"><i class="fa fa-cloud"></i> Clusters </a>
+            <a class="nav-link" href="{{ route('clusters.index') }}"><i class="fa fa-cloud"></i> Clusters </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ route('employees.index') }}"><i class="fa fa-users"></i> Employees </a>
           </li>
         </ul>
       </nav>

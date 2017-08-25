@@ -4,22 +4,22 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Agency extends Model
+class Employee extends Model
 {
     protected $casts = [
         'id' => 'string'
     ];
-
+    
     public $incrementing = false;
 
     protected $fillable = [
         'id',
         'name',
-        'agency_type_id'
+        'echelon_id'
     ];
 
-    public function echelons()
+    public function echelon()
     {
-        return $this->hasMany(Echelon::class);
+        return $this->belongsTo(Echelon::class);
     }
 }
