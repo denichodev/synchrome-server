@@ -4,6 +4,9 @@
 /public/bower_components
 /public/css
 /public/js
+/public/fonts
+/public/images
+/public/mix.js
 /storage/*.key
 /vendor
 /.idea
