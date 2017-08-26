@@ -26,18 +26,9 @@ class Calendar extends Component {
       },
       eventsToPost: []
     };
-
-    this.handleTitleChange = this.handleTitleChange.bind(this);
-    this.handleCalendarSelection = this.handleCalendarSelection.bind(this);
-    this.handlePublishOption = this.handlePublishOption.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleAddEvent = this.handleAddEvent.bind(this);
-    this.handleEventTitleChange = this.handleEventTitleChange.bind(this);
-    this.generateEventId = this.generateEventId.bind(this);
-    this.findEvent = this.findEvent.bind(this);
   }
 
-  fetchCategories() {
+  fetchCategories = () => {
     const token = document.head.querySelector('meta[name="jwt-token"]').content;    
     axios
       .get('http://localhost:8000/api/calendar/event/category', {
@@ -55,7 +46,7 @@ class Calendar extends Component {
       });
   }
 
-  componentDidMount() {
+  componentDidMount = () => {
     this.fetchCategories();
 
     const { edit, fetchCalendar, id } = this.props;
@@ -64,7 +55,7 @@ class Calendar extends Component {
     fetchCalendar(id);
   }
 
-  handleCalendarSelection(start, end) {
+  handleCalendarSelection = (start, end) => {
     
     this.setState({
       eventToPush: {
@@ -75,19 +66,19 @@ class Calendar extends Component {
     });
   }
 
-  handleTitleChange(e) {
+  handleTitleChange = (e) => {
     this.setState({
       calendarTitle: e.target.value
     });
   }
 
-  handlePublishOption(e) {
+  handlePublishOption = (e) => {
     this.setState({
       publishType: e.target.value
     });
   }
 
-  handleAddEvent(e) {
+  handleAddEvent = (e) => {
     e.preventDefault();
     
     this.setState({
@@ -102,7 +93,7 @@ class Calendar extends Component {
     });
   }
 
-  findEvent(id) {    
+  findEvent = (id) => {    
     if (!this.state) { return null; }
 
     let event = _.find(this.state.eventsToPost, o => {
@@ -116,7 +107,7 @@ class Calendar extends Component {
     return null;
   }
 
-  generateEventId() {
+  generateEventId = () => {
     let id = _.random(1, 720)
 
     if (this.findEvent(id) != null) {
@@ -135,7 +126,7 @@ class Calendar extends Component {
     });
   }
 
-  handleEventTitleChange(e) {
+  handleEventTitleChange = (e) => {
     this.setState({
       eventToPush: {
         ...this.state.eventToPush,      
@@ -144,11 +135,11 @@ class Calendar extends Component {
     });
   }
 
-  handleSubmit(e) {
+  handleSubmit = (e) => {
     e.preventDefault();
   }
 
-  renderCategoriesOption() {
+  renderCategoriesOption = () => {
     const { categories } = this.state;
 
     if (!categories) { return; }
@@ -164,7 +155,7 @@ class Calendar extends Component {
     );
   }
 
-  renderEventCalendar() {
+  renderEventCalendar = () => {
     const eventsToShow = (this.props.calendar.events);
     const { edit } = this.props;
 
