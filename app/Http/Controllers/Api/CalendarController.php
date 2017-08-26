@@ -4,10 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-use App\Http\Controllers\Controller;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use App\Http\Controllers\Controller;
 use App\Calendar;
 use App\Event;
+use App\EventCategory;
 use JWTAuth;
 use Validator;
 use DB;
@@ -24,7 +25,7 @@ class CalendarController extends Controller
                 'data' => $calendars
             ]);
     }
-    
+
     public function store(Request $request)
     {
         $validation = Validator::make($request->all(), [
@@ -242,5 +243,46 @@ class CalendarController extends Controller
         if (count($deletedEventIds) > 0) {
             Event::destroy($deletedEventIds);
         }
+    }
+
+    public function destroy($id)
+    {
+        try {
+            DB::beginTransaction();
+            $calendar = Calendar::find($id);
+
+            if (is_null($calendar)) {
+                abort(404);
+            }
+
+            $calendar->delete();
+            DB::commit();
+
+            return response()
+                ->json(['result' => 'success']);
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            if (\App::environment('local')) {
+                throw $e;
+            }
+            
+            return response()
+                ->json([
+                    'result' => 'failed', 
+                    'errors' => [$e->getMessage]
+                ]);
+        }
+    }
+
+    public function eventCategories()
+    {
+        $categories = EventCategory::get();
+        
+        return response()
+            ->json([
+                'result' => 'success',
+                'data' => $categories
+            ]);
     }
 }
