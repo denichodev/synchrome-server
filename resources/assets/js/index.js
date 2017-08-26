@@ -6,6 +6,8 @@ import { ConnectedRouter } from 'react-router-redux';
 import { configureStore, history } from './stores/configureStore.dev';
 import { http } from './services/http';
 
+import Root from './containers/Root';
+
 const initialState = {};
 const store = configureStore(initialState);
 
@@ -13,10 +15,6 @@ const store = configureStore(initialState);
 http.init();
   
 render(
-  <Provider store={store}>
-    <ConnectedRouter history={history}>
-      <App initialState={window.__INITIAL_STATE__} />
-    </ConnectedRouter>
-  </Provider>
+  <Root store={store} history={history} />
   , document.getElementById('root')
 );

@@ -9,7 +9,7 @@ export default class Sidebar extends Component {
           <ul className="sidebar-menu">
             <li className="header">MAIN NAVIGATION</li>
             <li className="treeview">
-              <Link to="/panel"><i className="fa fa-dashboard" />Dashboard</Link>
+              <Link to="/panel"><i className="fa fa-dashboard" /><span>Panel</span></Link>
             </li>
             <li className="treeview">
               <Link to="/panel/calendars">

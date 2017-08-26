@@ -15,6 +15,7 @@ Route::get('/', 'Auth\AuthController@login')->name('auth.login');
 Route::post('/', 'Auth\AuthController@doLogin')->name('auth.do_login');
 Route::post('/auth/logout', 'Auth\AuthController@doLogout')->name('auth.do_logout');
 
+
 Route::group(['prefix' => 'panel'], function () {
     Route::get('/', 'PanelController@dashboard')->name('dashboard');
     Route::get('{reactRoutes}', 'PanelController@dashboard')
