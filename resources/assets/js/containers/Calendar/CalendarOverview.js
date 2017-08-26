@@ -9,6 +9,35 @@ class CalendarOverview extends Component {
 
     fetchAllCalendar();
   }
+
+  renderCalendarTable = () => {
+    const { calendarData } = this.props;
+    
+    if (calendarData.length <= 0) {
+      return (
+        <tr>
+          <td colSpan="3"><center>No calendar added yet</center></td>
+        </tr>
+      )
+    }
+
+    return (
+      calendarData.map(cal => (
+        <tr key={cal.id}>
+          <td>{cal.name}</td>
+          <td><strong>{cal.start}</strong> s/d <strong>{cal.end}</strong></td>
+          <td>
+            <Link to={`/panel/calendars/${cal.id}`} className="btn btn-xs btn-primary">View/Edit</Link>
+            <form action="" method="POST" style={{ display: 'inline' }}>
+                {/* TODO: DESTROY CALENDAR */}  
+                <input type="hidden" name="_method" value="DELETE" />
+                <button type="submit" class="btn btn-xs btn-danger">Delete</button>
+            </form>
+          </td>
+        </tr>
+      ))
+    );
+  }
   
   render() {
     return (
@@ -25,7 +54,9 @@ class CalendarOverview extends Component {
                 <th>Actions</th>
               </tr>
             </thead>
-            
+            <tbody>
+              {this.renderCalendarTable()}
+            </tbody>
           </table>
         </div>
       </div>
@@ -33,10 +64,14 @@ class CalendarOverview extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  calendars: state.calendars
-})
+const mapStateToProps = state => {
+  console.log(state);
 
+  return {
+    calendarData: state.calendars.data,
+    calendarErrror: state.calendars.error
+  }
+}
 const mapDispatchToProps = dispatch => ({
   fetchAllCalendar: () => dispatch(calendarActions.fetchAllCalendar())  
 })
