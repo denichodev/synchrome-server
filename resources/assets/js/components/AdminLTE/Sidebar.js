@@ -9,21 +9,21 @@ export default class Sidebar extends Component {
           <ul className="sidebar-menu">
             <li className="header">MAIN NAVIGATION</li>
             <li className="treeview">
-              <Link to="/panel"><i className="fa fa-dashboard" />Panel</Link>
+              <Link to="/panel"><i className="fa fa-dashboard" />Dashboard</Link>
             </li>
             <li className="treeview">
               <Link to="/panel/calendars">
-                <i className="fa fa-dashboard" /> <span>Calendars</span>
+                <i className="fa fa-calendar" /> <span>Calendars</span>
               </Link>
             </li>
             <li className="treeview">
               <Link to="/panel/clusters">
-                <i className="fa fa-dashboard" /> <span>Clusters</span>
+                <i className="fa fa-cloud" /> <span>Clusters</span>
               </Link>
             </li>
             <li className="treeview">
               <Link to="/panel/employees">
-                <i className="fa fa-dashboard" /> <span>Employees</span>
+                <i className="fa fa-users" /> <span>Employees</span>
               </Link>
             </li>
           </ul>
