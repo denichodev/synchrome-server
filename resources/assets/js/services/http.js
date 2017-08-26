@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export default http = {
+export default {
   token: '',
 
   init() {
