@@ -1,4 +1,4 @@
-import axios from 'axios';
+import http from '../services/http'
 
 // Types
 const FETCH_CALENDAR_ALL_REQUEST = 'synchrome/calendar/fetch_calendar_all_request';
@@ -61,10 +61,33 @@ const fetchCalendarByIdFailure = error => {
 
 const fetchAllCalendar = () => {
   // TODO: implement fetch all calendar using the http services
+  
+
+  return dispatch => {
+    dispatch(fetchCalendarAllRequest());
+
+    const successCallback = res => {
+      dispatch(fetchCalendarAllSuccess(res.data.data));
+      console.log(res.data.data);
+    }
+  
+    const errorCallback = err => {
+      dispatch(fetchCalendarAllFailure(err.message));
+      console.log(err.message);
+    }
+
+    http.get('/calendar', successCallback, errorCallback);
+  }
+
 }
 
 const fetchCalendarById = id => {
   // TODO: implement fetch calendar by an id to get the events
+}
+
+export const calendarActions = {
+  fetchCalendarById,
+  fetchAllCalendar
 }
 
 const allCalendarReducer = (state = {}, action) => {
