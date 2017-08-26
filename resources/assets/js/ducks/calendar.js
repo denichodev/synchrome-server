@@ -68,12 +68,10 @@ const fetchAllCalendar = () => {
 
     const successCallback = res => {
       dispatch(fetchCalendarAllSuccess(res.data.data));
-      console.log(res.data.data);
     }
   
     const errorCallback = err => {
       dispatch(fetchCalendarAllFailure(err.message));
-      console.log(err.message);
     }
 
     http.get('/calendar', successCallback, errorCallback);
@@ -89,6 +87,12 @@ export const calendarActions = {
   fetchCalendarById,
   fetchAllCalendar
 }
+
+// All Calendar Reducer
+const allCalendarInitialState = {
+  error: '',
+  data: []
+};
 
 const allCalendarReducer = (state = {}, action) => {
   switch (action.type) {
@@ -107,6 +111,12 @@ const allCalendarReducer = (state = {}, action) => {
   }
 }
 
+// Active Calendar Reducer
+const activeCalendarInitialState = {
+  error: '',
+  data: []
+};
+
 const activeCalendarReducer = (state = {}, action) => {
   switch (action.type) {
     case FETCH_CALENDAR_BYID_SUCCESS:
@@ -120,5 +130,7 @@ const activeCalendarReducer = (state = {}, action) => {
 
 export default {
   allCalendarReducer,
-  activeCalendarReducer
+  activeCalendarReducer,
+  activeCalendarInitialState,
+  allCalendarInitialState
 }
