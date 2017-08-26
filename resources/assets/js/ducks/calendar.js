@@ -1,71 +1,95 @@
 import axios from 'axios';
 
 // Types
-const FETCH_CALENDAR_REQUEST = 'synchrome/calendar/fetch_calendar_request';
-const FETCH_CALENDAR_SUCCESS = 'synchrome/calendar/fetch_calendar_success';
-const FETCH_CALENDAR_FAILURE = 'synchrome/calendar/fetch_calendar_failure';
+const FETCH_CALENDAR_ALL_REQUEST = 'synchrome/calendar/fetch_calendar_all_request';
+const FETCH_CALENDAR_ALL_SUCCESS = 'synchrome/calendar/fetch_calendar_all_success';
+const FETCH_CALENDAR_ALL_FAILURE = 'synchrome/calendar/fetch_calendar_all_failure';
+
+const FETCH_CALENDAR_BYID_REQUEST = 'synchrome/calendar/fetch_calendar_byid_request';
+const FETCH_CALENDAR_BYID_SUCCESS = 'synchrome/calendar/fetch_calendar_byid_success';
+const FETCH_CALENDAR_BYID_FAILURE = 'synchrome/calendar/fetch_calendar_byid_failure';
 
 export const calendarTypes = {
-  FETCH_CALENDAR_REQUEST,
-  FETCH_CALENDAR_SUCCESS,
-  FETCH_CALENDAR_FAILURE
-};
-
-// Action creators
-const fetchCalendarRequest = () => {
-  return {
-    type: FETCH_CALENDAR_REQUEST
-  }
+  FETCH_CALENDAR_ALL_REQUEST,
+  FETCH_CALENDAR_ALL_SUCCESS,
+  FETCH_CALENDAR_ALL_FAILURE,
+  FETCH_CALENDAR_BYID_REQUEST,
+  FETCH_CALENDAR_BYID_SUCCESS,
+  FETCH_CALENDAR_BYID_FAILURE
 }
 
-const fetchCalendarSuccess = payload => {
-  console.log('PAYLOAD: ', payload);
+// Action Creators
+const fetchCalendarAllRequest = () => {
   return {
-    type: FETCH_CALENDAR_SUCCESS,
+    type: FETCH_CALENDAR_ALL_REQUEST
+  };
+};
+
+const fetchCalendarAllSuccess = payload => {
+  return {
+    type: FETCH_CALENDAR_ALL_SUCCESS,
     payload
   };
-}
+};
 
-const fetchCalendarFailure = error => {
+const fetchCalendarAllFailure = error => {
   return {
-    type: FETCH_CALENDAR_FAILURE,
-    error
-  }
-}
-
-const fetchCalendar = (id) => {
-  const token = document.head.querySelector('meta[name="jwt-token"]').content;
-  return dispatch => {
-    dispatch(fetchCalendarRequest());
-
-    axios
-      .get(`http://localhost:8000/api/int/calendar/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-      .then(res => {
-        console.log('RESPONSE:', res);
-        dispatch(fetchCalendarSuccess(res.data.data));
-      })
-      .catch(err => {
-        dispatch(fetchCalendarFailure(err.message));
-      });
+    type: FETCH_CALENDAR_ALL_FAILURE,
+    payload: error
   };
 };
 
-export const calendarActions = {
-  fetchCalendar
+const fetchCalendarByIdRequest = () => {
+  return {
+    type: FETCH_CALENDAR_BYID_REQUEST
+  };
+};
+
+const fetchCalendarByIdSuccess = payload => {
+  return {
+    type: FETCH_CALENDAR_BYID_SUCCESS,
+    payload
+  }
 }
 
-// Reducer
-const calendarReducer = (state = {}, action) => {
+const fetchCalendarByIdFailure = error => {
+  return {
+    type: FETCH_CALENDAR_BYID_FAILURE,
+    payload: error
+  }
+}
+
+const fetchAllCalendar = () => {
+  // TODO: implement fetch all calendar using the http services
+}
+
+const fetchCalendarById = id => {
+  // TODO: implement fetch calendar by an id to get the events
+}
+
+const allCalendarReducer = (state = {}, action) => {
   switch (action.type) {
-    case FETCH_CALENDAR_SUCCESS:
+    case FETCH_CALENDAR_ALL_SUCCESS:
       return action.payload;
+    case FETCH_CALENDAR_ALL_FAILURE:
+      return { error: action.payload };
     default:
       return state;
   }
-};
+}
 
-export default calendarReducer;
+const activeCalendarReducer = (state = {}, action) => {
+  switch (action.type) {
+    case FETCH_CALENDAR_BYID_SUCCESS:
+      return action.payload;
+    case FETCH_CALENDAR_BYID_FAILURE:
+      return { error: action.payload };
+    default:
+      return state;  
+  }
+}
+
+export default {
+  allCalendarReducer,
+  activeCalendarReducer
+}

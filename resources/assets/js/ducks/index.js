@@ -4,7 +4,8 @@ import calendar from './calendar';
 
 const rootReducer = combineReducers({
   router,
-  calendar
+  activeCalendar: calendar.activeCalendarReducer,
+  calendars: calendar.allCalendarReducer
 });
 
 export default rootReducer;
