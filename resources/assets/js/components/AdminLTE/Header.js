@@ -39,12 +39,12 @@ export default class Header extends Component {
             <ul className="nav navbar-nav">
               <li className="dropdown user user-menu">
                 <a href="#" className="dropdown-toggle" data-toggle="dropdown">
-                  <img src="images/vendor/admin-lte/dist/user2-160x160.jpg" className="user-image" alt="User Image" />
+                  <img src="/images/vendor/admin-lte/dist/user2-160x160.jpg" className="user-image" alt="User Image" />
                   <span className="hidden-xs">{ userName }</span>
                 </a>
                 <ul className="dropdown-menu">
                   <li className="user-header">
-                    <img src="images/vendor/admin-lte/dist/user2-160x160.jpg" className="img-circle" alt="User Image" />
+                    <img src="/images/vendor/admin-lte/dist/user2-160x160.jpg" className="img-circle" alt="User Image" />
                     <p>
                       { userName }
                       <small>{ userEmail }</small>
