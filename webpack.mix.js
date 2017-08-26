@@ -12,4 +12,8 @@ const { mix } = require('laravel-mix');
  */
 mix
   .sass('resources/assets/css/global.scss', 'public/css')
-  .react('resources/assets/js/index.js', 'public/js');
+  .react('resources/assets/js/index.js', 'public/js')
+  .copy('./node_modules/jquery/dist/jquery.min.js', 'public/js')
+  .copy('./node_modules/bootstrap/dist/js/bootstrap.min.js', 'public/js')
+  .copy('./node_modules/fastclick/lib/fastclick.js', 'public/js')
+  .copy('./node_modules/admin-lte/dist/js/app.min.js', 'public/js');
