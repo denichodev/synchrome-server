@@ -93,9 +93,15 @@ export const calendarActions = {
 const allCalendarReducer = (state = {}, action) => {
   switch (action.type) {
     case FETCH_CALENDAR_ALL_SUCCESS:
-      return action.payload;
+      return {
+        ...state,
+        data: action.payload
+      }
     case FETCH_CALENDAR_ALL_FAILURE:
-      return { error: action.payload };
+      return {
+        ...state,
+        error: action.payload
+      };
     default:
       return state;
   }
@@ -106,7 +112,7 @@ const activeCalendarReducer = (state = {}, action) => {
     case FETCH_CALENDAR_BYID_SUCCESS:
       return action.payload;
     case FETCH_CALENDAR_BYID_FAILURE:
-      return { error: action.payload };
+      return action.payload;
     default:
       return state;  
   }
