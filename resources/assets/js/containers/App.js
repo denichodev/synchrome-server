@@ -4,16 +4,22 @@ import {
   Route,
   Redirect
 } from 'react-router-dom';
+
 import Header from '../components/AdminLTE/Header';
+import Sidebar from '../components/AdminLTE/Sidebar';
+import ContentWrapper from '../components/AdminLTE/ContentWrapper';
 
 import AppRoutes from '../routes/AppRoutes';
 
 class App extends Component {
   render() {
     return (
-      <div>
+      <div className="app">
         <Header appName={this.props.initialState.appName} />
-        <AppRoutes />
+        <Sidebar />
+        <ContentWrapper>
+          <AppRoutes />        
+        </ContentWrapper>
       </div>
     );
   }

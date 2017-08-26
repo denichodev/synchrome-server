@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
 
-import './Dashboard.css';
-
-class Dashboard extends Component {
+class CalendarOverview extends Component {
   render() {
     return (
       <div>
-        Dashboard
+        Calendar Overview
       </div>
     );
   }
 }
 
-export default Dashboard;
+export default CalendarOverview;

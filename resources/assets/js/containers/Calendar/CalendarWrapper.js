@@ -5,6 +5,8 @@ import {
 } from 'react-router-dom';
 import Calendar from './Calendar';
 
+import CalendarOverview from './CalendarOverview';
+
 const EditCalendar = ({ match }) => {
   return (
     <Calendar edit={true} id={match.params.id ? match.params.id : null} />
@@ -17,14 +19,14 @@ const NewCalendar = ({ match }) => {
   );
 }
 
-
 class CalendarWrapper extends Component {
   render() {
     return (
       <div>
         <Switch>
-          <Route exact path="/dashboard/calendars/add-new" component={NewCalendar} />
-          <Route path="/dashboard/calendars/:id" component={EditCalendar} />     
+          <Route exact path="/panel/calendars" component={CalendarOverview} />
+          <Route exact path="/panel/calendars/add-new" component={NewCalendar} />
+          <Route path="/panel/calendars/:id" component={EditCalendar} />     
         </Switch>
       </div>
     );
