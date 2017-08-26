@@ -3,55 +3,55 @@ import React, { Component } from 'react';
 export default class Header extends Component {
   render() {
     return (
-      <header class="main-header">
-        <a href="#" class="logo">
-          <span class="logo-mini"><b>A</b>LT</span>
-          <span class="logo-lg"><b>Admin</b>LTE</span>
+      <header className="main-header">
+        <a href="#" className="logo">
+          <span className="logo-mini"><b>A</b>LT</span>
+          <span className="logo-lg">{ window.__INITIAL_STATE__.appName }</span>
         </a>
 
-        <nav class="navbar navbar-static-top">
-          <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
+        <nav className="navbar navbar-static-top">
+          <a href="#" className="sidebar-toggle" data-toggle="push-menu" role="button">
+            <span className="sr-only">Toggle navigation</span>
+            <span className="icon-bar"></span>
+            <span className="icon-bar"></span>
+            <span className="icon-bar"></span>
           </a>
 
-          <div class="navbar-custom-menu">
-            <ul class="nav navbar-nav">
-              <li class="dropdown user user-menu">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                  <img src="../../dist/img/user2-160x160.jpg" class="user-image" alt="User Image" />
-                  <span class="hidden-xs">Alexander Pierce</span>
+          <div className="navbar-custom-menu">
+            <ul className="nav navbar-nav">
+              <li className="dropdown user user-menu">
+                <a href="#" className="dropdown-toggle" data-toggle="dropdown">
+                  <img src="../../dist/img/user2-160x160.jpg" className="user-image" alt="User Image" />
+                  <span className="hidden-xs">Alexander Pierce</span>
                 </a>
-                <ul class="dropdown-menu">
-                  <li class="user-header">
-                    <img src="../../dist/img/user2-160x160.jpg" class="img-circle" alt="User Image" />
+                <ul className="dropdown-menu">
+                  <li className="user-header">
+                    <img src="../../dist/img/user2-160x160.jpg" className="img-circle" alt="User Image" />
 
                     <p>
                       Alexander Pierce - Web Developer
                       <small>Member since Nov. 2012</small>
                     </p>
                   </li>
-                  <li class="user-body">
-                    <div class="row">
-                      <div class="col-xs-4 text-center">
+                  <li className="user-body">
+                    <div className="row">
+                      <div className="col-xs-4 text-center">
                         <a href="#">Followers</a>
                       </div>
-                      <div class="col-xs-4 text-center">
+                      <div className="col-xs-4 text-center">
                         <a href="#">Sales</a>
                       </div>
-                      <div class="col-xs-4 text-center">
+                      <div className="col-xs-4 text-center">
                         <a href="#">Friends</a>
                       </div>
                     </div>
                   </li>
-                  <li class="user-footer">
-                    <div class="pull-left">
-                      <a href="#" class="btn btn-default btn-flat">Profile</a>
+                  <li className="user-footer">
+                    <div className="pull-left">
+                      <a href="#" className="btn btn-default btn-flat">Profile</a>
                     </div>
-                    <div class="pull-right">
-                      <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                    <div className="pull-right">
+                      <a href="#" className="btn btn-default btn-flat">Sign out</a>
                     </div>
                   </li>
                 </ul>

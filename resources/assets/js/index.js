@@ -7,7 +7,7 @@ import { configureStore, history } from './stores/configureStore.dev';
 
 import App from './containers/App';
 
-const initialState = {};
+const initialState = window.__INITIAL_STATE__;
 
 const store = configureStore(initialState);
   

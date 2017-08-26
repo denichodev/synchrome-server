@@ -20,11 +20,16 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
 <body class="hold-transition skin-green sidebar-mini">
-<!-- Site wrapper -->
 <div class="wrapper">
   <div id="root"></div>
 </div>
+
 <!-- ./wrapper -->
+<script>
+  window.__INITIAL_STATE__ = {
+    appName: '{{ env('APP_NAME') }}'
+  };
+</script>
 <script src="{{ asset('js/index.js') }}"></script>
 </body>
 </html>
