@@ -7,10 +7,6 @@ import { configureStore, history } from './stores/configureStore.dev';
 
 import App from './containers/App';
 
-import dotenv from 'dotenv';
-
-dotenv.config();
-
 const initialState = {};
 
 const store = configureStore(initialState);

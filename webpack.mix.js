@@ -11,10 +11,5 @@ const { mix } = require('laravel-mix');
  |
  */
 mix
-  .webpackConfig({
-    externals: [
-      'dotenv'
-    ]
-  }) 
   .sass('resources/assets/css/global.scss', 'public/css')
   .react('resources/assets/js/index.js', 'public/js');
