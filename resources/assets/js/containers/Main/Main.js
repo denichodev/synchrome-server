@@ -5,11 +5,13 @@ import Sidebar from '../../components/AdminLTE/Sidebar';
 
 import MainRoutes from '../../routes/MainRoutes';
 
+const initialState = window.__INITIAL_STATE__;
+
 class Main extends Component {
-  render() {
+  render() {  
     return (
       <div className="app">
-        <Header />
+        <Header appName={initialState.appName} />
         <Sidebar />
         <div className="content-wrapper">
           <section className="content-header"></section>
