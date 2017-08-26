@@ -1,6 +1,17 @@
 import React, { Component } from 'react';
 
 export default class Header extends Component {
+  handleClick = () => {
+    // Pushing the menu
+    const body = document.body;
+
+    if (body.clientWidth > 768) {
+      body.classList.toggle('sidebar-collapse');
+    } else {
+      body.classList.toggle('sidebar-open');
+    }
+  }
+  
   render() {
     const { appName } = this.props;
 
@@ -12,7 +23,7 @@ export default class Header extends Component {
         </a>
 
         <nav className="navbar navbar-static-top">
-          <a href="#" className="sidebar-toggle" data-toggle="push-menu" role="button">
+          <a className="sidebar-toggle" data-toggle="push-menu" role="button" onClick={this.handleClick}>
             <span className="sr-only">Toggle navigation</span>
             <span className="icon-bar"></span>
             <span className="icon-bar"></span>
