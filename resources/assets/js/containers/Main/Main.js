@@ -11,7 +11,12 @@ class Main extends Component {
   render() {  
     return (
       <div className="app">
-        <Header appName={initialState.appName} />
+        <Header 
+          appName={initialState.appName} 
+          userName={initialState.userName} 
+          userEmail={initialState.userEmail} 
+          csrfToken={initialState.csrfToken}
+        />
         <Sidebar />
         <div className="content-wrapper">
           <section className="content-header"></section>

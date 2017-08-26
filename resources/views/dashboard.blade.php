@@ -27,7 +27,10 @@
 <!-- ./wrapper -->
 <script>
   window.__INITIAL_STATE__ = {
-    appName: '{{ env('APP_NAME') }}'
+    appName: '{{ env('APP_NAME') }}',
+    userName: '{{ Auth::user()->name }}',
+    userEmail: '{{ Auth::user()->email }}',
+    csrfToken: '{{ csrf_token() }}'
   };
 </script>
 <script src="{{ asset('js/jquery.min.js') }}"></script>
