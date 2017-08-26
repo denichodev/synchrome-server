@@ -11,6 +11,8 @@ import { routerMiddleware, routerActions } from 'react-router-redux';
 import rootReducer from './ducks';
 import App from './containers/App';
 
+import actionCreators from './ducks/actionCreators';
+
 const initialState = {};
 const history = createBrowserHistory();
 
@@ -32,7 +34,8 @@ const configureStore = (initialState) => {
   const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
   ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
       // Options: http://zalmoxisus.github.io/redux-devtools-extension/API/Arguments.html
-  })
+      actionCreators
+    })
   : compose;
   
   enhancers.push(applyMiddleware(...middleware));
