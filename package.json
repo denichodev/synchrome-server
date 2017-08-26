@@ -17,13 +17,17 @@
     "eslint": "^4.1.1",
     "jquery": "^3.1.1",
     "laravel-mix": "0.*",
-    "lodash": "^4.17.4",
-    "vue": "^2.1.10"
+    "lodash": "^4.17.4"
   },
   "dependencies": {
+    "admin-lte": "^2.3.11",
+    "bootstrap": "^3.3.7",
     "coreui.io": "^1.0.0-alpha.6",
     "dotenv": "^4.0.0",
+    "font-awesome": "^4.7.0",
+    "fullcalendar": "^3.4.0",
     "history": "^4.7.2",
+    "ionicons": "^3.0.0",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-redux": "^5.0.6",
@@ -32,10 +36,6 @@
     "react-router-redux": "^5.0.0-alpha.6",
     "redux": "^3.7.2",
     "redux-logger": "^3.0.6",
-    "redux-thunk": "^2.2.0",
-    "validate.js": "^0.11.1",
-    "vue-full-calendar": "^2.0.2",
-    "vue-strap": "^1.1.37",
-    "vuejs-datepicker": "^0.8.3"
+    "redux-thunk": "^2.2.0"
   }
 }

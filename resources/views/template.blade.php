@@ -1,75 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>{{ env('APP_NAME') }} | @yield('title')</title>
+  <title>AdminLTE 2 | Blank Page</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <link rel="stylesheet" href="{{ asset('css/global.css') }}">
 
-  <!-- Icons -->
-  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.min.css" rel="stylesheet">
-  <!-- Main styles for this application -->
-  <link href="{{ asset('css/global.css') }}" rel="stylesheet">
-  @stack('head_scripts')
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+  <!-- Google Font -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
-
-<body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
-  <header class="app-header navbar">
-    <button class="navbar-toggler mobile-sidebar-toggler d-lg-none" type="button">☰</button>
-    <a href="#"></a>
-    <ul class="nav navbar-nav d-md-down-none">
-      <li class="nav-item"><a class="nav-link navbar-toggler sidebar-toggler" href="#">☰</a></li>
-    </ul>
-  </header>
-
-  <div class="app-body">
-    <div class="sidebar">
-      <nav class="sidebar-nav">
-        <ul class="nav">
-          <li class="nav-item">
-            <a class="nav-link" href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i> Dashboard </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{ route('calendars.index') }}"><i class="fa fa-calendar"></i> Calendars </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{ route('clusters.index') }}"><i class="fa fa-cloud"></i> Clusters </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{ route('employees.index') }}"><i class="fa fa-users"></i> Employees </a>
-          </li>
-        </ul>
-      </nav>
-    </div>
-
-    <!-- Main content -->
-    <main class="main">
-      <ol class="breadcrumb">
-        @yield('breadcrumb')
-      </ol>
-
-      <div class="container-fluid">
-        @yield('content')
-      </div>
-      <!-- /.container-fluid -->
-    </main>
-  </div>
-
-  <footer class="app-footer">
-    <a href="http://coreui.io">CoreUI</a> © 2017 creativeLabs.
-    <span class="float-right">Powered by <a href="http://coreui.io">CoreUI</a>
-    </span>
-  </footer>
-
-  <!-- Bootstrap and necessary plugins -->
-  <script src="{{ asset('bower_components/jquery/dist/jquery.min.js') }}"></script>
-  <script src="{{ asset('bower_components/tether/dist/js/tether.min.js') }}"></script>
-  <script src="{{ asset('bower_components/bootstrap/dist/js/bootstrap.min.js') }}"></script>
-  <script src="{{ asset('bower_components/pace/pace.min.js') }}"></script>
-  <!-- GenesisUI main scripts -->
-  <script src="{{ asset('js/coreui.js') }}"></script>
-  <!-- Plugins and scripts required by this views -->
-  @stack('footer_scripts')
+<body class="hold-transition skin-green sidebar-mini">
+<!-- Site wrapper -->
+<div class="wrapper">
+  <div id="root"></div>
+</div>
+<!-- ./wrapper -->
 </body>
 </html>
