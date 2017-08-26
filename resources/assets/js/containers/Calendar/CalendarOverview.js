@@ -31,7 +31,7 @@ class CalendarOverview extends Component {
             <form action="" method="POST" style={{ display: 'inline' }}>
                 {/* TODO: DESTROY CALENDAR */}  
                 <input type="hidden" name="_method" value="DELETE" />
-                <button type="submit" class="btn btn-xs btn-danger">Delete</button>
+                <button type="submit" className="btn btn-xs btn-danger">Delete</button>
             </form>
           </td>
         </tr>
@@ -65,8 +65,6 @@ class CalendarOverview extends Component {
 }
 
 const mapStateToProps = state => {
-  console.log(state);
-
   return {
     calendarData: state.calendars.data,
     calendarErrror: state.calendars.error
