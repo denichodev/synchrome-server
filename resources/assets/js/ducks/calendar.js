@@ -58,6 +58,7 @@ export const calendarActions = {
   fetchCalendar
 }
 
+// Reducer
 const calendarReducer = (state = {}, action) => {
   switch (action.type) {
     case FETCH_CALENDAR_SUCCESS:
