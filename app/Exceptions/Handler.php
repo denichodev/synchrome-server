@@ -46,7 +46,7 @@ class Handler extends ExceptionHandler
     {
         if ($exception instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
             return redirect()
-                ->route('react_root');
+                ->route('dashboard');
         }
 
         return parent::render($request, $exception);
