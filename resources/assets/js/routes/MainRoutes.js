@@ -6,9 +6,11 @@ import CalendarOverview from '../containers/Calendar/CalendarOverview';
 import NewCalendar from '../containers/Calendar/NewCalendar';
 import EditCalendar from '../containers/Calendar/EditCalendar';
 import Employee from '../containers/Employee/Employee';
+import Dashboard from '../containers/Dashboard/Dashboard';
 
 export default () => (
   <Switch>
+    <Route exact path="/panel" component={Dashboard} />  
     <Route exact path="/panel/calendars/add-new" component={NewCalendar} />
     <Route path="/panel/calendars/:id" component={EditCalendar} />
     <Route path="/panel/calendars" component={CalendarOverview} />
