@@ -16,4 +16,5 @@ mix
   .copy('./node_modules/jquery/dist/jquery.min.js', 'public/js')
   .copy('./node_modules/bootstrap/dist/js/bootstrap.min.js', 'public/js')
   .copy('./node_modules/fastclick/lib/fastclick.js', 'public/js')
-  .copy('./node_modules/admin-lte/dist/js/app.min.js', 'public/js');
+  .copy('./node_modules/admin-lte/dist/js/app.min.js', 'public/js')
+  .copy('./node_modules/admin-lte/dist/img/user2-160x160.jpg', 'public/images/vendor/admin-lte/dist');
