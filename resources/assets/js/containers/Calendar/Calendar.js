@@ -253,11 +253,32 @@ class Calendar extends Component {
                   </div>
                   <div className="card-block">
                     <form className="form-group" onSubmit={this.handleAddEvent}>
-                      <label htmlFor="category"><strong>Category</strong></label>
-                      {this.renderCategoriesOption()}
-                      <label htmlFor="event-title"><strong>Title</strong></label>      
-                      <input className="form-control" type="text" value={this.state.eventToPush.title} onChange={this.handleEventTitleChange} />
-                      <button style={{marginTop: '10px'}} className="btn btn-block btn-primary btn-lg">Add Event</button>
+                      {/* FIXME: beautify forms with coreui form-group and others, also add react datepicker with button */}  
+                      <div className="row">
+                        <div className="col-md-12 form-group">
+                          <label htmlFor="category"><strong>Category</strong></label>
+                          {this.renderCategoriesOption()}
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className="col-md-12 form-group">
+                          <label htmlFor="event-title"><strong>Title</strong></label>      
+                          <input className="form-control" type="text" value={this.state.eventToPush.title} onChange={this.handleEventTitleChange} />
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className="col-md-12 form-group">
+                          <label htmlFor="start-date"><strong>Start</strong></label>
+                          <input name="start-date" className="form-control" type="text" value={this.state.eventToPush.start} disabled />
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className="col-md-12 form-group">
+                          <label htmlFor="end-date"><strong>End</strong></label>
+                          <input name="end-date" className="form-control" type="text" value={this.state.eventToPush.end} disabled />
+                        </div>
+                      </div>      
+                      <button className="btn btn-block btn-primary btn-lg">Add Event</button>
                     </form>
                   </div>
                 </div>
