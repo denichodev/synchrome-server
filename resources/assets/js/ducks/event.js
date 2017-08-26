@@ -1,4 +1,4 @@
-import axios from 'axios';
+import http from '../services/http';
 
 // Types
 const FETCH_EVENT_CATEGORY_REQUEST = 'synchrome/event/fetch_event_category_request';
@@ -20,12 +20,12 @@ const fetchEventCategoryRequest = () => {
 
 const fetchEventCategorySuccess = payload => {
   return {
-    type: FETCH_EVENT_CATEGORY_REQUEST,
+    type: FETCH_EVENT_CATEGORY_SUCCESS,
     payload
   };
 };
 
-const fetchEventCategoryFailrue = payload => {
+const fetchEventCategoryFailure = payload => {
   return {
     type: FETCH_EVENT_CATEGORY_FAILURE,
     payload
@@ -33,7 +33,19 @@ const fetchEventCategoryFailrue = payload => {
 }
 
 const fetchEventCategory = () => {
-  // TODO: implementing fetch event category
+  return dispatch => {
+    dispatch(fetchEventCategoryRequest());
+
+    const success = res => {
+      dispatch(fetchEventCategorySuccess(res.data.data));
+    }
+
+    const error = err => {
+      dispatch(fetchEventCategoryFailure(err.message));
+    }
+
+    http.get('/calendar/event/category', success, error);
+  }
 }
 
 export const eventActions = {

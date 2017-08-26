@@ -59,28 +59,37 @@ const fetchCalendarByIdFailure = error => {
   }
 }
 
-const fetchAllCalendar = () => {
-  // TODO: implement fetch all calendar using the http services
-  
-
+const fetchAllCalendar = () => {  
   return dispatch => {
     dispatch(fetchCalendarAllRequest());
 
-    const successCallback = res => {
+    const success = res => {
       dispatch(fetchCalendarAllSuccess(res.data.data));
     }
   
-    const errorCallback = err => {
+    const error = err => {
       dispatch(fetchCalendarAllFailure(err.message));
     }
 
-    http.get('/calendar', successCallback, errorCallback);
+    http.get('/calendar', success, error);
   }
 
 }
 
 const fetchCalendarById = id => {
-  // TODO: implement fetch calendar by an id to get the events
+  return dispatch => {
+    dispatch(fetchCalendarByIdRequest());
+
+    const success = res => {
+      dispatch(fetchCalendarByIdSuccess(res.data.data));
+    }
+
+    const error = err => {
+      dispatch(fetchCalendarByIdFailure(err.message));
+    }
+
+    http.get(`/calendar/${id}`, success, error);
+  }
 }
 
 export const calendarActions = {
@@ -114,15 +123,21 @@ const allCalendarReducer = (state = {}, action) => {
 // Active Calendar Reducer
 const activeCalendarInitialState = {
   error: '',
-  data: []
+  data: {}
 };
 
 const activeCalendarReducer = (state = {}, action) => {
   switch (action.type) {
     case FETCH_CALENDAR_BYID_SUCCESS:
-      return action.payload;
+      return {
+        ...state,
+        data: action.payload
+      };
     case FETCH_CALENDAR_BYID_FAILURE:
-      return action.payload;
+      return {
+        ...state,
+        error: action.payload
+      };
     default:
       return state;  
   }
