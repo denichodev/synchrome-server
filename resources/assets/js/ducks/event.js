@@ -41,15 +41,29 @@ export const eventActions = {
 }
 
 // Reducer
+const initialState = {
+  error: '',
+  category: []
+}
+
 const eventReducer = (state = {}, action) => {
   switch (action.type) {
     case FETCH_EVENT_CATEGORY_SUCCESS:
-      return action.payload;
+      return {
+        ...state,
+        category: action.payload
+      };
     case FETCH_EVENT_CATEGORY_FAILURE:
-      return action.payload;
+      return {
+        ...state,
+        error: action.payload
+      }
     default:
       return state;  
   }
 }
 
-export default eventReducer;
+export default {
+  eventReducer,
+  initialState
+};
