@@ -15,30 +15,4 @@ Route::get('/', 'Auth\AuthController@login')->name('auth.login');
 Route::post('/', 'Auth\AuthController@doLogin')->name('auth.do_login');
 Route::post('/auth/logout', 'Auth\AuthController@doLogout')->name('auth.do_logout');
 
-Route::group(['prefix' => 'dashboard', 'middleware' => 'auth'], function () {
-    Route::get('/', 'DashboardController@dashboard')->name('dashboard');
-
-    Route::group(['prefix' => 'calendars'], function () {
-        Route::get('/', 'CalendarController@index')->name('calendars.index');
-        Route::get('add-new', 'CalendarController@create')->name('calendars.create');
-        Route::get('{id}', 'CalendarController@edit')->name('calendars.edit');
-        Route::delete('{id}', 'CalendarController@destroy')->name('calendars.destroy');
-    });
-
-    Route::group(['prefix' => 'clusters'], function () {
-        Route::get('/', 'ClusterController@index')->name('clusters.index');
-        Route::get('add-new', 'ClusterController@create')->name('clusters.create');
-        Route::post('add-new', 'ClusterController@store')->name('clusters.store');
-        Route::get('{id}', 'ClusterController@edit')->name('clusters.edit');
-        Route::patch('{id}', 'ClusterController@update')->name('clusters.update');
-        Route::delete('{id}', 'ClusterController@destroy')->name('clusters.destroy');
-        Route::post('generate-key/{id}', 'ClusterController@generateKey')->name('clusters.generate_key');
-        Route::post('disable-key/{keyId}', 'ClusterController@disableKey')->name('clusters.disable_key');
-    });
-
-    Route::group(['prefix' => 'employees'], function () {
-        Route::get('/', 'EmployeeController@index')->name('employees.index');
-        Route::get('add-new', 'EmployeeController@create')->name('employees.create');
-        Route::post('add-new', 'EmployeeController@store')->name('employees.store');
-    });
-});
+Route::get('panel', 'PanelController@dashboard')->name('dashboard');

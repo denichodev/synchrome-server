@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use JWTAuth;
 
-class DashboardController extends Controller
+class PanelController extends Controller
 {
     public function dashboard()
     {
