@@ -1,7 +1,15 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { calendarActions } from '../../ducks/calendar';
 
 class CalendarOverview extends Component {
+  componentDidMount() {
+    const { fetchAllCalendar } = this.props;
+
+    fetchAllCalendar();
+  }
+  
   render() {
     return (
       <div className="box">
@@ -25,4 +33,12 @@ class CalendarOverview extends Component {
   }
 }
 
-export default CalendarOverview;
+const mapStateToProps = state => ({
+  calendars: state.calendars
+})
+
+const mapDispatchToProps = dispatch => ({
+  fetchAllCalendar: () => dispatch(calendarActions.fetchAllCalendar())  
+})
+
+export default connect(mapStateToProps,mapDispatchToProps)(CalendarOverview);
