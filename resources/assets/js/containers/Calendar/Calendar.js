@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import axios from 'axios';
 import _ from 'lodash';
 import $ from 'jquery';
+import { http } from '../../services/http';
 
 import { calendarActions } from '../../ducks/calendar';
 
@@ -29,21 +29,13 @@ class Calendar extends Component {
   }
 
   fetchCategories = () => {
-    const token = document.head.querySelector('meta[name="jwt-token"]').content;    
-    axios
-      .get('http://localhost:8000/api/calendar/event/category', {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-      .then(res => {
-        this.setState({
-          categories: res.data.data
-        });
-      })
-      .catch(err => {
-        console.log(err);
+    http.get('calendar/event/category', (res) => {
+      this.setState({
+        categories: res.data.data
       });
+    }, (err) => {
+      console.log(err);
+    });
   }
 
   componentDidMount = () => {
