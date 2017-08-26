@@ -7,14 +7,14 @@ import { configureStore, history } from './stores/configureStore.dev';
 
 import App from './containers/App';
 
-const initialState = window.__INITIAL_STATE__;
+const initialState = {};
 
 const store = configureStore(initialState);
   
 render(
   <Provider store={store}>
     <ConnectedRouter history={history}>
-      <App />
+      <App initialState={window.__INITIAL_STATE__} />
     </ConnectedRouter>
   </Provider>
   , document.getElementById('root')

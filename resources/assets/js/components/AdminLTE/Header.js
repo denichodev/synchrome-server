@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 
 export default class Header extends Component {
   render() {
+    const { appName } = this.props;
+
     return (
       <header className="main-header">
         <a href="#" className="logo">
           <span className="logo-mini"><b>A</b>LT</span>
-          <span className="logo-lg">{ window.__INITIAL_STATE__.appName }</span>
+          <span className="logo-lg">{ appName }</span>
         </a>
 
         <nav className="navbar navbar-static-top">
