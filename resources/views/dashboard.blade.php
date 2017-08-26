@@ -28,6 +28,7 @@
 <script>
   window.__INITIAL_STATE__ = {
     appName: '{{ env('APP_NAME') }}',
+    appAbbr: '{{ env('APP_ABBR') }}',
     userName: '{{ Auth::user()->name }}',
     userEmail: '{{ Auth::user()->email }}',
     csrfToken: '{{ csrf_token() }}'

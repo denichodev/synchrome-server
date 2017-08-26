@@ -13,6 +13,7 @@ class Main extends Component {
       <div className="app">
         <Header 
           appName={initialState.appName} 
+          appAbbr={initialState.appAbbr}
           userName={initialState.userName} 
           userEmail={initialState.userEmail} 
           csrfToken={initialState.csrfToken}

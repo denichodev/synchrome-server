@@ -15,6 +15,7 @@ export default class Header extends Component {
   render() {
     const { 
       appName, 
+      appAbbr,
       userName, 
       userEmail,
       csrfToken
@@ -23,7 +24,7 @@ export default class Header extends Component {
     return (
       <header className="main-header">
         <a href="#" className="logo">
-          <span className="logo-mini"><b>A</b>LT</span>
+          <span className="logo-mini">{ appAbbr }</span>
           <span className="logo-lg">{ appName }</span>
         </a>
 
