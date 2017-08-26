@@ -120,7 +120,7 @@ class Calendar extends Component {
     let id = _.random(1, 720)
 
     if (this.findEvent(id) != null) {
-      return this.generateEventId()
+      return this.generateEventId();
     }
 
     return id
