@@ -31,7 +31,6 @@ class Calendar extends Component {
     this.handleCalendarSelection = this.handleCalendarSelection.bind(this);
     this.handlePublishOption = this.handlePublishOption.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleCategorySelect = this.handleCategorySelect.bind(this);
     this.handleAddEvent = this.handleAddEvent.bind(this);
     this.handleEventTitleChange = this.handleEventTitleChange.bind(this);
     this.generateEventId = this.generateEventId.bind(this);
@@ -41,7 +40,7 @@ class Calendar extends Component {
   fetchCategories() {
     const token = document.head.querySelector('meta[name="jwt-token"]').content;    
     axios
-      .get('http://localhost:8000/api/int/calendar/event/category', {
+      .get('http://localhost:8000/api/calendar/event/category', {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -66,7 +65,6 @@ class Calendar extends Component {
   }
 
   handleCalendarSelection(start, end) {
-    console.log('SELECTED: ', start.format('YYYY-MM-DD'), end.format('YYYY-MM-DD'));
     
     this.setState({
       eventToPush: {
@@ -128,7 +126,7 @@ class Calendar extends Component {
     return id
   }
 
-  handleCategorySelect(e) {
+  handleCategorySelect = (e) => {
     this.setState({
       eventToPush: {
         ...this.state.eventToPush,              
@@ -148,7 +146,6 @@ class Calendar extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    console.log(this.state);
   }
 
   renderCategoriesOption() {
@@ -170,7 +167,6 @@ class Calendar extends Component {
   renderEventCalendar() {
     const eventsToShow = (this.props.calendar.events);
     const { edit } = this.props;
-    console.log('events to post', this.state.eventsToPost);
 
     if (!edit) {
       return (

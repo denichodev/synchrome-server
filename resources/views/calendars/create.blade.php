@@ -8,8 +8,7 @@
 @endsection
 
 @section('content')
-<div id="cal">
-  <!-- <calendar state="create"></calendar> -->
+<div id="root">
 </div>
 @endsection
 

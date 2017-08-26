@@ -12,7 +12,6 @@ class EventCalendar extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    console.log('rerender');
     if (this.props.events.length) {
       const newEvents = _.differenceWith(this.props.events, prevProps.events, _.isEqual);
 
