@@ -25,5 +25,6 @@
   <div id="root"></div>
 </div>
 <!-- ./wrapper -->
+<script src="{{ asset('js/index.js') }}"></script>
 </body>
 </html>

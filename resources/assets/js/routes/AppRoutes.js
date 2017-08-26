@@ -8,10 +8,10 @@ import Employee from '../containers/Employee/Employee';
 
 export default () => (
   <Switch>
-    <Route path="/dashobard" component={Dashboard} />
-    <Route path="/dashboard/calendars" component={CalendarWrapper} />
-    <Route path="/dashboard/clusters" component={Cluster} />
-    <Route path="/dashboard/employees" component={Employee} />
-    <Redirect from="/" to="/dahsboard" />
+    <Route path="/panel" component={Dashboard} />
+    <Route path="/panel/calendars" component={CalendarWrapper} />
+    <Route path="/panel/clusters" component={Cluster} />
+    <Route path="/panel/employees" component={Employee} />
+    <Redirect from="/" to="/panel" />
   </Switch>
 );
