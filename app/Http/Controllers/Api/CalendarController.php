@@ -14,6 +14,17 @@ use DB;
 
 class CalendarController extends Controller
 {
+    public function index()
+    {
+        $calendars = Calendar::get();
+
+        return response()
+            ->json([
+                'result' => 'success',
+                'data' => $calendars
+            ]);
+    }
+    
     public function store(Request $request)
     {
         $validation = Validator::make($request->all(), [

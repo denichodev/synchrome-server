@@ -15,6 +15,7 @@ use App\Key;
 */
 
 Route::group(['middleware' => ['api']], function () {
+    Route::get('calendar', 'Api\CalendarController@index')->name('api.calendars.index');
     Route::post('calendar', 'Api\CalendarController@store')->name('api.calendars.store');
     Route::get('calendar/{id}', 'Api\CalendarController@get')->name('api.calendars.get');
     Route::patch('calendar/{id}', 'Api\CalendarController@update')->name('api.calendars.update');
