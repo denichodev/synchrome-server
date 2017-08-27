@@ -58,7 +58,7 @@ const initialState = {
   category: []
 }
 
-const eventReducer = (state = {}, action) => {
+const eventReducer = (state = initialState, action) => {
   switch (action.type) {
     case FETCH_EVENT_CATEGORY_SUCCESS:
       return {
