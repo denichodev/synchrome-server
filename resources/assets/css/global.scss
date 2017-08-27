@@ -5,10 +5,14 @@
 @import "../../../node_modules/ionicons/dist/css/ionicons.min.css";
 @import "../../../node_modules/admin-lte/dist/css/AdminLTE.min.css";
 @import "../../../node_modules/admin-lte/dist/css/skins/skin-green.css";
-@import '../../../node_modules/fullcalendar/dist/fullcalendar.css';
+@import "../../../node_modules/fullcalendar/dist/fullcalendar.css";
 
 // GLOBAL CSS CONFIGURATION
 
 #calendar {
   margin-top: 20px;
+}
+
+#start-event-datepicker_group, #end-event-datepicker_group {
+  width: 100%;
 }
