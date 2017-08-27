@@ -8,7 +8,7 @@ const FormDatePicker = field => {
 
   return (
     <DatePicker
-      id={ calendarId }
+      id={calendarId}
       value={input.value}
       onChange={input.onChange}
       className={`form-control`}

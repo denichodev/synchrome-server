@@ -3,12 +3,14 @@ import PropTypes from 'prop-types';
 
 const FormSelection = field => {
   const { meta: { touched, error } } = field;
-  const className = `form-group ${touched && error ? 'has-error' : ''}`;  
+  const className = `form-group ${touched && error ? 'has-error' : ''}`;
   const { input, optionsData, defaultValue, label } = field;
 
   return (
     <div className={className}>
-      <label htmlFor="name">{label}</label>  
+      <label htmlFor="name">
+        {label}
+      </label>
       <select className="form-control" selected={defaultValue} {...input}>
         {optionsData.map(opt => {
           return (
