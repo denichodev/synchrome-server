@@ -33,7 +33,7 @@ const fetchEchelonByIdFailure = payload => {
 
 const fetchEchelonsById = agencyId => {
   return dispatch => {
-    dispatch(fetchEchelonRequest());
+    dispatch(fetchEchelonByIdRequest());
 
     const success = res => {
       dispatch(fetchEchelonByIdSuccess(res.data.data));
