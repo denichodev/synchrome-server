@@ -1,4 +1,5 @@
 import http from '../services/http';
+import { push } from 'react-router-redux';
 
 // Types
 const POST_EMPLOYEE_REQUEST = 'synchrome/employee/post_employee_request';
@@ -33,6 +34,7 @@ const postEmployee = (data) => {
 
     const success = res => {
       dispatch(postEmployeeSuccess(res.data.data));
+      dispatch(push('/panel/employees'));
     }
 
     const error = err => {
