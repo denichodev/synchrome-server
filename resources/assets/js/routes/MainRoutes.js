@@ -5,7 +5,8 @@ import Cluster from '../containers/Cluster/Cluster'
 import CalendarOverview from '../containers/Calendar/CalendarOverview';
 import NewCalendar from '../containers/Calendar/NewCalendar';
 import EditCalendar from '../containers/Calendar/EditCalendar';
-import Employee from '../containers/Employee/Employee';
+import EmployeeOverview from '../containers/Employee/EmployeeOverview';
+import NewEmployee from '../containers/Employee/NewEmployee';
 import Dashboard from '../containers/Dashboard/Dashboard';
 
 export default () => (
@@ -15,7 +16,8 @@ export default () => (
     <Route path="/panel/calendars/:id" component={EditCalendar} />
     <Route path="/panel/calendars" component={CalendarOverview} />
     <Route path="/panel/clusters" component={Cluster} />    
-    <Route path="/panel/employees" component={Employee} />
+    <Route path="/panel/employees/add-new" component={NewEmployee} />
+    <Route path="/panel/employees" component={EmployeeOverview} />
     <Redirect from="/" to="/panel" />
   </Switch>
 )

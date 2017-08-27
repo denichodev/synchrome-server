@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 import { routerReducer as router } from 'react-router-redux';
+import { reducer as formReducer } from 'redux-form';
 
 // Made reducers
 import calendar from './calendar';
@@ -18,6 +19,7 @@ export const initialState = {
 
 const rootReducer = combineReducers({
   router,
+  form: formReducer,
   activeCalendar: calendar.activeCalendarReducer,
   calendars: calendar.allCalendarReducer,
   event: event.eventReducer,
