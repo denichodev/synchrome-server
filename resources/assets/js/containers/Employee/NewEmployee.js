@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import { agencyActions } from '../../ducks/agency';
 import { echelonActions } from '../../ducks/echelon';
+import { employeeActions } from '../../ducks/employee';
 
 class NewEmployee extends Component {
   constructor(props) {
@@ -104,15 +105,15 @@ class NewEmployee extends Component {
   };
 
   handleAgencyChange = (e) => {
-    console.log('Boom');
-
     const { fetchEchelonsById } = this.props;
 
     fetchEchelonsById(e.target.value);
   }
 
   onSubmit = values => {
-    console.log('VALUES', values);
+    const { postEmployee } = this.props;
+    
+    postEmployee(values);
   }
   
   render() {
@@ -160,7 +161,7 @@ class NewEmployee extends Component {
                 />
               </div>
             </div>
-            <div class="form-group">
+            <div className="form-group">
               <button type="submit" className="btn btn-primary">Save</button>
             </div>
           </form>
@@ -192,7 +193,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   fetchAllAgency: () => dispatch(agencyActions.fetchAllAgency()),
-  fetchEchelonsById: (id) => dispatch(echelonActions.fetchEchelonsById(id))
+  fetchEchelonsById: (id) => dispatch(echelonActions.fetchEchelonsById(id)),
+  postEmployee: (data) => dispatch(employeeActions.postEmployee(data))
 });
 
 const Connector = connect(mapStateToProps, mapDispatchToProps)(NewEmployee);

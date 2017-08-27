@@ -7,6 +7,7 @@ import calendar from './calendar';
 import event from './event';
 import agency from './agency';
 import echelon from './echelon';
+import employee from './employee';
 
 export const initialState = {
   router: {},
@@ -14,7 +15,8 @@ export const initialState = {
   calendars: calendar.allCalendarInitialState,
   event: event.initialState,
   agency: agency.initialState,
-  echelon: echelon.initialState
+  echelon: echelon.initialState,
+  employee: employee.initialState
 };
 
 const rootReducer = combineReducers({
@@ -24,7 +26,8 @@ const rootReducer = combineReducers({
   calendars: calendar.allCalendarReducer,
   event: event.eventReducer,
   agency: agency.agencyReducer,
-  echelon: echelon.echelonReducer
+  echelon: echelon.echelonReducer,
+  employee: employee.employeeReducer
 });
 
 export default rootReducer;
