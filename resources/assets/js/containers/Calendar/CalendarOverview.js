@@ -64,14 +64,15 @@ class CalendarOverview extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    calendarData: state.calendars.data,
-    calendarErrror: state.calendars.error
-  }
-}
+const mapStateToProps = state => ({
+  calendarData: state.calendars.data,
+  calendarError: state.calendars.error
+});
+
+
 const mapDispatchToProps = dispatch => ({
-  fetchAllCalendar: () => dispatch(calendarActions.fetchAllCalendar())  
+  fetchAllCalendar: () => dispatch(calendarActions.fetchAllCalendar()),
+  fetchCalendarById: id => dispatch(calendarActions.fetchCalendarById(id))
 })
 
 export default connect(mapStateToProps,mapDispatchToProps)(CalendarOverview);

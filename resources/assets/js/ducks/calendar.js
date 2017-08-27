@@ -9,13 +9,20 @@ const FETCH_CALENDAR_BYID_REQUEST = 'synchrome/calendar/fetch_calendar_byid_requ
 const FETCH_CALENDAR_BYID_SUCCESS = 'synchrome/calendar/fetch_calendar_byid_success';
 const FETCH_CALENDAR_BYID_FAILURE = 'synchrome/calendar/fetch_calendar_byid_failure';
 
+const POST_CALENDAR_REQUEST = 'synchrome/calendar/post_calendar_request';
+const POST_CALENDAR_SUCCESS = 'synchrome/calendar/post_calendar_all_success';
+const POST_CALENDAR_FAILURE = 'synchrome/calendar/post_calendar_failure';
+
 export const calendarTypes = {
   FETCH_CALENDAR_ALL_REQUEST,
   FETCH_CALENDAR_ALL_SUCCESS,
   FETCH_CALENDAR_ALL_FAILURE,
   FETCH_CALENDAR_BYID_REQUEST,
   FETCH_CALENDAR_BYID_SUCCESS,
-  FETCH_CALENDAR_BYID_FAILURE
+  FETCH_CALENDAR_BYID_FAILURE,
+  POST_CALENDAR_REQUEST,
+  POST_CALENDAR_SUCCESS,
+  POST_CALENDAR_FAILURE
 }
 
 // Action Creators
@@ -59,6 +66,22 @@ const fetchCalendarByIdFailure = error => {
   }
 }
 
+const postCalendarRequest = () => {
+  return {
+    type: POST_CALENDAR_REQUEST
+  }
+}
+
+const postCalendarSuccess = payload => ({
+  type: POST_CALENDAR_SUCCESS,
+  payload
+});
+
+const postCalendarFailure = payload => ({
+  type: POST_CALENDAR_FAILURE,
+  payload
+});
+
 const fetchAllCalendar = () => {  
   return dispatch => {
     dispatch(fetchCalendarAllRequest());
@@ -92,9 +115,33 @@ const fetchCalendarById = id => {
   }
 }
 
+const postCalendar = (calendar, events) => {
+  // MANIPULATE HERE
+
+  const data = {
+    ...calendar,
+    events: [...events]
+  };
+
+  console.log('CALENDAR API DATA :', data);
+
+  return dispatch => {
+    dispatch(postCalendarRequest());
+
+    const success = res => {
+      dispatch(postCalendarSuccess(res.data.data));
+    }
+
+    const failure = err => {
+      dispatch(postCalendarFailure(err.message));
+    }
+  }
+}
+
 export const calendarActions = {
   fetchCalendarById,
-  fetchAllCalendar
+  fetchAllCalendar,
+  postCalendar
 }
 
 // All Calendar Reducer
@@ -138,6 +185,16 @@ const activeCalendarReducer = (state = {}, action) => {
         ...state,
         error: action.payload
       };
+    case POST_CALENDAR_SUCCESS:
+      return {
+        ...state,
+        data: action.payload
+      }
+    case POST_CALENDAR_FAILURE:
+      return {
+        ...state,
+        error: action.payload
+      }  
     default:
       return state;  
   }

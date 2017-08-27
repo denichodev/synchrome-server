@@ -3,157 +3,52 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import $ from 'jquery';
-// import { http } from '../../services/http';
+import moment from 'moment';
+import { Field, reduxForm } from 'redux-form';
 
 import { calendarActions } from '../../ducks/calendar';
 import { eventActions } from '../../ducks/event';
-
+import { FormSelection, FormText } from '../../components/Forms';
 import EventCalendar from './EventCalendar';
+import EventForm from './EventForm';
 
 class Calendar extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      calendarTitle: '',
-      publishType: 'published',
-      categories: null,
-      eventToPush: {
-        id: this.generateEventId(),
-        title: '',
-        categoryId: '1',
-        start: '',
-        end: ''
-      },
-      eventsToPost: []
-    };
-  }
+  static publishTypes = [
+    {
+      name: 'Published',
+      id: 'published'
+    },
+    {
+      name: 'Draft',
+      id: 'draft'
+    }
+  ];
 
   componentDidMount = () => {
-    const { fetchCategories, edit, id } = this.props;
-
-    fetchCategories();
+    const { edit, id, fetchCalendarById } = this.props;
 
     if (!edit) {
       return;
     }
 
-    // fetchCalendar(id);
+    // fetchCalendarById(id);
   };
 
-  handleCalendarSelection = (start, end) => {
-    this.setState({
-      eventToPush: {
-        ...this.state.eventToPush,
-        start: start.format('YYYY-MM-DD'),
-        end: end.format('YYYY-MM-DD')
-      }
-    });
+  handleSubmit = (values) => {
+    const { postCalendar, eventToPost } = this.props;
+
+    console.log('VALUES: ', values);
+
+    postCalendar(values, eventToPost);
   };
 
-  handleTitleChange = e => {
-    this.setState({
-      calendarTitle: e.target.value
-    });
-  };
-
-  handlePublishOption = e => {
-    this.setState({
-      publishType: e.target.value
-    });
-  };
-
-  handleAddEvent = e => {
-    e.preventDefault();
-
-    this.setState({
-      eventsToPost: this.state.eventsToPost.concat(this.state.eventToPush),
-      eventToPush: {
-        id: this.generateEventId(),
-        title: '',
-        categoryId: '1',
-        start: '',
-        end: ''
-      }
-    });
-  };
-
-  findEvent = id => {
-    if (!this.state) {
-      return null;
-    }
-
-    let event = _.find(this.state.eventsToPost, o => {
-      return o.id == id;
-    });
-
-    if (typeof event != 'undefined') {
-      return event;
-    }
-
-    return null;
-  };
-
-  generateEventId = () => {
-    let id = _.random(1, 720);
-
-    if (this.findEvent(id) != null) {
-      return this.generateEventId();
-    }
-
-    return id;
-  };
-
-  handleCategorySelect = e => {
-    this.setState({
-      eventToPush: {
-        ...this.state.eventToPush,
-        categoryId: e.target.value
-      }
-    });
-  };
-
-  handleEventTitleChange = e => {
-    this.setState({
-      eventToPush: {
-        ...this.state.eventToPush,
-        title: e.target.value
-      }
-    });
-  };
-
-  handleSubmit = e => {
-    e.preventDefault();
-  };
-
-  renderCategoriesOption = () => {
-    const { categories } = this.props;
-
-    if (!categories.length) {
-      return;
-    }
-
-    return (
-      <select
-        value={this.state.eventToPush.categoryId}
-        onChange={this.handleCategorySelect}
-        name="category"
-        id="publish-type"
-        className="form-control"
-      >
-        {categories.map(category => {
-          return (
-            <option key={category.id} value={category.id}>
-              {category.name}
-            </option>
-          );
-        })}
-      </select>
-    );
-  };
+  handleSelection = (start, end) => {
+    // SUBTRACTING 1 DAY because fullCalendar different way of rendering end date
+    this.props.selectDateFromCalendar(start.toISOString(), end.add(-1, 'days').toISOString());    
+  }
 
   renderEventCalendar = () => {
-    // const eventsToShow = this.props.calendar.events;
+    const { eventToPost } = this.props;
     const { edit } = this.props;
 
     if (!edit) {
@@ -162,8 +57,8 @@ class Calendar extends Component {
           height={500}
           displayEventTime={false}
           selectable
-          events={[]}
-          handleSelection={this.handleCalendarSelection}
+          handleSelection={this.handleSelection}
+          events={eventToPost}
         />
       );
     }
@@ -175,13 +70,14 @@ class Calendar extends Component {
           displayEventTime={false}
           selectable
           events={eventsToShow}
-          handleSelection={this.handleCalendarSelection}
         />
       );
     }
   };
 
   render() {
+    const { handleSubmit, categories } = this.props;
+
     return (
       <div className="row">
         <div className="col-md-9">
@@ -194,19 +90,17 @@ class Calendar extends Component {
             <div className="box-body">
               <div className="row">
                 <div className="col-sm-12 from-group">
-                  <input
-                    className="form-control"
-                    onChange={this.handleTitleChange}
-                    value={this.state.calendarTitle}
-                    type="text"
+                  <Field
+                    name="name"
                     placeholder="Calendar Title"
+                    component={FormText}
                   />
                 </div>
               </div>
               <div className="row">
                 <div className="col-md-12">
                   {/* this.renderCalendarTitle() */}
-                  { this.renderEventCalendar() }
+                  {this.renderEventCalendar()}
                 </div>
               </div>
             </div>
@@ -218,22 +112,17 @@ class Calendar extends Component {
               <div className="box">
                 <div className="box-header">Publishing</div>
                 <div className="box-body">
-                  <form className="form-group" onSubmit={this.handleSubmit}>
-                    <label htmlFor="publish-type">
-                      <strong>Status</strong>
-                    </label>
-                    <select
-                      value={this.state.publishType}
-                      onChange={this.handlePublishOption}
-                      name="publish-type"
-                      id="publish-type"
-                      className="form-control"
-                    >
-                      <option value="published" defaultValue>
-                        Published
-                      </option>
-                      <option value="draft">Draft</option>
-                    </select>
+                  <form
+                    className="form-group"
+                    onSubmit={handleSubmit(this.handleSubmit)}
+                  >
+                    <Field
+                      name='status'
+                      defaultValue='published'
+                      label='Status'
+                      optionsData={Calendar.publishTypes}
+                      component={FormSelection}
+                    />
                     <button
                       style={{ marginTop: '10px' }}
                       type="submit"
@@ -251,60 +140,7 @@ class Calendar extends Component {
               <div className="box">
                 <div className="box-header">Event</div>
                 <div className="box-body">
-                  <form className="form-group" onSubmit={this.handleAddEvent}>
-                    <div className="row">
-                      <div className="col-md-12 form-group">
-                        <label htmlFor="category">
-                          <strong>Category</strong>
-                        </label>
-                        {this.renderCategoriesOption()}
-                      </div>
-                    </div>
-                    <div className="row">
-                      <div className="col-md-12 form-group">
-                        <label htmlFor="event-title">
-                          <strong>Title</strong>
-                        </label>
-                        <input
-                          className="form-control"
-                          type="text"
-                          value={this.state.eventToPush.title}
-                          onChange={this.handleEventTitleChange}
-                        />
-                      </div>
-                    </div>
-                    <div className="row">
-                      <div className="col-md-12 form-group">
-                        <label htmlFor="start-date">
-                          <strong>Start</strong>
-                        </label>
-                        <input
-                          name="start-date"
-                          className="form-control"
-                          type="text"
-                          value={this.state.eventToPush.start}
-                          disabled
-                        />
-                      </div>
-                    </div>
-                    <div className="row">
-                      <div className="col-md-12 form-group">
-                        <label htmlFor="end-date">
-                          <strong>End</strong>
-                        </label>
-                        <input
-                          name="end-date"
-                          className="form-control"
-                          type="text"
-                          value={this.state.eventToPush.end}
-                          disabled
-                        />
-                      </div>
-                    </div>
-                    <button className="btn btn-block btn-primary btn-lg">
-                      Add Event
-                    </button>
-                  </form>
+                  <EventForm />
                 </div>
               </div>
             </div>
@@ -326,13 +162,29 @@ Calendar.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  calendar: state.calendar,
-  categories: state.event.category
+  activeCalendar: state.activeCalendar,
+  eventToPost: state.event.toPost
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchCalendar: id => dispatch(calendarActions.fetchCalendar(id)),
-  fetchCategories: () => dispatch(eventActions.fetchEventCategory())
+  fetchCalendarById: id => dispatch(calendarActions.fetchCalendarById(id)),
+  selectDateFromCalendar: (start, end) => {
+    dispatch(eventActions.calendarDateSelected(start, end));
+  },
+  postCalendar: (calendar, events) => dispatch(calendarActions.postCalendar(calendar, events))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Calendar);
+const validate = values => {
+  const errors = {};
+
+  return errors;
+};
+
+const formOptions = {
+  form: 'calendarForm',
+  validate
+};
+
+export default reduxForm(formOptions)(
+  connect(mapStateToProps, mapDispatchToProps)(Calendar)
+);
