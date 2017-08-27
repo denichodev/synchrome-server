@@ -22,5 +22,6 @@ Route::group(['middleware' => ['api']], function () {
     Route::delete('calendar/{id}', 'Api\CalendarController@destroy')->name('api.calendars.destroy');
     Route::get('calendar/event/category', 'Api\CalendarController@eventCategories')->name('api.calendars.events.categories.index');
 
+    Route::get('agency', 'Api\AgencyController@index')->name('api.agencies.index');
     Route::get('agency/{id}/echelons', 'Api\AgencyController@echelons')->name('api.agencies.echelons');
 });

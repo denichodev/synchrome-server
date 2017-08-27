@@ -8,6 +8,17 @@ use App\Agency;
 
 class AgencyController extends Controller
 {
+    public function index()
+    {
+        $agencies = Agency::orderBy('id', 'ASC')->get(['id', 'name']);
+
+        return response()
+            ->json([
+                'result' => 'success',
+                'data' => $agencies
+            ]);
+    }
+
     public function echelons(Request $request, $id)
     {
         $agency = Agency::find($id);
