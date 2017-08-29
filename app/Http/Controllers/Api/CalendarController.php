@@ -62,8 +62,8 @@ class CalendarController extends Controller
                     'title' => $event['title'],
                     'start' => $event['start'],
                     'end' => ! empty($event['end']) ? $event['end'] : null,
-                    'isWeekday' => (empty($event['end']) || $event['start'] == $event['end']) && ($numOfDay == 6 || $numOfDay == 7) ? true : false,
-                    'numOfDay' => $numOfDay,
+                    'is_weekday' => (empty($event['end']) || $event['start'] == $event['end']) && ($numOfDay == 6 || $numOfDay == 7) ? true : false,
+                    'num_of_day' => $numOfDay,
                     'event_category_id' => $event['event_category_id']
                 ]));
             }
