@@ -38,19 +38,19 @@ export default {
       .catch(errorCallback);
   },
 
-  patch(url, successCallback, errorCallback) {
+  patch(url, data, successCallback, errorCallback) {
     return axios.request({
       url,
+      data,
       method: 'patch'
     })
       .then(successCallback)
       .catch(errorCallback);
   },
 
-  delete(url, data, successCallback, errorCallback) {
+  delete(url, successCallback, errorCallback) {
     return axios.request({
       url,
-      data,
       method: 'delete'
     })
       .then(successCallback)
