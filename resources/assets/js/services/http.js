@@ -36,5 +36,14 @@ export default {
     })
       .then(successCallback)
       .catch(errorCallback);
+  },
+
+  delete(url, successCallback, errorCallback) {
+    return axios.request({
+      url,
+      method: 'delete'
+    })
+      .then(successCallback)
+      .catch(errorCallback);
   }
 };
