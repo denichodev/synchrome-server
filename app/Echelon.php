@@ -24,6 +24,11 @@ class Echelon extends Model
         return $this->belongsTo(Agency::class);
     }
 
+    public function supervisor()
+    {
+        return $this->belongsTo(Echelon::class, 'supervisor_id');
+    }
+
     public function subordinates()
     {
         return $this->hasMany(Echelon::class, 'supervisor_id', 'id');
