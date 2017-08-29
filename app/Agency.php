@@ -18,6 +18,10 @@ class Agency extends Model
         'agency_type_id'
     ];
 
+    protected $hidden = [
+        'agency_type_id'
+    ];
+
     public function type()
     {
         return $this->belongsTo(AgencyType::class, 'agency_type_id');

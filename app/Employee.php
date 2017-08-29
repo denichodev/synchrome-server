@@ -21,6 +21,10 @@ class Employee extends Model
         'echelon_id'
     ];
 
+    protected $hidden = [
+        'echelon_id'
+    ];
+
     protected $dates = [
         'deleted_at'
     ];

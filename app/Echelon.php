@@ -19,6 +19,11 @@ class Echelon extends Model
         'agency_id'
     ];
 
+    protected $hidden = [
+        'agency_id',
+        'supervisor_id'
+    ];
+
     public function agency()
     {
         return $this->belongsTo(Agency::class);
