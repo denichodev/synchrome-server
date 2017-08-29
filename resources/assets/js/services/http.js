@@ -38,6 +38,15 @@ export default {
       .catch(errorCallback);
   },
 
+  patch(url, successCallback, errorCallback) {
+    return axios.request({
+      url,
+      method: 'patch'
+    })
+      .then(successCallback)
+      .catch(errorCallback);
+  },
+
   delete(url, successCallback, errorCallback) {
     return axios.request({
       url,
