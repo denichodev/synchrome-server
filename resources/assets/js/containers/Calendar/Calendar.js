@@ -34,7 +34,7 @@ class Calendar extends Component {
     // fetchCalendarById(id);
   };
 
-  handleSubmit = (values) => {
+  handleSubmit = values => {
     const { postCalendar, eventToPost } = this.props;
 
     console.log('VALUES: ', values);
@@ -44,8 +44,11 @@ class Calendar extends Component {
 
   handleSelection = (start, end) => {
     // SUBTRACTING 1 DAY because fullCalendar different way of rendering end date
-    this.props.selectDateFromCalendar(start.toISOString(), end.add(-1, 'days').toISOString());    
-  }
+    this.props.selectDateFromCalendar(
+      start.toISOString(),
+      end.add(-1, 'days').toISOString()
+    );
+  };
 
   renderEventCalendar = () => {
     const { eventToPost } = this.props;
@@ -117,9 +120,9 @@ class Calendar extends Component {
                     onSubmit={handleSubmit(this.handleSubmit)}
                   >
                     <Field
-                      name='status'
-                      defaultValue='published'
-                      label='Status'
+                      name="status"
+                      defaultValue="published"
+                      label="Status"
                       optionsData={Calendar.publishTypes}
                       component={FormSelection}
                     />
@@ -171,7 +174,8 @@ const mapDispatchToProps = dispatch => ({
   selectDateFromCalendar: (start, end) => {
     dispatch(eventActions.calendarDateSelected(start, end));
   },
-  postCalendar: (calendar, events) => dispatch(calendarActions.postCalendar(calendar, events))
+  postCalendar: (calendar, events) =>
+    dispatch(calendarActions.postCalendar(calendar, events))
 });
 
 const validate = values => {
