@@ -3,14 +3,21 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use DB;
 
 class Key extends Model
 {
+    use SoftDeletes;
+    
     protected $fillable = [
         'key',
         'status',
         'cluster_id'
+    ];
+
+    protected $dates = [
+        'deleted_at'
     ];
 
     public function cluster()
