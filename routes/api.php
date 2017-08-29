@@ -28,4 +28,5 @@ Route::group(['middleware' => ['api']], function () {
     Route::get('employee', 'Api\EmployeeController@index')->name('api.employees.index');
     Route::post('employee', 'Api\EmployeeController@store')->name('api.employees.store');
     Route::get('employee/{id}', 'Api\EmployeeController@get')->name('api.employees.get');
+    Route::delete('employee/{id}', 'Api\EmployeeController@destroy')->name('api.employees.destroy');
 });
