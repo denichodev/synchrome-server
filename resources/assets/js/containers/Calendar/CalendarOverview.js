@@ -12,13 +12,13 @@ class CalendarOverview extends Component {
 
   renderCalendarTable = () => {
     const { calendarData } = this.props;
-    
+
     if (calendarData.length <= 0) {
       return (
         <tr>
           <td colSpan="3"><center>No calendar added yet</center></td>
         </tr>
-      )
+      );
     }
 
     return (
@@ -27,18 +27,18 @@ class CalendarOverview extends Component {
           <td>{cal.name}</td>
           <td><strong>{cal.start}</strong> s/d <strong>{cal.end}</strong></td>
           <td>
-            <Link to={`/panel/calendars/${cal.id}`} className="btn btn-xs btn-primary">View/Edit</Link>
+            <Link to={`/panel/calendars/${cal.id}`} className="btn btn-xs btn-primary">View/Edit</Link>&nbsp;
             <form action="" method="POST" style={{ display: 'inline' }}>
-                {/* TODO: DESTROY CALENDAR */}  
-                <input type="hidden" name="_method" value="DELETE" />
-                <button type="submit" className="btn btn-xs btn-danger">Delete</button>
+              {/* TODO: DESTROY CALENDAR */}  
+              <input type="hidden" name="_method" value="DELETE" />
+              <button type="submit" className="btn btn-xs btn-danger">Delete</button>
             </form>
           </td>
         </tr>
       ))
     );
   }
-  
+
   render() {
     return (
       <div className="box">
@@ -73,6 +73,6 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   fetchAllCalendar: () => dispatch(calendarActions.fetchAllCalendar()),
   fetchCalendarById: id => dispatch(calendarActions.fetchCalendarById(id))
-})
+});
 
-export default connect(mapStateToProps,mapDispatchToProps)(CalendarOverview);
+export default connect(mapStateToProps, mapDispatchToProps)(CalendarOverview);
