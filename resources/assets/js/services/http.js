@@ -47,9 +47,10 @@ export default {
       .catch(errorCallback);
   },
 
-  delete(url, successCallback, errorCallback) {
+  delete(url, data, successCallback, errorCallback) {
     return axios.request({
       url,
+      data,
       method: 'delete'
     })
       .then(successCallback)
