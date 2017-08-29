@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, reset, change } from 'redux-form';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import _ from 'lodash';
 
 import { eventActions } from '../../ducks/event';
+import { calendarActions } from '../../ducks/calendar';
 import { FormSelection, FormText, FormDatePicker } from '../../components/Forms';
 
 class EventForm extends Component {
   componentWillMount() {
-    this.props.initialize({ category_id: '1' });
+    this.props.initialize({ event_category_id: '1' });
   }
 
   componentDidMount() {
@@ -19,34 +20,82 @@ class EventForm extends Component {
   }
 
   generateRandomId = () => {
-    const { eventToPost } = this.props;
+    const { eventToPost, edit, eventsFromCalendar } = this.props;
 
-    const rand = _.random(999);
+    const rand = _.random(9999);
+
     if (_.find(eventToPost, { id: rand }) !== undefined) {
-      console.log('there is something same');
       return this.generateRandomId();
     }
+
+    if (edit) {
+      if (_.find(eventsFromCalendar, { originalId: rand }) !== undefined) {
+        return this.generateRandomId();
+      }
+    }
+
     return rand;
   }
 
-  handleAddEvent = values => {
-    const { addEventToPost } = this.props;
+  handleSubmitButton = values => {
+    if (!values.end || !values.start) {
+      return;
+    }
+    if (moment(values.end).isBefore(moment(values.start))) {
+      return;
+    }
 
-    // ADDING 1 DAY because fullCalendar different way of rendering end date
+    if (!this.props.isEditing.bool) { this.addEvent(values); }
+    else {
+      this.editEvent(values);
+    }
+  }
+
+  addEvent = values => {
+    const { addEventToPost } = this.props;
     const eventToPost = values;
-    eventToPost.end = moment(values.end).add(1, 'days').toISOString();
+
+    // ADDING 1 DAY because fullCalendar different way of rendering end date    
+    eventToPost.end = moment(values.end).format('YYYY-MM-DD');
+
     eventToPost.id = this.generateRandomId();
     addEventToPost(eventToPost);
+    this.forceUpdate();
+  }
+
+  editEvent = values => {
+    const { editEventFromCalendar, eventsFromCalendar, isEditing, eventToPost, editEventToPost } = this.props;
+    eventToPost.end = moment(values.end).format('YYYY-MM-DD');
+    if (isEditing.target.originalId) {
+      const targetEvent = {
+        ..._.find(eventsFromCalendar, { originalId: isEditing.target.originalId }),
+        start: values.start,
+        end: values.end,
+        title: values.title,
+        event_category_id: values.event_category_id
+      };
+      editEventFromCalendar(this.props.eventsFromCalendar, targetEvent);
+
+    } else {
+      const targetEvent = {
+        ..._.find(eventToPost, { id: isEditing.target.id }),
+        start: values.start,
+        end: values.end,
+        title: values.title,
+        event_category_id: values.event_category_id
+      };
+      editEventToPost(eventToPost, targetEvent);
+    }
   }
 
   render() {
-    const { categories, handleSubmit } = this.props;
+    const { categories, handleSubmit, isEditing } = this.props;
     return (
-      <form className="form-group" onSubmit={handleSubmit(this.handleAddEvent)}>
+      <form className="form-group" onSubmit={handleSubmit(this.handleSubmitButton)}>
         <div className="row">
           <div className="col-md-12 form-group">
             <Field
-              name="category_id"
+              name="event_category_id"
               label="Category"
               optionsData={categories}
               component={FormSelection}
@@ -79,11 +128,12 @@ class EventForm extends Component {
               calendarId="end-event-datepicker"
               label="End Date"
               name="end"
+              end
               component={FormDatePicker}
             />
           </div>
         </div>
-        <button className="btn btn-block btn-primary btn-lg">Add Event</button>
+        <button className="btn btn-block btn-primary btn-lg">{isEditing.bool ? 'Edit' : 'Add'} Event</button>
       </form>
     );
   }
@@ -91,12 +141,18 @@ class EventForm extends Component {
 
 const mapStateToProps = state => ({
   categories: state.event.category,
-  eventToPost: state.event.toPost
+  eventToPost: state.event.toPost,
+  eventsFromCalendar: state.activeCalendar.data.events,
+  isEditing: state.event.isEditing
 });
 
 const mapDispatchToProps = dispatch => ({
   fetchCategories: () => dispatch(eventActions.fetchEventCategory()),
-  addEventToPost: (data) => dispatch(eventActions.addEventToPost(data))
+  addEventToPost: (data) => {
+    dispatch(eventActions.addEventToPost(data));
+  },
+  editEventFromCalendar: (events, editedEvent) => dispatch(calendarActions.editEvent(events, editedEvent)),
+  editEventToPost: (events, editedEvent) => dispatch(eventActions.editEvent(events, editedEvent))
 });
 
 const validate = values => {
@@ -111,6 +167,7 @@ const validate = values => {
   if (!values.end) {
     errors.end = 'Required';
   }
+
   if (moment(values.end).isBefore(moment(values.start))) {
     errors.end = 'Must be after start date';
   }
@@ -123,4 +180,4 @@ const formOptions = {
   validate
 };
 
-export default reduxForm(formOptions)(connect(mapStateToProps,mapDispatchToProps)(EventForm));
+export default reduxForm(formOptions)(connect(mapStateToProps, mapDispatchToProps)(EventForm));

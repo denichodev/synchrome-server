@@ -11,11 +11,11 @@ import Dashboard from '../containers/Dashboard/Dashboard';
 
 export default () => (
   <Switch>
-    <Route exact path="/panel" component={Dashboard} />  
+    <Route exact path="/panel" component={Dashboard} />
     <Route exact path="/panel/calendars/add-new" component={NewCalendar} />
     <Route path="/panel/calendars/:id" component={EditCalendar} />
     <Route path="/panel/calendars" component={CalendarOverview} />
-    <Route path="/panel/clusters" component={Cluster} />    
+    <Route path="/panel/clusters" component={Cluster} />
     <Route path="/panel/employees/add-new" component={NewEmployee} />
     <Route path="/panel/employees" component={EmployeeOverview} />
     <Redirect from="/" to="/panel" />

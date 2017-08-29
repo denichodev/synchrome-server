@@ -4,11 +4,11 @@ import PropTypes from 'prop-types';
 const FormText = field => {
   const { meta: { touched, error } } = field;
   const className = `form-group ${touched && error ? 'has-error' : ''}`;
-  const { label, name, input, placeholder } = field;
+  const { label, name, input, placeholder, defaultValue } = field;
   const errorHelpBlockStyle = {
     visibility: `${touched && error ? 'visible' : 'hidden'}`
   };
-
+  
   return (
     <div className={className}>
       <label htmlFor={name}>
@@ -18,6 +18,7 @@ const FormText = field => {
         type="text"
         className="form-control"
         placeholder={placeholder}
+        value={defaultValue}
         {...input}
       />
       <span className="help-block" style={errorHelpBlockStyle}>{error}</span>

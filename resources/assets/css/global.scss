@@ -6,6 +6,7 @@
 @import "../../../node_modules/admin-lte/dist/css/AdminLTE.min.css";
 @import "../../../node_modules/admin-lte/dist/css/skins/skin-green.css";
 @import "../../../node_modules/fullcalendar/dist/fullcalendar.css";
+@import "../../../node_modules/react-datepicker/dist/react-datepicker.css";
 
 // GLOBAL CSS CONFIGURATION
 
@@ -15,4 +16,12 @@
 
 #start-event-datepicker_group, #end-event-datepicker_group {
   width: 100%;
+}
+
+.fc-event{
+  cursor: pointer;
+}
+
+.react-datepicker-popper {
+  z-index: 999;
 }

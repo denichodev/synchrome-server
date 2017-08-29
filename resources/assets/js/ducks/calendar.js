@@ -1,4 +1,5 @@
-import http from '../services/http'
+import moment from 'moment';
+import http from '../services/http';
 
 // Types
 const FETCH_CALENDAR_ALL_REQUEST = 'synchrome/calendar/fetch_calendar_all_request';
@@ -13,6 +14,14 @@ const POST_CALENDAR_REQUEST = 'synchrome/calendar/post_calendar_request';
 const POST_CALENDAR_SUCCESS = 'synchrome/calendar/post_calendar_all_success';
 const POST_CALENDAR_FAILURE = 'synchrome/calendar/post_calendar_failure';
 
+const PATCH_CALENDAR_REQUEST = 'synchrome/calendar/patch_calendar_request';
+const PATCH_CALENDAR_SUCCESS = 'synchrome/calendar/patch_calendar_success';
+const PATCH_CALENDAR_FAILURE = 'synchrome/calendar/patch_calendar_failure';
+
+const ADD_DELETED_EVENT = 'synchrome/calendar/add_deleted_event';
+
+const EDIT_EVENT = 'synchrome/calendar/edit_event';
+
 export const calendarTypes = {
   FETCH_CALENDAR_ALL_REQUEST,
   FETCH_CALENDAR_ALL_SUCCESS,
@@ -22,7 +31,12 @@ export const calendarTypes = {
   FETCH_CALENDAR_BYID_FAILURE,
   POST_CALENDAR_REQUEST,
   POST_CALENDAR_SUCCESS,
-  POST_CALENDAR_FAILURE
+  POST_CALENDAR_FAILURE,
+  PATCH_CALENDAR_REQUEST,
+  PATCH_CALENDAR_SUCCESS,
+  PATCH_CALENDAR_FAILURE,
+  ADD_DELETED_EVENT,
+  EDIT_EVENT
 }
 
 // Action Creators
@@ -56,8 +70,8 @@ const fetchCalendarByIdSuccess = payload => {
   return {
     type: FETCH_CALENDAR_BYID_SUCCESS,
     payload
-  }
-}
+  };
+};
 
 const fetchCalendarByIdFailure = error => {
   return {
@@ -69,8 +83,8 @@ const fetchCalendarByIdFailure = error => {
 const postCalendarRequest = () => {
   return {
     type: POST_CALENDAR_REQUEST
-  }
-}
+  };
+};
 
 const postCalendarSuccess = payload => ({
   type: POST_CALENDAR_SUCCESS,
@@ -82,22 +96,64 @@ const postCalendarFailure = payload => ({
   payload
 });
 
-const fetchAllCalendar = () => {  
+const patchCalendarRequest = () => {
+  return {
+    type: PATCH_CALENDAR_REQUEST
+  }
+};
+
+const patchCalendarSuccess = payload => ({
+  type: PATCH_CALENDAR_SUCCESS,
+  payload
+});
+
+const patchCalendarFailure = payload => ({
+  type: PATCH_CALENDAR_FAILURE,
+  payload
+});
+
+const addDeletedEvent = payload => ({
+  type: ADD_DELETED_EVENT,
+  payload
+});
+
+const editEvent = (events, editedEvent) => {
+  const copy = events;
+  const newEvents = copy.map(eve => {
+    if (eve.originalId === editedEvent.originalId) {
+      return {
+        ...eve,
+        title: editedEvent.title,
+        start: editedEvent.start,
+        end: editedEvent.end,
+        updated: true
+      };
+    }
+    return eve;
+  });
+
+  return {
+    type: EDIT_EVENT,
+    payload: newEvents
+  };
+};
+
+const fetchAllCalendar = () => {
   return dispatch => {
     dispatch(fetchCalendarAllRequest());
 
     const success = res => {
       dispatch(fetchCalendarAllSuccess(res.data.data));
-    }
-  
+    };
+
     const error = err => {
       dispatch(fetchCalendarAllFailure(err.message));
-    }
+    };
 
     http.get('/calendar', success, error);
-  }
+  };
 
-}
+};
 
 const fetchCalendarById = id => {
   return dispatch => {
@@ -118,9 +174,16 @@ const fetchCalendarById = id => {
 const postCalendar = (calendar, events) => {
   // MANIPULATE HERE
 
+  const eventData = events.map(event => {
+    event.start = moment(event.start).format('YYYY-MM-DD');
+    event.end = moment(event.end).format('YYYY-MM-DD');
+    
+    return event;
+  });
+
   const data = {
     ...calendar,
-    events: [...events]
+    events: [...eventData]
   };
 
   console.log('CALENDAR API DATA :', data);
@@ -129,20 +192,46 @@ const postCalendar = (calendar, events) => {
     dispatch(postCalendarRequest());
 
     const success = res => {
+      console.log(res);
       dispatch(postCalendarSuccess(res.data.data));
-    }
+    };
 
-    const failure = err => {
+    const error = err => {
+      console.log(err);
       dispatch(postCalendarFailure(err.message));
-    }
-  }
-}
+    };
+
+    http.post('/calendar', data, success, error);
+  };
+};
+
+const patchCalendar = (calendar, newEvents, deletedList, updatedList) => {
+  console.log('calendar', calendar);
+  console.log('newEvents', newEvents);
+  console.log('deletedList', deletedList);
+  return dispatch => {
+    dispatch(patchCalendarRequest());
+
+    const success = res => {
+      dispatch(patchCalendarSuccess(res.data.data));
+    };
+
+    const error = err => {
+      dispatch(patchCalendarFailure(err.message));
+    };
+
+    // http.patch('/calendar', data, success, error);
+  };
+};
 
 export const calendarActions = {
   fetchCalendarById,
   fetchAllCalendar,
-  postCalendar
-}
+  postCalendar,
+  addDeletedEvent,
+  patchCalendar,
+  editEvent
+};
 
 // All Calendar Reducer
 const allCalendarInitialState = {
@@ -170,7 +259,14 @@ const allCalendarReducer = (state = {}, action) => {
 // Active Calendar Reducer
 const activeCalendarInitialState = {
   error: '',
-  data: {}
+  data: {},
+  deleted: []
+};
+
+const filterEvent = (data = [], deleteId) => {
+  return data.filter(event => {
+    return event.originalId !== deleteId;
+  });
 };
 
 const activeCalendarReducer = (state = {}, action) => {
@@ -194,9 +290,26 @@ const activeCalendarReducer = (state = {}, action) => {
       return {
         ...state,
         error: action.payload
+      };
+    case ADD_DELETED_EVENT:
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          events: filterEvent(state.data.events, action.payload)
+        },
+        deleted: state.deleted.concat(action.payload)
+      };
+    case EDIT_EVENT:
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          events: action.payload
+        }
       }  
     default:
-      return state;  
+      return state;
   }
 }
 

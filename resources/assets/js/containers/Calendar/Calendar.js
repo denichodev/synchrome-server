@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, reset, change } from 'redux-form';
+import DatePicker from 'react-bootstrap-date-picker';
+import { withRouter } from 'react-router-dom';
+import $ from 'jquery';
 
 import { calendarActions } from '../../ducks/calendar';
 import { eventActions } from '../../ducks/event';
@@ -21,8 +24,20 @@ class Calendar extends Component {
     }
   ];
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      initializedFormOnEdit: false
+    };
+  }
+
   componentWillMount() {
-    this.props.initialize({ status: 'published' });
+    const { edit, initialize } = this.props;
+
+    if (!edit) {
+      initialize({ status: 'published' });
+    }
   }
 
   componentDidMount = () => {
@@ -32,26 +47,56 @@ class Calendar extends Component {
       return;
     }
 
-    // fetchCalendarById(id);
+    fetchCalendarById(id);
   };
 
-  handleSubmit = values => {
-    const { postCalendar, eventToPost } = this.props;
+  componentWillReceiveProps(nextProps) {
+    const { edit, initialize, dispatch } = this.props;
 
-    postCalendar(values, eventToPost);
+    if (!edit || !nextProps.activeCalendar.data.name) {
+      return;
+    }
+    if (this.state.initializedFormOnEdit) {
+      return;
+    }
+
+    const initialForm = {
+      status: 'published',
+      name: nextProps.activeCalendar.data.name
+    };
+
+    dispatch(initialize(initialForm));
+    this.setState({ initializedFormOnEdit: true });
+  }
+
+  handleSubmit = values => {
+    const { postCalendar, eventToPost, dispatch, edit, patchCalendar, activeCalendar } = this.props;
+    
+    if (!edit) { postCalendar(values, eventToPost); }
+    else {
+      patchCalendar(values, eventToPost, activeCalendar.deleted);
+    }
+
+    dispatch(reset('calendarForm'));
   };
 
   handleSelection = (start, end) => {
     // SUBTRACTING 1 DAY because fullCalendar different way of rendering end date
+    const { setEventEditStatus } = this.props;
+
+    setEventEditStatus({
+      bool: false,
+      target: {}
+    });
+
     this.props.selectDateFromCalendar(
-      start.toISOString(),
-      end.add(-1, 'days').toISOString()
+      start,
+      end.add(-1, 'days')
     );
   };
 
   renderEventCalendar = () => {
-    const { eventToPost } = this.props;
-    const { edit } = this.props;
+    const { eventToPost, edit, activeCalendar } = this.props;
 
     if (!edit) {
       return (
@@ -65,20 +110,33 @@ class Calendar extends Component {
       );
     }
 
+    const events = activeCalendar.data.events
+      ? activeCalendar.data.events.concat(eventToPost)
+      : [];
+
+    // console.log(events);
+
+    // const editedEvents = events.map(ev => {
+    //   if (ev.originalId) {
+    //     ev.id = ev.originalId;
+    //   }
+    // });
+
     if (edit) {
       return (
         <EventCalendar
           height={500}
           displayEventTime={false}
           selectable
-          events={[]}
+          handleSelection={this.handleSelection}
+          events={events}
         />
       );
     }
   };
 
   render() {
-    const { handleSubmit } = this.props;
+    const { handleSubmit, activeCalendar } = this.props;
 
     return (
       <div className="row">
@@ -86,7 +144,9 @@ class Calendar extends Component {
           <div className="box">
             <div className="box-header">
               {this.props.edit
-                ? `Edit Calendar ${this.props.id}`
+                ? `Edit ${activeCalendar.data.name
+                  ? activeCalendar.data.name
+                  : ''}`
                 : 'Add New Calendar'}
             </div>
             <div className="box-body">
@@ -95,6 +155,7 @@ class Calendar extends Component {
                   <Field
                     name="name"
                     placeholder="Calendar Title"
+                    defaultValue="kontlooooo"
                     component={FormText}
                   />
                 </div>
@@ -142,7 +203,7 @@ class Calendar extends Component {
               <div className="box">
                 <div className="box-header">Event</div>
                 <div className="box-body">
-                  <EventForm />
+                  <EventForm edit={this.props.edit} />
                 </div>
               </div>
             </div>
@@ -168,13 +229,23 @@ const mapStateToProps = state => ({
   eventToPost: state.event.toPost
 });
 
+let clear = function clearDatepicker() {
+
+};
+
 const mapDispatchToProps = dispatch => ({
   fetchCalendarById: id => dispatch(calendarActions.fetchCalendarById(id)),
   selectDateFromCalendar: (start, end) => {
     dispatch(eventActions.calendarDateSelected(start, end));
   },
   postCalendar: (calendar, events) =>
-    dispatch(calendarActions.postCalendar(calendar, events))
+    dispatch(calendarActions.postCalendar(calendar, events)),
+  patchCalendar: (calendar, newEvents, deletedList, updatedList) =>
+    dispatch(calendarActions.patchCalendar(calendar, newEvents, deletedList, updatedList)),
+  setEventEditStatus: data => {
+    dispatch(reset('eventForm'));
+    dispatch(eventActions.setEditStatus(data));
+  }
 });
 
 const validate = values => {

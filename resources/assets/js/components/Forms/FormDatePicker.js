@@ -1,5 +1,6 @@
 import React from 'react';
-import DatePicker from 'react-bootstrap-date-picker';
+import DatePicker from 'react-datepicker';
+import moment from 'moment';
 
 const FormDatePicker = field => {
   const { meta: { pristine, error } } = field;
@@ -19,12 +20,9 @@ const FormDatePicker = field => {
           <i className="fa fa-calendar" />
         </div>
         <DatePicker
-          id={calendarId}
-          value={input.value}
+          selected={input.value}
           onChange={input.onChange}
-          className={`form-control`}
-          minDate={minDate ? minDate : null}
-          maxDate={maxDate ? maxDate : null}
+          className={'form-control'}
         />
       </div>
       <span className="help-block" style={errorHelpBlockStyle}>{error}</span>

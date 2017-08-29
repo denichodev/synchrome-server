@@ -1,3 +1,4 @@
+import moment from 'moment';
 import http from '../services/http';
 
 // Types
@@ -6,16 +7,20 @@ const FETCH_EVENT_CATEGORY_SUCCESS = 'synchrome/event/fetch_event_category_succe
 const FETCH_EVENT_CATEGORY_FAILURE = 'synchrome/event/fetch_event_category_failure';
 
 const ADD_EVENT_TO_POST = 'synchrome/event/add_event_to_post';
+const EDIT_EVENT_TO_POST = 'synchrome/event/edit_event_to_post';
 const REMOVE_EVENT_TO_POST = 'synchrome/event/remove_event_to_post';
 
-const CALENDAR_DATE_SELECTED = 'synchrome/eventForm/calendar_date_selected';
+const CALENDAR_DATE_SELECTED = 'synchrome/event/calendar_date_selected';
+
+const SET_EDIT_STATUS = 'synchrome/event/set_edit_status';
 
 export const eventTypes = {
   FETCH_EVENT_CATEGORY_REQUEST,
   FETCH_EVENT_CATEGORY_SUCCESS,
   FETCH_EVENT_CATEGORY_FAILURE,
   ADD_EVENT_TO_POST,
-  CALENDAR_DATE_SELECTED,  
+  CALENDAR_DATE_SELECTED,
+  SET_EDIT_STATUS
 };
 
 // Action Creators
@@ -43,8 +48,8 @@ const addEventToPost = payload => {
   return {
     type: ADD_EVENT_TO_POST,
     payload
-  }
-}
+  };
+};
 
 const removeEventToPost = payload => {
   return {
@@ -63,6 +68,20 @@ const calendarDateSelected = (start, end) => {
   };
 };
 
+const setEditStatus = payload => {
+  return {
+    type: SET_EDIT_STATUS,
+    payload
+  };
+};
+
+const editEventToPost = payload => {
+  return {
+    type: EDIT_EVENT_TO_POST,
+    payload
+  };
+};
+
 const fetchEventCategory = () => {
   return dispatch => {
     dispatch(fetchEventCategoryRequest());
@@ -76,22 +95,47 @@ const fetchEventCategory = () => {
     };
 
     http.get('/calendar/event/category', success, error);
+  };
+};
+
+const editEvent = (events, editedEvent) => {
+  const copy = events;
+  const newEvents = copy.map(eve => {
+    if (eve.id === editedEvent.id) {
+      return {
+        ...eve,
+        title: editedEvent.title,
+        start: editedEvent.start,
+        end: moment(editedEvent.end).add(1, 'days').format('YYYY-MM-DD')
+      };
+    }
+
+    return eve;
+  });
+
+  return dispatch => {
+    dispatch(editEventToPost(newEvents));
   }
-}
+};
 
 export const eventActions = {
   fetchEventCategory,
   addEventToPost,
   calendarDateSelected,
-  removeEventToPost
+  removeEventToPost,
+  setEditStatus,
+  editEvent
 };
 
 // Reducer
 const initialState = {
   error: '',
   category: [],
-  toPost: []
-}
+  toPost: [],
+  isEditing: {
+    bool: false
+  }
+};
 
 const reduxFormPlugin = {
   eventForm: (state, action) => {
@@ -130,7 +174,7 @@ const eventReducer = (state = initialState, action) => {
       return {
         ...state,
         error: action.payload
-      }
+      };
     case ADD_EVENT_TO_POST:
       return {
         ...state,
@@ -141,10 +185,20 @@ const eventReducer = (state = initialState, action) => {
         ...state,
         toPost: filterEvent(state.toPost, action.payload)
       };
+    case SET_EDIT_STATUS:
+      return {
+        ...state,
+        isEditing: action.payload
+      };
+    case EDIT_EVENT_TO_POST:
+      return {
+        ...state,
+        toPost: action.payload
+      }  
     default:
       return state;
-  }
-}
+  };
+};
 
 export default {
   eventReducer,

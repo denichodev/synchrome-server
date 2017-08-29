@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { change } from 'redux-form';
 import $ from 'jquery';
-import 'moment';
+import moment from 'moment';
 import 'fullcalendar/dist/fullcalendar';
 import _ from 'lodash';
 import { eventActions } from '../../ducks/event';
+import { calendarActions } from '../../ducks/calendar';
 
 class EventCalendar extends Component {
   constructor(props) {
@@ -22,20 +24,28 @@ class EventCalendar extends Component {
       displayEventTime,
       selectable,
       handleSelection,
-      validRange,
+      validRange
     } = this.props;
 
     $('#calendar').fullCalendar({
       defaultView,
       height,
       header,
-      events: this.props.events,
       displayEventTime,
       selectable,
       validRange,
       eventClick: this.handleEventClick,
       select: handleSelection
     });
+
+    const eventSource = events.map(ev => {
+      return {
+        ...ev,
+        end: moment(ev.end).add(1, 'days')
+      };
+    });
+
+    $('#calendar').fullCalendar('addEventSource', eventSource);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -52,11 +62,37 @@ class EventCalendar extends Component {
     }
   }
 
-  handleEventClick = (calEvent) => {
-    const { removeEvent } = this.props;
-    $('#calendar').fullCalendar('removeEvents', calEvent.id);
-    removeEvent(calEvent.id);
-  }
+  handleEventClick = (calEvent, jsEvent) => {
+    const { removeEvent, addDeletedEvent, events, setEventForm, setEditStatus, setEventFormOriginalId } = this.props;
+
+    if (jsEvent.originalEvent.shiftKey) {
+      if (!calEvent.originalId) {
+        removeEvent(calEvent.id);
+        $('#calendar').fullCalendar('removeEvents', calEvent.id);
+      } else {
+        addDeletedEvent(calEvent.originalId);
+        $('#calendar').fullCalendar('removeEvents', calEvent._id);
+      }
+    }
+
+    let eventToEdit;
+
+    if (!calEvent.originalId) {
+      eventToEdit = _.find(events, { id: calEvent.id });
+      setEventForm(eventToEdit);
+      setEditStatus({
+        target: calEvent,
+        bool: true
+      });
+    } else {
+      eventToEdit = _.find(events, { originalId: calEvent.originalId });
+      setEventFormOriginalId(eventToEdit);
+      setEditStatus({
+        target: calEvent,
+        bool: true
+      });
+    }
+  };
 
   rerenderFullcalendar() {
     const {
@@ -76,13 +112,21 @@ class EventCalendar extends Component {
       defaultView,
       height,
       header,
-      events,
       displayEventTime,
       selectable,
       validRange,
-      eventClick: this.handleEventClick,      
+      eventClick: this.handleEventClick,
       select: handleSelection
     });
+
+    const eventSource = events.map(ev => {
+      return {
+        ...ev,
+        end: moment(ev.end).add(1, 'days')
+      };
+    });
+    
+    $('#calendar').fullCalendar('addEventSource', eventSource);
   }
 
   render() {
@@ -104,7 +148,21 @@ EventCalendar.defaultProps = {
 };
 
 const mapDispatchToProps = dispatch => ({
-  removeEvent: id => dispatch(eventActions.removeEventToPost(id))
+  removeEvent: id => dispatch(eventActions.removeEventToPost(id)),
+  addDeletedEvent: orgId => dispatch(calendarActions.addDeletedEvent(orgId)),
+  setEventForm: event => {
+    dispatch(change('eventForm', 'title', event.title));
+    dispatch(change('eventForm', 'start', moment(event.start)));
+    dispatch(change('eventForm', 'end', moment(event.end)));
+    dispatch(change('eventForm', 'event_category_id', event.event_category_id));
+  },
+  setEventFormOriginalId: event => {
+    dispatch(change('eventForm', 'title', event.title));
+    dispatch(change('eventForm', 'start', moment(event.start)));
+    dispatch(change('eventForm', 'end', moment(event.end)));
+    dispatch(change('eventForm', 'event_category_id', event.event_category_id));
+  },
+  setEditStatus: status => dispatch(eventActions.setEditStatus(status))
 });
 
 export default connect(null, mapDispatchToProps)(EventCalendar);
