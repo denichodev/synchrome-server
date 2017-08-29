@@ -5,7 +5,8 @@ const FETCH_EVENT_CATEGORY_REQUEST = 'synchrome/event/fetch_event_category_reque
 const FETCH_EVENT_CATEGORY_SUCCESS = 'synchrome/event/fetch_event_category_success';
 const FETCH_EVENT_CATEGORY_FAILURE = 'synchrome/event/fetch_event_category_failure';
 
-const ADD_EVENT_TO_POST = 'synchrome/event/add_events_to_post';
+const ADD_EVENT_TO_POST = 'synchrome/event/add_event_to_post';
+const REMOVE_EVENT_TO_POST = 'synchrome/event/remove_event_to_post';
 
 const CALENDAR_DATE_SELECTED = 'synchrome/eventForm/calendar_date_selected';
 
@@ -45,6 +46,13 @@ const addEventToPost = payload => {
   }
 }
 
+const removeEventToPost = payload => {
+  return {
+    type: REMOVE_EVENT_TO_POST,
+    payload
+  };
+};
+
 const calendarDateSelected = (start, end) => {
   return {
     type: CALENDAR_DATE_SELECTED,
@@ -61,11 +69,11 @@ const fetchEventCategory = () => {
 
     const success = res => {
       dispatch(fetchEventCategorySuccess(res.data.data));
-    }
+    };
 
     const error = err => {
       dispatch(fetchEventCategoryFailure(err.message));
-    }
+    };
 
     http.get('/calendar/event/category', success, error);
   }
@@ -74,8 +82,9 @@ const fetchEventCategory = () => {
 export const eventActions = {
   fetchEventCategory,
   addEventToPost,
-  calendarDateSelected
-}
+  calendarDateSelected,
+  removeEventToPost
+};
 
 // Reducer
 const initialState = {
@@ -85,22 +94,30 @@ const initialState = {
 }
 
 const reduxFormPlugin = {
-  eventForm: (state, action) => {   // <----- 'login' is name of form given to reduxForm()
-    switch(action.type) {
+  eventForm: (state, action) => {
+    switch (action.type) {
       case CALENDAR_DATE_SELECTED:
         return {
           ...state,
           values: {
             ...state.values,
             start: action.payload.start,
-            end: action.payload.end// <----- clear password value
+            end: action.payload.end
           }
         }
+      case ADD_EVENT_TO_POST:
+        return undefined;
       default:
-        return state
+        return state;
     }
   }
 }
+
+const filterEvent = (data = [], deleteId) => {
+  return data.filter(event => {
+    return event.id !== deleteId;
+  });
+};
 
 const eventReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -118,9 +135,14 @@ const eventReducer = (state = initialState, action) => {
       return {
         ...state,
         toPost: state.toPost.concat(action.payload)
-      }
+      };
+    case REMOVE_EVENT_TO_POST:
+      return {
+        ...state,
+        toPost: filterEvent(state.toPost, action.payload)
+      };
     default:
-      return state;  
+      return state;
   }
 }
 

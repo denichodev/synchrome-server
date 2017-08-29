@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import $ from 'jquery';
 import 'moment';
 import 'fullcalendar/dist/fullcalendar';
 import _ from 'lodash';
+import { eventActions } from '../../ducks/event';
 
 class EventCalendar extends Component {
   constructor(props) {
@@ -11,14 +13,49 @@ class EventCalendar extends Component {
     this.rerenderFullcalendar = this.rerenderFullcalendar.bind(this);
   }
 
+  componentDidMount() {
+    const {
+      defaultView,
+      height,
+      header,
+      events,
+      displayEventTime,
+      selectable,
+      handleSelection,
+      validRange,
+    } = this.props;
+
+    $('#calendar').fullCalendar({
+      defaultView,
+      height,
+      header,
+      events: this.props.events,
+      displayEventTime,
+      selectable,
+      validRange,
+      eventClick: this.handleEventClick,
+      select: handleSelection
+    });
+  }
+
   componentDidUpdate(prevProps, prevState) {
     if (this.props.events.length) {
-      const newEvents = _.differenceWith(this.props.events, prevProps.events, _.isEqual);
+      const newEvents = _.differenceWith(
+        this.props.events,
+        prevProps.events,
+        _.isEqual
+      );
 
       if (newEvents.length) {
         this.rerenderFullcalendar();
       }
     }
+  }
+
+  handleEventClick = (calEvent) => {
+    const { removeEvent } = this.props;
+    $('#calendar').fullCalendar('removeEvents', calEvent.id);
+    removeEvent(calEvent.id);
   }
 
   rerenderFullcalendar() {
@@ -43,35 +80,12 @@ class EventCalendar extends Component {
       displayEventTime,
       selectable,
       validRange,
+      eventClick: this.handleEventClick,      
       select: handleSelection
     });
   }
 
-  componentDidMount() {
-    const {
-      defaultView,
-      height,
-      header,
-      events,
-      displayEventTime,
-      selectable,
-      handleSelection,
-      validRange
-    } = this.props;
-
-    $('#calendar').fullCalendar({
-      defaultView,
-      height,
-      header,
-      events: this.props.events,
-      displayEventTime,
-      selectable,
-      validRange,
-      select: handleSelection
-    });
-  }
-
-  render() {    
+  render() {
     return <div id="calendar" />;
   }
 }
@@ -87,6 +101,10 @@ EventCalendar.defaultProps = {
     start: '2017-01-01',
     end: '2017-12-31'
   }
-}
+};
 
-export default EventCalendar;
+const mapDispatchToProps = dispatch => ({
+  removeEvent: id => dispatch(eventActions.removeEventToPost(id))
+});
+
+export default connect(null, mapDispatchToProps)(EventCalendar);

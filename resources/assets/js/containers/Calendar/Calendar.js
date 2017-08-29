@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
-import $ from 'jquery';
-import moment from 'moment';
 import { Field, reduxForm } from 'redux-form';
 
 import { calendarActions } from '../../ducks/calendar';
@@ -24,6 +21,10 @@ class Calendar extends Component {
     }
   ];
 
+  componentWillMount() {
+    this.props.initialize({ status: 'published' });
+  }
+
   componentDidMount = () => {
     const { edit, id, fetchCalendarById } = this.props;
 
@@ -36,8 +37,6 @@ class Calendar extends Component {
 
   handleSubmit = values => {
     const { postCalendar, eventToPost } = this.props;
-
-    console.log('VALUES: ', values);
 
     postCalendar(values, eventToPost);
   };
@@ -66,20 +65,20 @@ class Calendar extends Component {
       );
     }
 
-    if (edit && eventsToShow) {
+    if (edit) {
       return (
         <EventCalendar
           height={500}
           displayEventTime={false}
           selectable
-          events={eventsToShow}
+          events={[]}
         />
       );
     }
   };
 
   render() {
-    const { handleSubmit, categories } = this.props;
+    const { handleSubmit } = this.props;
 
     return (
       <div className="row">
@@ -92,7 +91,7 @@ class Calendar extends Component {
             </div>
             <div className="box-body">
               <div className="row">
-                <div className="col-sm-12 from-group">
+                <div className="col-sm-12">
                   <Field
                     name="name"
                     placeholder="Calendar Title"
@@ -180,6 +179,10 @@ const mapDispatchToProps = dispatch => ({
 
 const validate = values => {
   const errors = {};
+
+  if (!values.name) {
+    errors.name = 'Required';
+  }
 
   return errors;
 };
