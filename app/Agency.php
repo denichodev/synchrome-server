@@ -18,6 +18,11 @@ class Agency extends Model
         'agency_type_id'
     ];
 
+    public function type()
+    {
+        return $this->belongsTo(AgencyType::class, 'agency_type_id');
+    }
+
     public function echelons()
     {
         return $this->hasMany(Echelon::class);
