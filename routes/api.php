@@ -29,4 +29,12 @@ Route::group(['middleware' => ['api']], function () {
     Route::post('employee', 'Api\EmployeeController@store')->name('api.employees.store');
     Route::get('employee/{id}', 'Api\EmployeeController@get')->name('api.employees.get');
     Route::delete('employee/{id}', 'Api\EmployeeController@destroy')->name('api.employees.destroy');
+
+    Route::get('cluster', 'Api\ClusterController@index')->name('api.clusters.index');
+    Route::post('cluster', 'Api\ClusterController@store')->name('api.clusters.store');
+    Route::get('cluster/{id}', 'Api\ClusterController@get')->name('api.clusters.get');
+    Route::patch('cluster/{id}', 'Api\ClusterController@update')->name('api.clusters.update');
+    Route::delete('cluster/{id}', 'Api\ClusterController@destroy')->name('api.clusters.destroy');
+    Route::post('cluster/{id}/keys', 'Api\ClusterController@generateKey')->name('api.clusters.generate_key');
+    Route::post('cluster/keys/{key_id}/disable', 'Api\ClusterController@disablekey')->name('api.clusters.disable_key');
 });
