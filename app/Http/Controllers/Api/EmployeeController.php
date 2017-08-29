@@ -10,6 +10,25 @@ use DB;
 
 class EmployeeController extends Controller
 {
+    public function index()
+    {
+        $employees = Employee::with([
+            'echelon' => function ($query) {
+                $query->select(['id', 'name', 'agency_id']);
+            }, 
+            
+            'echelon.agency' => function ($query) {
+                $query->select(['id', 'name']);
+        }])
+        ->get(['id', 'name', 'echelon_id']);
+
+        return response()
+            ->json([
+                'result' => 'success',
+                'data' => $employees
+            ]);
+    }
+
     public function store(Request $request)
     {
         $validation = Validator::make($request->all(), [
@@ -49,6 +68,67 @@ class EmployeeController extends Controller
                     'errors' => [$e->getMessage()]
                 ]);
         }
+    }
 
+    public function get($id)
+    {
+        $employee = Employee::with([
+            'echelon' => function ($query) {
+                $query->select(['id', 'name', 'agency_id']);
+            }, 
+            'echelon.agency' => function ($query) {
+                $query->select(['id', 'name']);
+            }
+        ])->find($id);
+
+        if (is_null($employee)) {
+            return response()
+                ->json([
+                    'result' => 'failed',
+                    'errors' => ['employee_not_found']
+                ], 404);
+        }
+
+        return response()
+            ->json([
+                'result' => 'success',
+                'data' => $employee
+            ]);
+    }
+
+    public function destroy($id)
+    {
+        $employee = Employee::find($id);
+
+        if (is_null($employee)) {
+            return response()
+                ->json([
+                    'result' => 'failed',
+                    'errors' => ['employee_not_found']
+                ], 404);
+        }
+
+        try {
+            DB::beginTransaction();
+            $employee->delete();
+            DB::commit();
+
+            return response()
+                ->json([
+                    'result' => 'success'
+                ]);
+        } catch (\Exception $e) {
+            DB::rollback();
+            
+            if (\App::environment('local')) {
+                throw $e;
+            }
+
+            return response()
+                ->json([
+                    'result' => 'failed',
+                    'errors' => [$e->getMessage()]
+                ]);
+        }
     }
 }
