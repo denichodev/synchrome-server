@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Employee extends Model
 {
+    use SoftDeletes;
+
     protected $casts = [
         'id' => 'string'
     ];
@@ -16,6 +19,10 @@ class Employee extends Model
         'id',
         'name',
         'echelon_id'
+    ];
+
+    protected $dates = [
+        'deleted_at'
     ];
 
     public function echelon()
