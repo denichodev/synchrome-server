@@ -6,15 +6,13 @@ export default {
   init() {
     axios.defaults.baseURL = '/api';
 
-    const tokenMeta = document.head.querySelector('meta[name="jwt-token"]');
+    let tokenMeta = document.head.querySelector('meta[name="jwt-token"]');
 
     if (tokenMeta) {
-      axios.interceptors.request.use((config) => {
-        const newConfig = config;
+      axios.interceptors.request.use(config => {
+        config.headers.Authorization = `Bearer ${tokenMeta.content}`;
 
-        newConfig.headers.Authorization = `Bearer ${tokenMeta.content}`;
-
-        return newConfig;
+        return config
       });
     }
   },
@@ -25,8 +23,8 @@ export default {
       data,
       method: 'post'
     })
-      .then(successCallback)
-      .catch(errorCallback);
+    .then(successCallback)
+    .catch(errorCallback);
   },
 
   get(url, successCallback, errorCallback) {
@@ -34,7 +32,7 @@ export default {
       url,
       method: 'get'
     })
-      .then(successCallback)
-      .catch(errorCallback);
+    .then(successCallback)
+    .catch(errorCallback);
   }
 };
