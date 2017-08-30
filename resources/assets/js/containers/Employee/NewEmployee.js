@@ -7,15 +7,6 @@ import { echelonActions } from '../../ducks/echelon';
 import { employeeActions } from '../../ducks/employee';
 
 class NewEmployee extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      agency: null,
-      echelon: null
-    };
-  }
-
   componentDidMount = () => {
     const { fetchAllAgency } = this.props;
 
