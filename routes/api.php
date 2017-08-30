@@ -37,4 +37,12 @@ Route::group(['middleware' => ['api']], function () {
     Route::delete('cluster/{id}', 'Api\ClusterController@destroy')->name('api.clusters.destroy');
     Route::post('cluster/{id}/keys', 'Api\ClusterController@generateKey')->name('api.clusters.generate_key');
     Route::post('cluster/keys/{key_id}/disable', 'Api\ClusterController@disablekey')->name('api.clusters.disable_key');
+
+    Route::group(['middleware' => 'jwt_admin'], function () {
+        Route::get('user', 'Api\UserController@index')->name('api.users.index');
+        Route::post('user', 'Api\UserController@store')->name('api.users.store');
+        Route::get('user/{id}', 'Api\UserController@get')->name('api.users.get');
+        Route::patch('user/{id}', 'Api\UserController@update')->name('api.users.update');
+        Route::delete('user/{id}', 'Api\UserController@destroy')->name('api.users.destroy');
+    });
 });
