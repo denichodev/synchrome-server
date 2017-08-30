@@ -13,6 +13,8 @@ class EmployeeOverview extends Component {
   renderEmployeeTable() {
     const { employeeData } = this.props;
 
+    console.log(employeeData);
+
     if (employeeData.length <= 0) {
       return (
         <tr>
