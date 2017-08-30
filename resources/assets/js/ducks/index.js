@@ -8,6 +8,7 @@ import event from './event';
 import agency from './agency';
 import echelon from './echelon';
 import employee from './employee';
+import cluster from './cluster';
 
 export const initialState = {
   router: {},
@@ -16,7 +17,8 @@ export const initialState = {
   event: event.initialState,
   agency: agency.initialState,
   echelon: echelon.initialState,
-  employee: employee.initialState
+  employee: employee.initialState,
+  cluster: cluster.initialState
 };
 
 const rootReducer = combineReducers({
@@ -27,7 +29,8 @@ const rootReducer = combineReducers({
   event: event.eventReducer,
   agency: agency.agencyReducer,
   echelon: echelon.echelonReducer,
-  employee: employee.employeeReducer
+  employee: employee.employeeReducer,
+  cluster: cluster.clusterReducer
 });
 
 export default rootReducer;
