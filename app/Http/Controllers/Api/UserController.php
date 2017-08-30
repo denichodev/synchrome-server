@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User;
+use App\Role;
 use Validator;
 use DB;
 
@@ -179,5 +180,16 @@ class UserController extends Controller
                     'errors' => [$e->getMessage()]
                 ]);
         }
+    }
+
+    public function roles()
+    {
+        $roles = Role::get();
+
+        return response()
+            ->json([
+                'result' => 'success',
+                'data' => $roles
+            ]);
     }
 }
