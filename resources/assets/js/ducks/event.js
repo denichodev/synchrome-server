@@ -106,7 +106,7 @@ const editEvent = (events, editedEvent) => {
         ...eve,
         title: editedEvent.title,
         start: editedEvent.start,
-        end: moment(editedEvent.end).add(1, 'days').format('YYYY-MM-DD')
+        end: moment(editedEvent.end).format('YYYY-MM-DD')
       };
     }
 

@@ -66,6 +66,7 @@ class EventForm extends Component {
   editEvent = values => {
     const { editEventFromCalendar, eventsFromCalendar, isEditing, eventToPost, editEventToPost } = this.props;
     eventToPost.end = moment(values.end).format('YYYY-MM-DD');
+    console.log(eventToPost);
     if (isEditing.target.originalId) {
       const targetEvent = {
         ..._.find(eventsFromCalendar, { originalId: isEditing.target.originalId }),

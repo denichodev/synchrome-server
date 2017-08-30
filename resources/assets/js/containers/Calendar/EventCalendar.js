@@ -35,7 +35,8 @@ class EventCalendar extends Component {
       selectable,
       validRange,
       eventClick: this.handleEventClick,
-      select: handleSelection
+      select: handleSelection,
+      allDayDefault: true
     });
 
     const eventSource = events.map(ev => {
@@ -63,7 +64,14 @@ class EventCalendar extends Component {
   }
 
   handleEventClick = (calEvent, jsEvent) => {
-    const { removeEvent, addDeletedEvent, events, setEventForm, setEditStatus, setEventFormOriginalId } = this.props;
+    const {
+      removeEvent,
+      addDeletedEvent,
+      events,
+      setEventForm,
+      setEditStatus,
+      setEventFormOriginalId
+    } = this.props;
 
     if (jsEvent.originalEvent.shiftKey) {
       if (!calEvent.originalId) {
@@ -116,7 +124,8 @@ class EventCalendar extends Component {
       selectable,
       validRange,
       eventClick: this.handleEventClick,
-      select: handleSelection
+      select: handleSelection,
+      allDayDefault: true
     });
 
     const eventSource = events.map(ev => {
@@ -125,7 +134,7 @@ class EventCalendar extends Component {
         end: moment(ev.end).add(1, 'days')
       };
     });
-    
+
     $('#calendar').fullCalendar('addEventSource', eventSource);
   }
 
