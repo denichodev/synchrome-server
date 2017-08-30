@@ -22,18 +22,21 @@ class JwtAuthMiddleware
             if (! $user = JWTAuth::parseToken()->authenticate()) {
                 return response()
                     ->json([
-                        'error' => ['user_not_found']
+                        'result' => 'failed',
+                        'errors' => ['user_not_found']
                     ], 404);
             }
         } catch (JWTException $e) {
             return response()
                 ->json([
-                    'error' => ['token_required'],
+                    'result' => 'failed',
+                    'errors' => ['token_required'],
                 ], 400);
         } catch (TokenInvalidException $e) {
             return response()
                 ->json([
-                    'error' => ['invalid_token'],
+                    'result' => 'failed',
+                    'errors' => ['invalid_token'],
                 ], 400);
         }
 
