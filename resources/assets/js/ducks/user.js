@@ -1,3 +1,4 @@
+import { push } from 'react-router-redux';
 import http from '../services/http';
 
 const GET_USER_ALL_REQUEST = 'synchrome/user/get_user_all_request';
@@ -141,6 +142,7 @@ const postUser = data => (
 
     const success = res => {
       dispatch(postUserSuccess(res.data.data));
+      dispatch(push('/panel/users'));
     };
 
     const error = err => {
