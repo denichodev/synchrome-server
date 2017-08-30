@@ -263,12 +263,10 @@ const generateClusterKey = id => (
     dispatch(generateClusterKeyRequest());
 
     const success = res => {
-      console.log(res);
       dispatch(generateClusterKeySuccess(res.data.data));
     };
 
     const error = err => {
-      console.log(err);
       dispatch(generateClusterKeyFailure(err.message));
     };
 

@@ -209,13 +209,11 @@ const updateUser = (id, data) => (
     dispatch(updateUserRequest());
 
     const success = res => {
-      console.log(res);
       dispatch(updateUserSuccess(res.data.data));
       dispatch(push('/panel/users'));
     };
 
     const error = err => {
-      console.log(err);
       dispatch(updateUserFailure(err.message));
     };
 
