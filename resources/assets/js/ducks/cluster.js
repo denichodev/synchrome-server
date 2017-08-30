@@ -10,6 +10,10 @@ const FETCH_CLUSTER_BYID_REQUEST = 'synchrome/cluster/fetch_cluster_byid_request
 const FETCH_CLUSTER_BYID_SUCCESS = 'synchrome/cluster/fetch_cluster_byid_success';
 const FETCH_CLUSTER_BYID_FAILURE = 'synchrome/cluster/fetch_cluster_byid_failure';
 
+const FETCH_CLUSTER_KEY_REQUEST = 'synchrome/cluster/fetch_cluster_key_request';
+const FETCH_CLUSTER_KEY_SUCCESS = 'synchrome/cluster/fetch_cluster_key_success';
+const FETCH_CLUSTER_KEY_FAILURE = 'synchrome/cluster/fetch_cluster_key_failure';
+
 const POST_CLUSTER_REQUEST = 'synchrome/cluster/post_cluster_request';
 const POST_CLUSTER_SUCCESS = 'synchrome/cluster/post_cluster_success';
 const POST_CLUSTER_FAILURE = 'synchrome/cluster/post_cluster_failure';
@@ -41,7 +45,13 @@ export const clusterTypes = {
   GENERATE_CLUSTER_KEY_SUCCESS,
   PATCH_CLUSTER_FAILURE,
   PATCH_CLUSTER_REQUEST,
-  PATCH_CLUSTER_SUCCESS
+  PATCH_CLUSTER_SUCCESS,
+  FETCH_CLUSTER_KEY_FAILURE,
+  FETCH_CLUSTER_KEY_REQUEST,
+  FETCH_CLUSTER_KEY_SUCCESS,
+  FETCH_CLUSTER_BYID_FAILURE,
+  FETCH_CLUSTER_BYID_REQUEST,
+  FETCH_CLUSTER_BYID_SUCCESS
 };
 
 // Action Creators
@@ -125,7 +135,21 @@ const patchClusterSuccess = payload => ({
 });
 
 const patchClusterFailure = payload => ({
-  type: patchClusterFailure,
+  type: PATCH_CLUSTER_FAILURE,
+  payload
+});
+
+const fetchClusterKeyRequest = () => ({
+  type: FETCH_CLUSTER_KEY_REQUEST
+});
+
+const fetchClusterKeySuccess = payload => ({
+  type: FETCH_CLUSTER_KEY_SUCCESS,
+  payload
+});
+
+const fetchClusterKeyFailure = payload => ({
+  type: FETCH_CLUSTER_KEY_FAILURE,
   payload
 });
 
@@ -161,7 +185,25 @@ const fetchClusterById = id => (
 
     http.get(`/cluster/${id}`, success, error);
   }
-)
+);
+
+const fetchClusterKey = id => (
+  dispatch => {
+    dispatch(fetchClusterKeyRequest());
+
+    const success = res => {
+      console.log(res);
+      dispatch(fetchClusterKeySuccess(res.data.data));
+    };
+
+    const error = err => {
+      console.log(err);
+      dispatch(fetchClusterKeyFailure(err.message));
+    };
+
+    http.get(`/cluster/${id}/keys`, success, error);
+  }
+);
 
 const postCluster = data => (
   dispatch => {
@@ -221,12 +263,14 @@ const generateClusterKey = id => (
     dispatch(generateClusterKeyRequest());
 
     const success = res => {
+      console.log(res);
       dispatch(generateClusterKeySuccess(res.data.data));
     };
 
     const error = err => {
+      console.log(err);
       dispatch(generateClusterKeyFailure(err.message));
-    }
+    };
 
     http.post(`/cluster/${id}/keys`, id, success, error);
   }
@@ -238,14 +282,17 @@ export const clusterActions = {
   deleteCluster,
   fetchClusterById,
   generateClusterKey,
-  patchCluster
+  patchCluster,
+  fetchClusterKey
 };
 
 // Reducer
 const initialState = {
   error: '',
   data: [],
-  active: {}
+  active: {
+    keys: []
+  }
 };
 
 const clusterReducer = (state = initialState, action) => {
@@ -263,7 +310,10 @@ const clusterReducer = (state = initialState, action) => {
     case POST_CLUSTER_SUCCESS:
       return {
         ...state,
-        active: action.payload
+        active: {
+          keys: [...state.active.keys],
+          ...state.active
+        }
       };
     case POST_CLUSTER_FAILURE:
       return {
@@ -273,7 +323,10 @@ const clusterReducer = (state = initialState, action) => {
     case FETCH_CLUSTER_BYID_SUCCESS:
       return {
         ...state,
-        active: action.payload
+        active: {
+          keys: [...state.active.keys],
+          ...action.payload
+        }
       };
     case FETCH_CLUSTER_BYID_FAILURE:
       return {
@@ -283,13 +336,29 @@ const clusterReducer = (state = initialState, action) => {
     case PATCH_CLUSTER_SUCCESS:
       return {
         ...state,
-        active: action.payload
+        active: {
+          keys: [...state.active.keys],
+          ...action.payload
+        }
       };
     case PATCH_CLUSTER_FAILURE:
       return {
         ...state,
         error: action.payload
-      }  
+      };
+    case FETCH_CLUSTER_KEY_SUCCESS:
+      return {
+        ...state,
+        active: {
+          ...state.active,
+          keys: action.payload
+        }
+      };
+    case FETCH_CLUSTER_KEY_FAILURE:
+      return {
+        ...state,
+        error: action.payload
+      };
     default:
       return state;
   }

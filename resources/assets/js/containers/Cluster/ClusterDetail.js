@@ -14,9 +14,10 @@ class ClusterDetail extends Component {
   };
 
   componentDidMount() {
-    const { fetchClusterById, match } = this.props;
+    const { fetchClusterById, match, fetchClusterKey } = this.props;
 
     fetchClusterById(match.params.id);
+    fetchClusterKey(match.params.id);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -33,7 +34,26 @@ class ClusterDetail extends Component {
   }
 
   renderKeyTable = () => {
-    return <div>clusterId : {this.props.match.params.id}</div>;
+    const { cluster } = this.props;
+
+    if (cluster.keys.length <= 0) {
+      return (
+        <tr>
+          <td colSpan="2"><center>No cluster key generated yet</center></td>
+        </tr>
+      );
+    }
+
+    return (
+      cluster.keys.map((key) => (
+        <tr key={key.key}>
+          <td>{key.key}</td>
+          <td>
+            <button type="button" className="btn btn-danger btn-xs">Delete</button>
+          </td>
+        </tr>
+      ))
+    );
   };
 
   handleGenerate = () => {
@@ -96,7 +116,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   fetchClusterById: id => dispatch(clusterActions.fetchClusterById(id)),
   generateClusterKey: id => dispatch(clusterActions.generateClusterKey(id)),
-  patchCluster: (id, data) => dispatch(clusterActions.patchCluster(id, data))
+  patchCluster: (id, data) => dispatch(clusterActions.patchCluster(id, data)),
+  fetchClusterKey: id => dispatch(clusterActions.fetchClusterKey(id))
 });
 
 const validate = values => {
