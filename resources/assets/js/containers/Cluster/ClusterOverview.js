@@ -18,6 +18,11 @@ class ClusterOverview extends Component {
     postCluster(values);
   }
 
+  deleteCluster = (id) => {
+    const { deleteCluster } = this.props;
+    deleteCluster(id);
+  }
+
   renderClusterTableBody = () => {
     const { clusters } = this.props;
 
@@ -32,6 +37,10 @@ class ClusterOverview extends Component {
         <tr key={cluster.id}>
           <td>{cluster.id}</td>
           <td>{cluster.name}</td>
+          <td>
+            <Link to={`/panel/clusters/${cluster.id}`} className="btn btn-primary btn-xs">Edit</Link>&nbsp;
+            <button data-id={cluster.id} type="button" className="btn btn-danger btn-xs" onClick={() => this.deleteCluster(cluster.id)}>Delete</button>
+          </td>
         </tr>
       ))
     );
@@ -44,6 +53,7 @@ class ClusterOverview extends Component {
           <tr>
             <th>ID</th>
             <th>Name</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -91,7 +101,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   fetchAllCluster: () => dispatch(clusterActions.fetchAllCluster()),
-  postCluster: data => dispatch(clusterActions.postCluster(data))
+  postCluster: data => dispatch(clusterActions.postCluster(data)),
+  deleteCluster: id => dispatch(clusterActions.deleteCluster(id))
 });
 
 const validate = values => {

@@ -10,13 +10,20 @@ const POST_CLUSTER_REQUEST = 'synchrome/cluster/post_cluster_request';
 const POST_CLUSTER_SUCCESS = 'synchrome/cluster/post_cluster_success';
 const POST_CLUSTER_FAILURE = 'synchrome/cluster/post_cluster_failure';
 
+const DELETE_CLUSTER_REQUEST = 'synchrome/cluster/delete_cluster_request';
+const DELETE_CLUSTER_SUCCESS = 'synchrome/cluster/delete_cluster_success';
+const DELETE_CLUSTER_FAILURE = 'synchrome/cluster/delete_cluster_failure';
+
 export const clusterTypes = {
   FETCH_CLUSTER_ALL_FAILURE,
   FETCH_CLUSTER_ALL_REQUEST,
   FETCH_CLUSTER_ALL_SUCCESS,
   POST_CLUSTER_REQUEST,
   POST_CLUSTER_SUCCESS,
-  POST_CLUSTER_FAILURE
+  POST_CLUSTER_FAILURE,
+  DELETE_CLUSTER_REQUEST,
+  DELETE_CLUSTER_SUCCESS,
+  DELETE_CLUSTER_FAILURE
 };
 
 // Action Creators
@@ -48,6 +55,20 @@ const postClusterFailure = payload => ({
   payload
 });
 
+const deleteClusterRequest = () => ({
+  type: DELETE_CLUSTER_REQUEST
+});
+
+const deleteClusterSuccess = payload => ({
+  type: DELETE_CLUSTER_SUCCESS,
+  payload
+});
+
+const deleteClusterFailure = payload => ({
+  type: DELETE_CLUSTER_FAILURE,
+  payload
+});
+
 const fetchAllCluster = () => (
   dispatch => {
     dispatch(fetchClusterAllRequest());
@@ -70,13 +91,11 @@ const postCluster = data => (
     dispatch(postClusterRequest());
 
     const success = res => {
-      console.log(res);
       dispatch(postClusterSuccess(res.data.data));
       dispatch(fetchAllCluster());
     };
 
     const error = err => {
-      console.log(err);
       dispatch(postClusterFailure(err.message));
     };
 
@@ -84,9 +103,27 @@ const postCluster = data => (
   }
 );
 
+const deleteCluster = id => (
+  dispatch => {
+    dispatch(deleteClusterRequest());
+
+    const success = res => {
+      dispatch(deleteClusterSuccess(res.data.data));
+      dispatch(fetchAllCluster());
+    };
+
+    const error = err => {
+      dispatch(deleteClusterFailure(err.message));
+    };
+
+    http.delete(`/cluster/${id}`, success, error);
+  }
+);
+
 export const clusterActions = {
   fetchAllCluster,
-  postCluster
+  postCluster,
+  deleteCluster
 };
 
 // Reducer
