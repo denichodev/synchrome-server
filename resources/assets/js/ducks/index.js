@@ -9,6 +9,7 @@ import agency from './agency';
 import echelon from './echelon';
 import employee from './employee';
 import cluster from './cluster';
+import user from './user';
 
 export const initialState = {
   router: {},
@@ -18,7 +19,8 @@ export const initialState = {
   agency: agency.initialState,
   echelon: echelon.initialState,
   employee: employee.initialState,
-  cluster: cluster.initialState
+  cluster: cluster.initialState,
+  user: user.initialState
 };
 
 const rootReducer = combineReducers({
@@ -30,7 +32,8 @@ const rootReducer = combineReducers({
   agency: agency.agencyReducer,
   echelon: echelon.echelonReducer,
   employee: employee.employeeReducer,
-  cluster: cluster.clusterReducer
+  cluster: cluster.clusterReducer,
+  user: user.userReducer
 });
 
 export default rootReducer;
