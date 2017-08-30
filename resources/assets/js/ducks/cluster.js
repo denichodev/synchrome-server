@@ -14,9 +14,17 @@ const POST_CLUSTER_REQUEST = 'synchrome/cluster/post_cluster_request';
 const POST_CLUSTER_SUCCESS = 'synchrome/cluster/post_cluster_success';
 const POST_CLUSTER_FAILURE = 'synchrome/cluster/post_cluster_failure';
 
+const PATCH_CLUSTER_REQUEST = 'synchrome/cluster/patch_cluster_request';
+const PATCH_CLUSTER_SUCCESS = 'synchrome/cluster/patch_cluster_success';
+const PATCH_CLUSTER_FAILURE = 'synchrome/cluster/patch_cluster_failure';
+
 const DELETE_CLUSTER_REQUEST = 'synchrome/cluster/delete_cluster_request';
 const DELETE_CLUSTER_SUCCESS = 'synchrome/cluster/delete_cluster_success';
 const DELETE_CLUSTER_FAILURE = 'synchrome/cluster/delete_cluster_failure';
+
+const GENERATE_CLUSTER_KEY_REQUEST = 'synchrome/cluster/generate_cluster_key_request';
+const GENERATE_CLUSTER_KEY_SUCCESS = 'synchrome/cluster/generate_cluster_key_success';
+const GENERATE_CLUSTER_KEY_FAILURE = 'synchrome/cluster/generate_cluster_key_failure';
 
 export const clusterTypes = {
   FETCH_CLUSTER_ALL_FAILURE,
@@ -27,7 +35,13 @@ export const clusterTypes = {
   POST_CLUSTER_FAILURE,
   DELETE_CLUSTER_REQUEST,
   DELETE_CLUSTER_SUCCESS,
-  DELETE_CLUSTER_FAILURE
+  DELETE_CLUSTER_FAILURE,
+  GENERATE_CLUSTER_KEY_FAILURE,
+  GENERATE_CLUSTER_KEY_REQUEST,
+  GENERATE_CLUSTER_KEY_SUCCESS,
+  PATCH_CLUSTER_FAILURE,
+  PATCH_CLUSTER_REQUEST,
+  PATCH_CLUSTER_SUCCESS
 };
 
 // Action Creators
@@ -46,16 +60,16 @@ const fetchClusterAllFailure = payload => ({
 });
 
 const fetchClusterByIdRequest = () => ({
-  type: FETCH_CLUSTER_ALL_REQUEST
+  type: FETCH_CLUSTER_BYID_REQUEST
 });
 
 const fetchClusterByIdSuccess = payload => ({
-  type: FETCH_CLUSTER_ALL_SUCCESS,
+  type: FETCH_CLUSTER_BYID_SUCCESS,
   payload
 });
 
 const fetchClusterByIdFailure = payload => ({
-  type: FETCH_CLUSTER_ALL_FAILURE,
+  type: FETCH_CLUSTER_BYID_FAILURE,
   payload
 });
 
@@ -84,6 +98,34 @@ const deleteClusterSuccess = payload => ({
 
 const deleteClusterFailure = payload => ({
   type: DELETE_CLUSTER_FAILURE,
+  payload
+});
+
+const generateClusterKeyRequest = () => ({
+  type: GENERATE_CLUSTER_KEY_REQUEST
+});
+
+const generateClusterKeySuccess = payload => ({
+  type: GENERATE_CLUSTER_KEY_SUCCESS,
+  payload
+});
+
+const generateClusterKeyFailure = payload => ({
+  type: GENERATE_CLUSTER_KEY_FAILURE,
+  payload
+});
+
+const patchClusterRequest = () => ({
+  type: PATCH_CLUSTER_REQUEST
+});
+
+const patchClusterSuccess = payload => ({
+  type: PATCH_CLUSTER_SUCCESS,
+  payload
+});
+
+const patchClusterFailure = payload => ({
+  type: patchClusterFailure,
   payload
 });
 
@@ -139,6 +181,24 @@ const postCluster = data => (
   }
 );
 
+const patchCluster = (id, data) => (
+  dispatch => {
+    dispatch(patchClusterRequest());
+
+    const success = res => {
+      console.log(res);
+      dispatch(patchClusterSuccess(res.data.data));
+      dispatch(reset('editClusterForm'));
+    };
+
+    const error = err => {
+      dispatch(patchClusterFailure(err.message));
+    };
+
+    http.patch(`/cluster/${id}`, data, success, error);
+  }
+);
+
 const deleteCluster = id => (
   dispatch => {
     dispatch(deleteClusterRequest());
@@ -156,11 +216,29 @@ const deleteCluster = id => (
   }
 );
 
+const generateClusterKey = id => (
+  dispatch => {
+    dispatch(generateClusterKeyRequest());
+
+    const success = res => {
+      dispatch(generateClusterKeySuccess(res.data.data));
+    };
+
+    const error = err => {
+      dispatch(generateClusterKeyFailure(err.message));
+    }
+
+    http.post(`/cluster/${id}/keys`, id, success, error);
+  }
+)
+
 export const clusterActions = {
   fetchAllCluster,
   postCluster,
   deleteCluster,
-  fetchClusterById
+  fetchClusterById,
+  generateClusterKey,
+  patchCluster
 };
 
 // Reducer
@@ -202,6 +280,16 @@ const clusterReducer = (state = initialState, action) => {
         ...state,
         error: action.payload
       };
+    case PATCH_CLUSTER_SUCCESS:
+      return {
+        ...state,
+        active: action.payload
+      };
+    case PATCH_CLUSTER_FAILURE:
+      return {
+        ...state,
+        error: action.payload
+      }  
     default:
       return state;
   }
