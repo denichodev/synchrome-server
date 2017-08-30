@@ -2,8 +2,8 @@ import { push } from 'react-router-redux';
 import http from '../services/http';
 
 const GET_USER_ALL_REQUEST = 'synchrome/user/get_user_all_request';
-const GET_USER_ALL_SUCCESS = 'synchrome/user/get_user_all_request';
-const GET_USER_ALL_FAILURE = 'synchrome/user/get_user_all_request';
+const GET_USER_ALL_SUCCESS = 'synchrome/user/get_user_all_success';
+const GET_USER_ALL_FAILURE = 'synchrome/user/get_user_all_failure';
 
 const GET_USER_BYID_REQUEST = 'synchrome/user/get_user_byid_request';
 const GET_USER_BYID_SUCCESS = 'synchrome/user/get_user_byid_success';
@@ -17,6 +17,10 @@ const POST_USER_REQUEST = 'synchrome/user/post_user_request';
 const POST_USER_SUCCESS = 'synchrome/user/post_user_success';
 const POST_USER_FAILURE = 'synchrome/user/post_user_failure';
 
+const DELETE_USER_REQUEST = 'synchrome/user/delete_user_request';
+const DELETE_USER_SUCCESS = 'synchrome/user/delete_user_success';
+const DELETE_USER_FAILURE = 'synchrome/user/delete_user_failure';
+
 export const userTypes = {
   GET_ROLE_FAILURE,
   GET_ROLE_REQUEST,
@@ -29,7 +33,10 @@ export const userTypes = {
   GET_USER_BYID_REQUEST,
   GET_USER_ALL_FAILURE,
   GET_USER_ALL_REQUEST,
-  GET_USER_ALL_SUCCESS
+  GET_USER_ALL_SUCCESS,
+  DELETE_USER_FAILURE,
+  DELETE_USER_REQUEST,
+  DELETE_USER_SUCCESS
 };
 
 const getRoleRequest = () => ({
@@ -85,6 +92,20 @@ const postUserFailure = payload => ({
 
 const postUserSuccess = payload => ({
   type: POST_USER_SUCCESS,
+  payload
+});
+
+const deleteUserRequest = () => ({
+  type: DELETE_USER_REQUEST
+});
+
+const deleteUserFailure = payload => ({
+  type: DELETE_USER_FAILURE,
+  payload
+});
+
+const deleteUserSuccess = payload => ({
+  type: DELETE_USER_SUCCESS,
   payload
 });
 
@@ -153,11 +174,29 @@ const postUser = data => (
   }
 );
 
+const deleteUser = id => (
+  dispatch => {
+    dispatch(deleteUserRequest());
+
+    const success = res => {
+      dispatch(deleteUserSuccess(res.data.data));
+      dispatch(getAllUser());
+    };
+
+    const error = err => {
+      dispatch(deleteUserFailure(err.message));
+    };
+
+    http.delete(`/user/${id}`, success, error);
+  }
+);
+
 export const userActions = {
   postUser,
   getAllUser,
   getUserById,
-  getRole
+  getRole,
+  deleteUser
 };
 
 const initialState = {
@@ -205,6 +244,16 @@ const userReducer = (state = initialState, action) => {
         active: action.payload
       };
     case POST_USER_FAILURE:
+      return {
+        ...state,
+        error: action.payload
+      };
+    case DELETE_USER_SUCCESS:
+      return {
+        ...state,
+        active: action.payload
+      };
+    case DELETE_USER_FAILURE:
       return {
         ...state,
         error: action.payload

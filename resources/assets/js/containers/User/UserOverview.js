@@ -10,6 +10,12 @@ class UserOverview extends Component {
     getUsers();
   }
 
+  handleDeleteClick = (id) => {
+    const { deleteUser } = this.props;
+
+    deleteUser(id);
+  }
+
   renderUserTable = () => {
     const { user } = this.props;
 
@@ -23,14 +29,14 @@ class UserOverview extends Component {
       );
     }
 
-    return user.data.map(user => (
-      <tr key={user.id}>
-        <td>{user.email}</td>
-        <td>{user.name}</td>
-        <td>{user.role.name}</td>
+    return user.data.map(usr => (
+      <tr key={usr.id}>
+        <td>{usr.email}</td>
+        <td>{usr.name}</td>
+        <td>{usr.role.name}</td>
         <td>
-          <Link to={`/panel/users/${user.id}`} className="btn btn-primary btn-xs">Edit</Link>&nbsp;
-          <button type="button" className="btn btn-danger btn-xs">Delete</button>
+          <Link to={`/panel/users/${usr.id}`} className="btn btn-primary btn-xs">Edit</Link>&nbsp;
+          <button onClick={() => this.handleDeleteClick(usr.id)} type="button" className="btn btn-danger btn-xs">Delete</button>
         </td>
       </tr>
     ));
@@ -68,7 +74,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   getUsers: () => dispatch(userActions.getAllUser()),
-  getUserById: id => dispatch(userActions.getUserById(id))
+  getUserById: id => dispatch(userActions.getUserById(id)),
+  deleteUser: id => dispatch(userActions.deleteUser(id))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserOverview);
