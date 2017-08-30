@@ -1,6 +1,7 @@
 import React from 'react';
 import { Switch, Route, Redirect } from 'react-router';
 
+import ClusterDetail from '../containers/Cluster/ClusterDetail';
 import ClusterOverview from '../containers/Cluster/ClusterOverview';
 import CalendarOverview from '../containers/Calendar/CalendarOverview';
 import NewCalendar from '../containers/Calendar/NewCalendar';
@@ -15,6 +16,7 @@ export default () => (
     <Route exact path="/panel/calendars/add-new" component={NewCalendar} />
     <Route path="/panel/calendars/:id" component={EditCalendar} />
     <Route path="/panel/calendars" component={CalendarOverview} />
+    <Route path="/panel/clusters/:id" component={ClusterDetail} />
     <Route path="/panel/clusters" component={ClusterOverview} />
     <Route path="/panel/employees/add-new" component={NewEmployee} />
     <Route path="/panel/employees" component={EmployeeOverview} />

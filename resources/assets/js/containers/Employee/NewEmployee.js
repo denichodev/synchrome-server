@@ -14,7 +14,7 @@ class NewEmployee extends Component {
       agency: null,
       echelon: null
     };
-  };
+  }
 
   componentDidMount = () => {
     const { fetchAllAgency } = this.props;
@@ -28,7 +28,7 @@ class NewEmployee extends Component {
     const { label, name, input, placeholder } = field;
 
     return (
-      <div className={className}> 
+      <div className={className}>
         <label htmlFor={name}>{label}</label>
         <input
           type="text"
@@ -40,7 +40,7 @@ class NewEmployee extends Component {
     );
   };
 
-  renderAgenciesDropdown = (field) => {
+  renderAgenciesDropdown = field => {
     const { meta: { touched, error } } = field;
     const className = `form-group ${touched && error ? 'has-danger' : ''}`;
     const { label, name, input } = field;
@@ -49,12 +49,8 @@ class NewEmployee extends Component {
     return (
       <div className={className}>
         <label htmlFor={name}>{label}</label>
-        <select 
-          className="form-control"
-          onChange
-          {...input}
-        >
-          {agency.data.map((row) => {
+        <select className="form-control" onChange {...input}>
+          {agency.data.map(row => {
             return (
               <option key={row.id} value={row.id}>
                 {row.name}
@@ -66,7 +62,7 @@ class NewEmployee extends Component {
     );
   };
 
-  renderEchelonsDropdown = (field) => {
+  renderEchelonsDropdown = field => {
     const { meta: { touched, error } } = field;
     const className = `form-group ${touched && error ? 'has-danger' : ''}`;
     const { label, name, input } = field;
@@ -76,11 +72,8 @@ class NewEmployee extends Component {
       return (
         <div className={className}>
           <label htmlFor={name}>{label}</label>
-          <select 
-            className="form-control"
-            {...input}
-          >
-            {echelon.data.map((row) => {
+          <select className="form-control" {...input}>
+            {echelon.data.map(row => {
               return (
                 <option key={row.id} value={row.id}>
                   {row.name}
@@ -91,31 +84,27 @@ class NewEmployee extends Component {
         </div>
       );
     }
-    
+
     return (
       <div className={className}>
         <label htmlFor={name}>{label}</label>
-        <select 
-          className="form-control"
-          {...input}
-        >
-        </select>
+        <select className="form-control" {...input} />
       </div>
     );
   };
 
-  handleAgencyChange = (e) => {
+  handleAgencyChange = e => {
     const { fetchEchelonsById } = this.props;
 
     fetchEchelonsById(e.target.value);
-  }
+  };
 
   onSubmit = values => {
     const { postEmployee } = this.props;
-    
+
     postEmployee(values);
-  }
-  
+  };
+
   render() {
     const { handleSubmit } = this.props;
 
@@ -128,11 +117,7 @@ class NewEmployee extends Component {
           <form onSubmit={handleSubmit(this.onSubmit)}>
             <div className="row">
               <div className="col-md-3">
-                <Field
-                  label="ID"
-                  name="id"
-                  component={this.renderTextField}
-                />
+                <Field label="ID" name="id" component={this.renderTextField} />
               </div>
             </div>
             <div className="row">
@@ -162,7 +147,9 @@ class NewEmployee extends Component {
               </div>
             </div>
             <div className="form-group">
-              <button type="submit" className="btn btn-primary">Save</button>
+              <button type="submit" className="btn btn-primary">
+                Save
+              </button>
             </div>
           </form>
         </div>
@@ -175,26 +162,26 @@ const validate = values => {
   const errors = {};
 
   if (!values.name) {
-    errors.name = 'Nama tidak boleh kosong'
+    errors.name = 'Nama tidak boleh kosong';
   }
 
   return errors;
-}
+};
 
 const formOptions = {
   form: 'newEmployeeForm',
   validate
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   agency: state.agency,
   echelon: state.echelon
 });
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = dispatch => ({
   fetchAllAgency: () => dispatch(agencyActions.fetchAllAgency()),
-  fetchEchelonsById: (id) => dispatch(echelonActions.fetchEchelonsById(id)),
-  postEmployee: (data) => dispatch(employeeActions.postEmployee(data))
+  fetchEchelonsById: id => dispatch(echelonActions.fetchEchelonsById(id)),
+  postEmployee: data => dispatch(employeeActions.postEmployee(data))
 });
 
 const Connector = connect(mapStateToProps, mapDispatchToProps)(NewEmployee);

@@ -2,13 +2,13 @@ import { push } from 'react-router-redux';
 import http from '../services/http';
 
 // Types
-const FETCH_EMPLOYEE_ALL_REQUEST = 'synchrome/employee/fetch_calendar_all_request';
-const FETCH_EMPLOYEE_ALL_SUCCESS = 'synchrome/employee/fetch_calendar_all_success';
-const FETCH_EMPLOYEE_ALL_FAILURE = 'synchrome/employee/fetch_calendar_all_failure';
+const FETCH_EMPLOYEE_ALL_REQUEST = 'synchrome/employee/fetch_employee_all_request';
+const FETCH_EMPLOYEE_ALL_SUCCESS = 'synchrome/employee/fetch_employee_all_success';
+const FETCH_EMPLOYEE_ALL_FAILURE = 'synchrome/employee/fetch_employee_all_failure';
 
-const FETCH_EMPLOYEE_BYID_REQUEST = 'synchrome/employee/fetch_calendar_byid_request';
-const FETCH_EMPLOYEE_BYID_SUCCESS = 'synchrome/employee/fetch_calendar_byid_success';
-const FETCH_EMPLOYEE_BYID_FAILURE = 'synchrome/employee/fetch_calendar_byid_failure';
+const FETCH_EMPLOYEE_BYID_REQUEST = 'synchrome/employee/fetch_employee_byid_request';
+const FETCH_EMPLOYEE_BYID_SUCCESS = 'synchrome/employee/fetch_employee_byid_success';
+const FETCH_EMPLOYEE_BYID_FAILURE = 'synchrome/employee/fetch_employee_byid_failure';
 
 const POST_EMPLOYEE_REQUEST = 'synchrome/employee/post_employee_request';
 const POST_EMPLOYEE_SUCCESS = 'synchrome/employee/post_employee_success';
@@ -28,7 +28,7 @@ export const employeeTypes = {
 
 // Action Creators
 const fetchEmployeeAllRequest = () => ({
-  type: FETCH_EMPLOYEE_ALL_SUCCESS
+  type: FETCH_EMPLOYEE_ALL_REQUEST
 });
 
 const fetchEmployeeAllSuccess = (payload) => ({
