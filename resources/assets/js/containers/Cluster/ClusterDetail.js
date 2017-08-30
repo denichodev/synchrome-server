@@ -11,7 +11,7 @@ class ClusterDetail extends Component {
     this.state = {
       namefieldChanged: false
     };
-  };
+  }
 
   componentDidMount() {
     const { fetchClusterById, match, fetchClusterKey } = this.props;
@@ -33,6 +33,12 @@ class ClusterDetail extends Component {
     }
   }
 
+  disableKey = (keyId) => {
+    const { disableClusterKey, match } = this.props;
+
+    disableClusterKey(keyId, match.params.id);
+  }
+
   renderKeyTable = () => {
     const { cluster } = this.props;
 
@@ -47,9 +53,17 @@ class ClusterDetail extends Component {
     return (
       cluster.keys.map((key) => (
         <tr key={key.key}>
+          <td>{key.status === 1 ? (
+            <span style={{ color: 'green' }}><i className="fa fa-check" /> Active</span>
+          ) : (
+            <span style={{ color: 'red' }}><i className="fa fa-ban" /> Disabled</span>
+          )}</td>  
           <td>{key.key}</td>
-          <td>
-            <button type="button" className="btn btn-danger btn-xs">Delete</button>
+          <td>{key.status === 1 ? (
+            <button onClick={() => this.disableKey(key.id)} type="button" className="btn btn-danger btn-xs">Disable</button>            
+          ) : (
+            <button type="button" className="btn btn-disabled btn-xs" disabled>Disabled</button>
+          )}
           </td>
         </tr>
       ))
@@ -96,6 +110,7 @@ class ClusterDetail extends Component {
             <table className="table table-striped table-bordered">
               <thead>
                 <tr>
+                  <th>Status</th>
                   <th>Key</th>
                   <th>Actions</th>
                 </tr>
@@ -117,7 +132,8 @@ const mapDispatchToProps = dispatch => ({
   fetchClusterById: id => dispatch(clusterActions.fetchClusterById(id)),
   generateClusterKey: id => dispatch(clusterActions.generateClusterKey(id)),
   patchCluster: (id, data) => dispatch(clusterActions.patchCluster(id, data)),
-  fetchClusterKey: id => dispatch(clusterActions.fetchClusterKey(id))
+  fetchClusterKey: id => dispatch(clusterActions.fetchClusterKey(id)),
+  disableClusterKey: (keyId, clusterId) => dispatch(clusterActions.disableClusterKey(keyId, clusterId))
 });
 
 const validate = values => {

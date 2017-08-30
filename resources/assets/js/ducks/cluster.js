@@ -1,4 +1,5 @@
 import { reset } from 'redux-form';
+import { push } from 'react-router-redux';
 import http from '../services/http';
 
 // Types
@@ -30,6 +31,11 @@ const GENERATE_CLUSTER_KEY_REQUEST = 'synchrome/cluster/generate_cluster_key_req
 const GENERATE_CLUSTER_KEY_SUCCESS = 'synchrome/cluster/generate_cluster_key_success';
 const GENERATE_CLUSTER_KEY_FAILURE = 'synchrome/cluster/generate_cluster_key_failure';
 
+const DISABLE_CLUSTER_KEY_REQUEST = 'synchrome/cluster/disable_cluster_key_request';
+const DISABLE_CLUSTER_KEY_SUCCESS = 'synchrome/cluster/disable_cluster_key_success';
+const DISABLE_CLUSTER_KEY_FAILURE = 'synchrome/cluster/disable_cluster_key_failure';
+
+
 export const clusterTypes = {
   FETCH_CLUSTER_ALL_FAILURE,
   FETCH_CLUSTER_ALL_REQUEST,
@@ -51,7 +57,10 @@ export const clusterTypes = {
   FETCH_CLUSTER_KEY_SUCCESS,
   FETCH_CLUSTER_BYID_FAILURE,
   FETCH_CLUSTER_BYID_REQUEST,
-  FETCH_CLUSTER_BYID_SUCCESS
+  FETCH_CLUSTER_BYID_SUCCESS,
+  DISABLE_CLUSTER_KEY_FAILURE,
+  DISABLE_CLUSTER_KEY_REQUEST,
+  DISABLE_CLUSTER_KEY_SUCCESS
 };
 
 // Action Creators
@@ -125,6 +134,19 @@ const generateClusterKeyFailure = payload => ({
   payload
 });
 
+const disableClusterKeyRequest = () => ({
+  type: DISABLE_CLUSTER_KEY_REQUEST
+});
+
+const disableClusterKeySuccess = () => ({
+  type: DISABLE_CLUSTER_KEY_SUCCESS
+});
+
+const disableClusterKeyFailure = payload => ({
+  type: DISABLE_CLUSTER_KEY_FAILURE,
+  payload
+});
+
 const patchClusterRequest = () => ({
   type: PATCH_CLUSTER_REQUEST
 });
@@ -153,6 +175,26 @@ const fetchClusterKeyFailure = payload => ({
   payload
 });
 
+const disableClusterKey = (keyId, clusterId) => (
+  dispatch => {
+    dispatch(disableClusterKeyRequest());
+
+    const success = res => {
+      console.log(res);
+      dispatch(disableClusterKeySuccess());
+      dispatch(fetchClusterKey(clusterId));
+    };
+
+    const error = err => {
+      console.log(err);
+      dispatch(disableClusterKeyFailure(err.message));
+      dispatch(fetchClusterKey(clusterId));
+    };
+
+    http.post(`/cluster/keys/${keyId}/disable`, { id: clusterId }, success, error);
+  }
+);
+
 const fetchAllCluster = () => (
   dispatch => {
     dispatch(fetchClusterAllRequest());
@@ -174,12 +216,10 @@ const fetchClusterById = id => (
     dispatch(fetchClusterByIdRequest());
 
     const success = res => {
-      console.log(res);
       dispatch(fetchClusterByIdSuccess(res.data.data));
     };
 
     const error = err => {
-      console.log(err);
       dispatch(fetchClusterByIdFailure(err.message));
     };
 
@@ -192,12 +232,10 @@ const fetchClusterKey = id => (
     dispatch(fetchClusterKeyRequest());
 
     const success = res => {
-      console.log(res);
       dispatch(fetchClusterKeySuccess(res.data.data));
     };
 
     const error = err => {
-      console.log(err);
       dispatch(fetchClusterKeyFailure(err.message));
     };
 
@@ -228,9 +266,9 @@ const patchCluster = (id, data) => (
     dispatch(patchClusterRequest());
 
     const success = res => {
-      console.log(res);
       dispatch(patchClusterSuccess(res.data.data));
       dispatch(reset('editClusterForm'));
+      dispatch(push('/panel/clusters'));
     };
 
     const error = err => {
@@ -264,6 +302,7 @@ const generateClusterKey = id => (
 
     const success = res => {
       dispatch(generateClusterKeySuccess(res.data.data));
+      dispatch(fetchClusterKey(id));
     };
 
     const error = err => {
@@ -281,7 +320,8 @@ export const clusterActions = {
   fetchClusterById,
   generateClusterKey,
   patchCluster,
-  fetchClusterKey
+  fetchClusterKey,
+  disableClusterKey
 };
 
 // Reducer
