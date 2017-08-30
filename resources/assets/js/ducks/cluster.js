@@ -1,10 +1,14 @@
-import http from '../services/http';
 import { reset } from 'redux-form';
+import http from '../services/http';
 
 // Types
 const FETCH_CLUSTER_ALL_REQUEST = 'synchrome/cluster/fetch_cluster_request';
 const FETCH_CLUSTER_ALL_SUCCESS = 'synchrome/cluster/fetch_cluster_success';
 const FETCH_CLUSTER_ALL_FAILURE = 'synchrome/cluster/fetch_cluster_failure';
+
+const FETCH_CLUSTER_BYID_REQUEST = 'synchrome/cluster/fetch_cluster_byid_request';
+const FETCH_CLUSTER_BYID_SUCCESS = 'synchrome/cluster/fetch_cluster_byid_success';
+const FETCH_CLUSTER_BYID_FAILURE = 'synchrome/cluster/fetch_cluster_byid_failure';
 
 const POST_CLUSTER_REQUEST = 'synchrome/cluster/post_cluster_request';
 const POST_CLUSTER_SUCCESS = 'synchrome/cluster/post_cluster_success';
@@ -37,6 +41,20 @@ const fetchClusterAllSuccess = payload => ({
 });
 
 const fetchClusterAllFailure = payload => ({
+  type: FETCH_CLUSTER_ALL_FAILURE,
+  payload
+});
+
+const fetchClusterByIdRequest = () => ({
+  type: FETCH_CLUSTER_ALL_REQUEST
+});
+
+const fetchClusterByIdSuccess = payload => ({
+  type: FETCH_CLUSTER_ALL_SUCCESS,
+  payload
+});
+
+const fetchClusterByIdFailure = payload => ({
   type: FETCH_CLUSTER_ALL_FAILURE,
   payload
 });
@@ -85,6 +103,24 @@ const fetchAllCluster = () => (
   }
 );
 
+const fetchClusterById = id => (
+  dispatch => {
+    dispatch(fetchClusterByIdRequest());
+
+    const success = res => {
+      console.log(res);
+      dispatch(fetchClusterByIdSuccess(res.data.data));
+    };
+
+    const error = err => {
+      console.log(err);
+      dispatch(fetchClusterByIdFailure(err.message));
+    };
+
+    http.get(`/cluster/${id}`, success, error);
+  }
+)
+
 const postCluster = data => (
   dispatch => {
     dispatch(reset('clusterForm'));
@@ -123,7 +159,8 @@ const deleteCluster = id => (
 export const clusterActions = {
   fetchAllCluster,
   postCluster,
-  deleteCluster
+  deleteCluster,
+  fetchClusterById
 };
 
 // Reducer
@@ -151,6 +188,16 @@ const clusterReducer = (state = initialState, action) => {
         active: action.payload
       };
     case POST_CLUSTER_FAILURE:
+      return {
+        ...state,
+        error: action.payload
+      };
+    case FETCH_CLUSTER_BYID_SUCCESS:
+      return {
+        ...state,
+        active: action.payload
+      };
+    case FETCH_CLUSTER_BYID_FAILURE:
       return {
         ...state,
         error: action.payload
