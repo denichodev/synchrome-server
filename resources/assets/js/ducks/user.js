@@ -17,9 +17,15 @@ const POST_USER_REQUEST = 'synchrome/user/post_user_request';
 const POST_USER_SUCCESS = 'synchrome/user/post_user_success';
 const POST_USER_FAILURE = 'synchrome/user/post_user_failure';
 
+const UPDATE_USER_REQUEST = 'synchrome/user/update_user_request';
+const UPDATE_USER_SUCCESS = 'synchrome/user/update_user_success';
+const UPDATE_USER_FAILURE = 'synchrome/user/update_user_failure';
+
 const DELETE_USER_REQUEST = 'synchrome/user/delete_user_request';
 const DELETE_USER_SUCCESS = 'synchrome/user/delete_user_success';
 const DELETE_USER_FAILURE = 'synchrome/user/delete_user_failure';
+
+const CLEAR_ACTIVE_USER = 'synchrome/user/clear_active_user';
 
 export const userTypes = {
   GET_ROLE_FAILURE,
@@ -36,7 +42,11 @@ export const userTypes = {
   GET_USER_ALL_SUCCESS,
   DELETE_USER_FAILURE,
   DELETE_USER_REQUEST,
-  DELETE_USER_SUCCESS
+  DELETE_USER_SUCCESS,
+  CLEAR_ACTIVE_USER,
+  UPDATE_USER_FAILURE,
+  UPDATE_USER_REQUEST,
+  UPDATE_USER_SUCCESS
 };
 
 const getRoleRequest = () => ({
@@ -95,6 +105,20 @@ const postUserSuccess = payload => ({
   payload
 });
 
+const updateUserRequest = () => ({
+  type: UPDATE_USER_REQUEST
+});
+
+const updateUserFailure = payload => ({
+  type: UPDATE_USER_FAILURE,
+  payload
+});
+
+const updateUserSuccess = payload => ({
+  type: UPDATE_USER_SUCCESS,
+  payload
+});
+
 const deleteUserRequest = () => ({
   type: DELETE_USER_REQUEST
 });
@@ -107,6 +131,11 @@ const deleteUserFailure = payload => ({
 const deleteUserSuccess = payload => ({
   type: DELETE_USER_SUCCESS,
   payload
+});
+
+const clearActiveUser = () => ({
+  type: CLEAR_ACTIVE_USER,
+  payload: []
 });
 
 const getRole = () => (
@@ -143,6 +172,7 @@ const getAllUser = () => (
 
 const getUserById = id => (
   dispatch => {
+    dispatch(clearActiveUser());
     dispatch(getUserByIdRequest());
 
     const success = res => {
@@ -174,6 +204,25 @@ const postUser = data => (
   }
 );
 
+const updateUser = (id, data) => (
+  dispatch => {
+    dispatch(updateUserRequest());
+
+    const success = res => {
+      console.log(res);
+      dispatch(updateUserSuccess(res.data.data));
+      dispatch(push('/panel/users'));
+    };
+
+    const error = err => {
+      console.log(err);
+      dispatch(updateUserFailure(err.message));
+    };
+
+    http.patch(`/user/${id}`, data, success, error);
+  }
+);
+
 const deleteUser = id => (
   dispatch => {
     dispatch(deleteUserRequest());
@@ -196,7 +245,8 @@ export const userActions = {
   getAllUser,
   getUserById,
   getRole,
-  deleteUser
+  deleteUser,
+  updateUser
 };
 
 const initialState = {
@@ -254,6 +304,21 @@ const userReducer = (state = initialState, action) => {
         active: action.payload
       };
     case DELETE_USER_FAILURE:
+      return {
+        ...state,
+        error: action.payload
+      };
+    case CLEAR_ACTIVE_USER:
+      return {
+        ...state,
+        active: action.payload
+      };
+    case UPDATE_USER_SUCCESS:
+      return {
+        ...state,
+        active: action.payload
+      };
+    case UPDATE_USER_FAILURE:
       return {
         ...state,
         error: action.payload
