@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import ClusterForm from './ClusterForm';
 import { clusterActions } from '../../ducks/cluster';
 
 class ClusterOverview extends Component {
@@ -46,12 +45,20 @@ class ClusterOverview extends Component {
     );
   }
 
+  renderClusterForm = () => {
+    return (
+      <form>
+        Form
+      </form>
+    )
+  }
+
   render() {
     return (
       <div className="box">
         <div className="box-body">
           <div className="col-md-4">
-            <ClusterForm />
+            {this.renderClusterForm()}
           </div>
           <div className="col-md-8">
             {this.renderClusterTable()}
