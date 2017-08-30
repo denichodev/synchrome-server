@@ -6,7 +6,7 @@ export default {
   init() {
     axios.defaults.baseURL = '/api';
 
-    const tokenMeta = document.head.querySelector('meta[name="jwt-token"]');
+    const tokenMeta = document.head.querySelector('meta[name="jwt"]');
 
     if (tokenMeta) {
       axios.interceptors.request.use((config) => {
