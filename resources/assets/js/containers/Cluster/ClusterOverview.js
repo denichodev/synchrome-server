@@ -12,9 +12,22 @@ class ClusterOverview extends Component {
   }
 
   renderClusterTableBody = () => {
+    const { clusters } = this.props;
+
+    if (clusters.length <= 0) {
+      return (
+        <tr><td colSpan="5"><center>No cluster added yet</center></td></tr>
+      );
+    }
+
     return (
-      <div>list</div>
-    )
+      clusters.map(cluster => (
+        <tr key={cluster.id}>
+          <td>{cluster.id}</td>
+          <td>{cluster.name}</td>
+        </tr>
+      ))
+    );
   }
 
   renderClusterTable = () => {
@@ -22,11 +35,8 @@ class ClusterOverview extends Component {
       <table className="table table-striped table-bordered">
         <thead>
           <tr>
-            <th>NIP</th>
+            <th>ID</th>
             <th>Name</th>
-            <th>Agency</th>
-            <th>Echelon</th>
-            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
