@@ -20,6 +20,10 @@ class Key extends Model
         'deleted_at'
     ];
 
+    protected $hidden = [
+        'deleted_at'
+    ];
+
     public function cluster()
     {
         return $this->belongsTo(Cluster::class);

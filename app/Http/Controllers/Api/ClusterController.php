@@ -170,6 +170,25 @@ class ClusterController extends Controller
         }
     }
 
+    public function keys($id)
+    {
+        $cluster = Cluster::find($id);
+        
+        if (is_null($cluster)) {
+            return response()
+                ->json([
+                    'result' => 'failed',
+                    'errors' => ['cluster_not_found']
+                ], 404);
+        }
+
+        return response()
+            ->json([
+                'result' => 'success',
+                'data' => $cluster->keys
+            ]);
+    }
+
     public function generateKey($id)
     {
         $cluster = Cluster::find($id);
