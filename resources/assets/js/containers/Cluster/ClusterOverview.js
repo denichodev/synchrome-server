@@ -76,12 +76,15 @@ class ClusterOverview extends Component {
         />
         <button className="btn btn-primary pull-right" type="submit">Add New Cluster</button>
       </form>
-    )
+    );
   }
 
   render() {
     return (
       <div className="box">
+        <div className="box-header">
+          <h3 className="box-title">Clusters</h3>
+        </div>
         <div className="box-body">
           <div className="col-md-4">
             {this.renderClusterForm()}
