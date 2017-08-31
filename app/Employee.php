@@ -33,4 +33,9 @@ class Employee extends Model
     {
         return $this->belongsTo(Echelon::class);
     }
+
+    public function templates()
+    {
+        return $this->hasMany(Template::class);
+    }
 }
