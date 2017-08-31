@@ -1,13 +1,12 @@
 import React from 'react';
 import DatePicker from 'react-datepicker';
-import moment from 'moment';
 
 const FormDatePicker = field => {
   const { meta: { pristine, error } } = field;
   const className = `form-group ${!pristine && error ? 'has-error' : ''}`;
-  const { input, label, name, minDate, maxDate, calendarId } = field;
+  const { input, label, name } = field;
   const errorHelpBlockStyle = {
-    visibility: `${!pristine && error ? 'visible' : 'hidden'}`
+    display: `${!pristine && error ? 'block' : 'none'}`
   };
 
   return (

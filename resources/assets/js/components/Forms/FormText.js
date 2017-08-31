@@ -6,9 +6,9 @@ const FormText = field => {
   const className = `form-group ${touched && error ? 'has-error' : ''}`;
   const { label, name, input, placeholder, defaultValue } = field;
   const errorHelpBlockStyle = {
-    visibility: `${touched && error ? 'visible' : 'hidden'}`
+    display: `${touched && error ? 'block' : 'none'}`
   };
-  
+
   return (
     <div className={className}>
       <label htmlFor={name}>
