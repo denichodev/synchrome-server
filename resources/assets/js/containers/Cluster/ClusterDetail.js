@@ -45,7 +45,7 @@ class ClusterDetail extends Component {
     if (cluster.keys.length <= 0) {
       return (
         <tr>
-          <td colSpan="2"><center>No cluster key generated yet</center></td>
+          <td colSpan="3"><center>No cluster key generated yet</center></td>
         </tr>
       );
     }
@@ -53,13 +53,13 @@ class ClusterDetail extends Component {
     return (
       cluster.keys.map((key) => (
         <tr key={key.key}>
-          <td>{key.status === 1 ? (
-            <span style={{ color: 'green' }}><i className="fa fa-check" /> Active</span>
+          <td className="col-xs-8">{key.key}</td>
+          <td className="col-xs-2">{key.status === 1 ? (
+            <span className="label label-success"><i className="fa fa-check" />&nbsp;Active</span>
           ) : (
-            <span style={{ color: 'red' }}><i className="fa fa-ban" /> Disabled</span>
-          )}</td>  
-          <td>{key.key}</td>
-          <td>{key.status === 1 ? (
+            <span className="label label-default"><i className="fa fa-ban" />&nbsp;Disabled</span>
+          )}</td>
+          <td className="col-xs-2">{key.status === 1 ? (
             <button onClick={() => this.disableKey(key.id)} type="button" className="btn btn-danger btn-xs">Disable</button>            
           ) : (
             <button type="button" className="btn btn-disabled btn-xs" disabled>Disabled</button>
@@ -110,8 +110,8 @@ class ClusterDetail extends Component {
             <table className="table table-striped table-bordered">
               <thead>
                 <tr>
-                  <th>Status</th>
                   <th>Key</th>
+                  <th>Status</th>
                   <th>Actions</th>
                 </tr>
               </thead>
