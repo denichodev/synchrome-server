@@ -45,6 +45,9 @@ class UserOverview extends Component {
   render() {
     return (
       <div className="box">
+        <div className="box-header">
+          <h3 className="box-title">Users</h3>
+        </div>
         <div className="box-body">
           <div className="form-group pull-right">
             <Link className="btn btn-primary" to="/panel/users/add-new">
