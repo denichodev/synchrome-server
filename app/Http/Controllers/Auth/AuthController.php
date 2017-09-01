@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use App\User;
+use JWTAuth;
 
 class AuthController extends Controller
 {
@@ -33,5 +35,25 @@ class AuthController extends Controller
 
         return redirect()
             ->route('auth.login');
+    }
+
+    public function checkUser(Request $request)
+    {
+        $user = JWTAuth::parseToken()->authenticate();
+        $user->role = $user->role()->get();
+
+        if (is_null($user)) {
+            return response()
+                ->json([
+                    'result' => 'failed',
+                    'errors' => ['user_not_found']
+                ], 404);
+        }
+
+        return response()
+            ->json([
+                'result' => 'success',
+                'data' => $user
+            ]);
     }
 }
