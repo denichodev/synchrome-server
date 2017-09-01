@@ -286,7 +286,11 @@ const initialState = {
   role: [],
   data: [],
   active: {},
-  loggedIn: {}
+  loggedIn: {
+    role: {
+      id: 2
+    }
+  }
 };
 
 const userReducer = (state = initialState, action) => {
