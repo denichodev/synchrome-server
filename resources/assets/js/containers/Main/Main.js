@@ -1,13 +1,21 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import Header from '../../components/AdminLTE/Header';
 import Sidebar from '../../components/AdminLTE/Sidebar';
+import { userActions } from '../../ducks/user';
 
 import MainRoutes from '../../routes/MainRoutes';
 
 const initialState = window.__INITIAL_STATE__;
 
 class Main extends Component {
+  componentDidMount() {
+    const { fetchLoggedInUser } = this.props;
+
+    fetchLoggedInUser();
+  }
+  
   render() {  
     return (
       <div className="app">
@@ -30,4 +38,8 @@ class Main extends Component {
   }
 }
 
-export default Main;
+const mapDispatchToProps = dispatch => ({
+  fetchLoggedInUser: () => dispatch(userActions.checkLoggedInUser())
+});
+
+export default connect(null, mapDispatchToProps)(Main);
