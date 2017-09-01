@@ -40,7 +40,7 @@ class AuthController extends Controller
     public function checkUser(Request $request)
     {
         $user = JWTAuth::parseToken()->authenticate();
-        $user->role = $user->role()->get();
+        $user->role = $user->role()->get()[0];
 
         if (is_null($user)) {
             return response()
