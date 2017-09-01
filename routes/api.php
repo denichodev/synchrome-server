@@ -15,6 +15,8 @@ use App\Key;
 */
 
 Route::group(['middleware' => ['api']], function () {
+    Route::get('check-user', 'Auth\AuthController@checkUser')->name('api.check_user');
+
     Route::get('calendar', 'Api\CalendarController@index')->name('api.calendars.index');
     Route::post('calendar', 'Api\CalendarController@store')->name('api.calendars.store');
     Route::get('calendar/{id}', 'Api\CalendarController@get')->name('api.calendars.get');
