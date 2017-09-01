@@ -181,6 +181,7 @@ const getUserById = id => (
 
     const error = err => {
       dispatch(getUserByIdFailure(err.message));
+      dispatch(push('/not-found'));
     };
 
     http.get(`/user/${id}`, success, error);

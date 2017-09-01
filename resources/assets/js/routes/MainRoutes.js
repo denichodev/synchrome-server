@@ -12,20 +12,22 @@ import Dashboard from '../containers/Dashboard/Dashboard';
 import UserOverview from '../containers/User/UserOverview';
 import NewUser from '../containers/User/NewUser';
 import EditUser from '../containers/User/EditUser';
+import Error404 from '../containers/Error/Error404';
 
 export default () => (
   <Switch>
     <Route exact path="/panel" component={Dashboard} />
     <Route exact path="/panel/calendars/add-new" component={NewCalendar} />
     <Route path="/panel/calendars/:id" component={EditCalendar} />
-    <Route path="/panel/calendars" component={CalendarOverview} />
+    <Route exact path="/panel/calendars" component={CalendarOverview} />
     <Route path="/panel/clusters/:id" component={ClusterDetail} />
-    <Route path="/panel/clusters" component={ClusterOverview} />
+    <Route exact path="/panel/clusters" component={ClusterOverview} />
     <Route path="/panel/employees/add-new" component={NewEmployee} />
-    <Route path="/panel/employees" component={EmployeeOverview} />
-    <Route path="/panel/users/add-new" component={NewUser} />
+    <Route exact path="/panel/employees" component={EmployeeOverview} />
+    <Route exact path="/panel/users/add-new" component={NewUser} />
     <Route path="/panel/users/:id" component={EditUser} />
-    <Route path="/panel/users" component={UserOverview} />
-    <Redirect from="/" to="/panel" />
+    <Route exact path="/panel/users" component={UserOverview} />
+    <Route exact path="/not-found" component={Error404} />
+    <Redirect to="/not-found" />
   </Switch>
 )

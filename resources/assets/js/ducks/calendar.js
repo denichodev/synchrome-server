@@ -1,4 +1,5 @@
 import moment from 'moment';
+import { push } from 'react-router-redux';
 import http from '../services/http';
 
 // Types
@@ -161,11 +162,12 @@ const fetchCalendarById = id => {
 
     const success = res => {
       dispatch(fetchCalendarByIdSuccess(res.data.data));
-    }
+    };
 
     const error = err => {
       dispatch(fetchCalendarByIdFailure(err.message));
-    }
+      dispatch(push('/not-found'));
+    };
 
     http.get(`/calendar/${id}`, success, error);
   }

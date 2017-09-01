@@ -221,6 +221,7 @@ const fetchClusterById = id => (
 
     const error = err => {
       dispatch(fetchClusterByIdFailure(err.message));
+      dispatch(push('/not-found'));
     };
 
     http.get(`/cluster/${id}`, success, error);
