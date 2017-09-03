@@ -19,6 +19,10 @@ const PATCH_CALENDAR_REQUEST = 'synchrome/calendar/patch_calendar_request';
 const PATCH_CALENDAR_SUCCESS = 'synchrome/calendar/patch_calendar_success';
 const PATCH_CALENDAR_FAILURE = 'synchrome/calendar/patch_calendar_failure';
 
+const DELETE_CALENDAR_REQUEST = 'synchrome/calendar/delete_calendar_request';
+const DELETE_CALENDAR_SUCCESS = 'synchrome/calendar/delete_calendar_success';
+const DELETE_CALENDAR_FAILURE = 'synchrome/calendar/delete_calendar_failure';
+
 const ADD_DELETED_EVENT = 'synchrome/calendar/add_deleted_event';
 
 const EDIT_EVENT = 'synchrome/calendar/edit_event';
@@ -37,8 +41,11 @@ export const calendarTypes = {
   PATCH_CALENDAR_SUCCESS,
   PATCH_CALENDAR_FAILURE,
   ADD_DELETED_EVENT,
-  EDIT_EVENT
-}
+  EDIT_EVENT,
+  DELETE_CALENDAR_FAILURE,
+  DELETE_CALENDAR_REQUEST,
+  DELETE_CALENDAR_SUCCESS
+};
 
 // Action Creators
 const fetchCalendarAllRequest = () => {
@@ -113,10 +120,43 @@ const patchCalendarFailure = payload => ({
   payload
 });
 
+const deleteCalendarRequest = () => {
+  return {
+    type: DELETE_CALENDAR_REQUEST
+  }
+};
+
+const deleteCalendarSuccess = payload => ({
+  type: DELETE_CALENDAR_SUCCESS,
+  payload
+});
+
+const deleteCalendarFailure = payload => ({
+  type: DELETE_CALENDAR_FAILURE,
+  payload
+});
+
 const addDeletedEvent = payload => ({
   type: ADD_DELETED_EVENT,
   payload
 });
+
+const deleteCalendar = id => {
+  return dispatch => {
+    dispatch(deleteCalendarRequest());
+
+    const success = res => {
+      dispatch(deleteCalendarSuccess(res.data.data));
+      dispatch(fetchAllCalendar());
+    };
+
+    const error = err => {
+      dispatch(deleteCalendarFailure(err.message));
+    };
+
+    http.delete(`/calendar/${id}`, success, error);
+  };
+};
 
 const editEvent = (events, editedEvent) => {
   const copy = events;
@@ -233,7 +273,8 @@ export const calendarActions = {
   postCalendar,
   addDeletedEvent,
   patchCalendar,
-  editEvent
+  editEvent,
+  deleteCalendar
 };
 
 // All Calendar Reducer

@@ -28,16 +28,17 @@ class CalendarOverview extends Component {
           <td><strong>{cal.start}</strong> s/d <strong>{cal.end}</strong></td>
           <td>
             <Link to={`/panel/calendars/${cal.id}`} className="btn btn-xs btn-primary">View/Edit</Link>&nbsp;
-            <form action="" method="POST" style={{ display: 'inline' }}>
-              {/* TODO: DESTROY CALENDAR */}  
-              <input type="hidden" name="_method" value="DELETE" />
-              <button type="submit" className="btn btn-xs btn-danger">Delete</button>
-            </form>
+            <button onClick={() => this.handleCalendarDelete(cal.id)} type="submit" className="btn btn-xs btn-danger">Delete</button>
           </td>
         </tr>
       ))
     );
   }
+
+  handleCalendarDelete = (id) => {
+    const { deleteCalendar } = this.props;
+    deleteCalendar(id);
+  };
 
   render() {
     return (
@@ -75,7 +76,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   fetchAllCalendar: () => dispatch(calendarActions.fetchAllCalendar()),
-  fetchCalendarById: id => dispatch(calendarActions.fetchCalendarById(id))
+  fetchCalendarById: id => dispatch(calendarActions.fetchCalendarById(id)),
+  deleteCalendar: id => dispatch(calendarActions.deleteCalendar(id))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CalendarOverview);
