@@ -256,22 +256,35 @@ const postCalendar = (calendar, events) => {
   };
 };
 
-const patchCalendar = (calendar, newEvents, deletedList, updatedList) => {
+const patchCalendar = (id, calendar, newEvents, deletedList, updatedList) => {
   console.log('calendar', calendar);
   console.log('newEvents', newEvents);
   console.log('deletedList', deletedList);
+  console.log('updatedList', updatedList);
+
+  const data = {
+    ...calendar,
+    newEvents: [...newEvents],
+    deletedEvents: [...deletedList],
+    updatedEvents: [...updatedList]
+  };
+  console.log('data', data);
+
   return dispatch => {
     dispatch(patchCalendarRequest());
 
     const success = res => {
+      console.log(res);
       dispatch(patchCalendarSuccess(res.data.data));
     };
 
     const error = err => {
+      const errCopy = { ...err };
+      console.log(errCopy);
       dispatch(patchCalendarFailure(err.message));
     };
 
-    // http.patch('/calendar', data, success, error);
+    http.patch(`/calendar/${id}`, data, success, error);
   };
 };
 
@@ -349,7 +362,7 @@ const activeCalendarReducer = (state = activeCalendarInitialState, action) => {
         ...state,
         data: {
           ...state.data,
-          events: filterEvent(state.data.events, action.payload)
+          events: filterEvent(state.data.events, action.payload.originalId)
         },
         deleted: state.deleted.concat(action.payload)
       };

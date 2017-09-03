@@ -75,8 +75,8 @@ class EventForm extends Component {
     if (isEditing.target.originalId) {
       const targetEvent = {
         ..._.find(eventsFromCalendar, { originalId: isEditing.target.originalId }),
-        start: values.start,
-        end: values.end,
+        start: moment(values.start).format('YYYY-MM-DD'),
+        end: values.end.format('YYYY-MM-DD'),
         title: values.title,
         event_category_id: values.event_category_id
       };

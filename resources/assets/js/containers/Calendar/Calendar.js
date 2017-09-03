@@ -71,11 +71,16 @@ class Calendar extends Component {
   }
 
   handleSubmit = values => {
-    const { postCalendar, eventToPost, dispatch, edit, patchCalendar, activeCalendar } = this.props;
+    const { postCalendar, eventToPost, dispatch, edit, patchCalendar, activeCalendar, id } = this.props;
+    const updatedEvents = activeCalendar.data.events.filter(event => {
+      return event.updated === true;
+    });
 
-    if (!edit) { postCalendar(values, eventToPost); }
-    else {
-      patchCalendar(values, eventToPost, activeCalendar.deleted);
+    if (!edit) {
+      postCalendar(values, eventToPost);
+    } else {
+      console.log(updatedEvents);
+      patchCalendar(id, values, eventToPost, activeCalendar.deleted, updatedEvents);
     }
 
     dispatch(reset('calendarForm'));
@@ -229,8 +234,8 @@ const mapDispatchToProps = dispatch => ({
   },
   postCalendar: (calendar, events) =>
     dispatch(calendarActions.postCalendar(calendar, events)),
-  patchCalendar: (calendar, newEvents, deletedList, updatedList) =>
-    dispatch(calendarActions.patchCalendar(calendar, newEvents, deletedList, updatedList)),
+  patchCalendar: (id, calendar, newEvents, deletedList, updatedList) =>
+    dispatch(calendarActions.patchCalendar(id, calendar, newEvents, deletedList, updatedList)),
   setEventEditStatus: data => {
     dispatch(reset('eventForm'));
     dispatch(eventActions.setEditStatus(data));

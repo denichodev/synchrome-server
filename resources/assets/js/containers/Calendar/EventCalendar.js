@@ -160,7 +160,7 @@ EventCalendar.defaultProps = {
 
 const mapDispatchToProps = dispatch => ({
   removeEvent: id => dispatch(eventActions.removeEventToPost(id)),
-  addDeletedEvent: orgId => dispatch(calendarActions.addDeletedEvent(orgId)),
+  addDeletedEvent: orgId => dispatch(calendarActions.addDeletedEvent({ originalId: orgId })),
   setEventForm: event => {
     dispatch(change('eventForm', 'title', event.title));
     dispatch(change('eventForm', 'start', moment(event.start)));
