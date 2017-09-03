@@ -276,6 +276,7 @@ const patchCalendar = (id, calendar, newEvents, deletedList, updatedList) => {
     const success = res => {
       console.log(res);
       dispatch(patchCalendarSuccess(res.data.data));
+      dispatch(push('/panel/calendars'));
     };
 
     const error = err => {
