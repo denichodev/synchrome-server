@@ -23,6 +23,8 @@ const DELETE_CALENDAR_REQUEST = 'synchrome/calendar/delete_calendar_request';
 const DELETE_CALENDAR_SUCCESS = 'synchrome/calendar/delete_calendar_success';
 const DELETE_CALENDAR_FAILURE = 'synchrome/calendar/delete_calendar_failure';
 
+const CLEAR_ACTIVE_CALENDAR = 'synchrome/calendar/clear_active_calendar';
+
 const ADD_DELETED_EVENT = 'synchrome/calendar/add_deleted_event';
 
 const EDIT_EVENT = 'synchrome/calendar/edit_event';
@@ -44,7 +46,8 @@ export const calendarTypes = {
   EDIT_EVENT,
   DELETE_CALENDAR_FAILURE,
   DELETE_CALENDAR_REQUEST,
-  DELETE_CALENDAR_SUCCESS
+  DELETE_CALENDAR_SUCCESS,
+  CLEAR_ACTIVE_CALENDAR
 };
 
 // Action Creators
@@ -141,6 +144,10 @@ const addDeletedEvent = payload => ({
   payload
 });
 
+const clearActiveCalendar = () => ({
+  type: CLEAR_ACTIVE_CALENDAR
+});
+
 const deleteCalendar = id => {
   return dispatch => {
     dispatch(deleteCalendarRequest());
@@ -199,6 +206,7 @@ const fetchAllCalendar = () => {
 const fetchCalendarById = id => {
   return dispatch => {
     dispatch(fetchCalendarByIdRequest());
+    dispatch(clearActiveCalendar());
 
     const success = res => {
       dispatch(fetchCalendarByIdSuccess(res.data.data));
@@ -210,8 +218,8 @@ const fetchCalendarById = id => {
     };
 
     http.get(`/calendar/${id}`, success, error);
-  }
-}
+  };
+};
 
 const postCalendar = (calendar, events) => {
   // MANIPULATE HERE
@@ -234,13 +242,13 @@ const postCalendar = (calendar, events) => {
     dispatch(postCalendarRequest());
 
     const success = res => {
-      console.log(res);
       dispatch(postCalendarSuccess(res.data.data));
       dispatch(push('/panel/calendars'));
     };
 
     const error = err => {
-      console.log(err);
+      const errCopy = { ...err };
+      console.log(errCopy);
       dispatch(postCalendarFailure(err.message));
     };
 
@@ -274,7 +282,8 @@ export const calendarActions = {
   addDeletedEvent,
   patchCalendar,
   editEvent,
-  deleteCalendar
+  deleteCalendar,
+  clearActiveCalendar
 };
 
 // All Calendar Reducer
@@ -298,7 +307,7 @@ const allCalendarReducer = (state = {}, action) => {
     default:
       return state;
   }
-}
+};
 
 // Active Calendar Reducer
 const activeCalendarInitialState = {
@@ -313,7 +322,7 @@ const filterEvent = (data = [], deleteId) => {
   });
 };
 
-const activeCalendarReducer = (state = {}, action) => {
+const activeCalendarReducer = (state = activeCalendarInitialState, action) => {
   switch (action.type) {
     case FETCH_CALENDAR_BYID_SUCCESS:
       return {
@@ -351,7 +360,9 @@ const activeCalendarReducer = (state = {}, action) => {
           ...state.data,
           events: action.payload
         }
-      }  
+      };
+    case CLEAR_ACTIVE_CALENDAR:
+      return activeCalendarInitialState;
     default:
       return state;
   }

@@ -53,9 +53,14 @@ class EventForm extends Component {
 
   addEvent = values => {
     const { addEventToPost } = this.props;
-    const eventToPost = values;
 
-    // ADDING 1 DAY because fullCalendar different way of rendering end date    
+    const eventToPost = { ...values };
+
+    // default event category id is workday
+    if (!eventToPost.event_category_id) {
+      eventToPost.event_category_id = '1';
+    }
+
     eventToPost.end = moment(values.end).format('YYYY-MM-DD');
 
     eventToPost.id = this.generateRandomId();
@@ -66,7 +71,7 @@ class EventForm extends Component {
   editEvent = values => {
     const { editEventFromCalendar, eventsFromCalendar, isEditing, eventToPost, editEventToPost } = this.props;
     eventToPost.end = moment(values.end).format('YYYY-MM-DD');
-    console.log(eventToPost);
+
     if (isEditing.target.originalId) {
       const targetEvent = {
         ..._.find(eventsFromCalendar, { originalId: isEditing.target.originalId }),

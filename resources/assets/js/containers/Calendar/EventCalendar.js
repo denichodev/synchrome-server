@@ -50,17 +50,19 @@ class EventCalendar extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.props.events.length) {
-      const newEvents = _.differenceWith(
-        this.props.events,
-        prevProps.events,
-        _.isEqual
-      );
+    this.rerenderFullcalendar();
+    // console.log('prevprops', prevProps);
+    // if (this.props.events.length) {
+    //   const newEvents = _.differenceWith(
+    //     this.props.events,
+    //     prevProps.events,
+    //     _.isEqual
+    //   );
 
-      if (newEvents.length) {
-        this.rerenderFullcalendar();
-      }
-    }
+    //   if (newEvents.length) {
+    //     this.rerenderFullcalendar();
+    //   }
+    // }
   }
 
   handleEventClick = (calEvent, jsEvent) => {
@@ -171,6 +173,8 @@ const mapDispatchToProps = dispatch => ({
     dispatch(change('eventForm', 'end', moment(event.end)));
     dispatch(change('eventForm', 'event_category_id', event.event_category_id));
   },
+  clearActiveCalendar: () => dispatch(calendarActions.clearActiveCalendar()),
+  clearActiveEvents: () => dispatch(eventActions.clarActiveEvents()),
   setEditStatus: status => dispatch(eventActions.setEditStatus(status))
 });
 
