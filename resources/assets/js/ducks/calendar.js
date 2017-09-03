@@ -179,7 +179,7 @@ const postCalendar = (calendar, events) => {
   const eventData = events.map(event => {
     event.start = moment(event.start).format('YYYY-MM-DD');
     event.end = moment(event.end).format('YYYY-MM-DD');
-    
+
     return event;
   });
 
@@ -196,6 +196,7 @@ const postCalendar = (calendar, events) => {
     const success = res => {
       console.log(res);
       dispatch(postCalendarSuccess(res.data.data));
+      dispatch(push('/panel/calendars'));
     };
 
     const error = err => {
