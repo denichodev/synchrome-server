@@ -25,6 +25,10 @@ const DELETE_USER_REQUEST = 'synchrome/user/delete_user_request';
 const DELETE_USER_SUCCESS = 'synchrome/user/delete_user_success';
 const DELETE_USER_FAILURE = 'synchrome/user/delete_user_failure';
 
+const CHECK_LOGGED_IN_USER_REQUEST = 'synchrome/user/check_logged_in_user_request';
+const CHECK_LOGGED_IN_USER_SUCCESS = 'synchrome/user/check_logged_in_user_success';
+const CHECK_LOGGED_IN_USER_FAILURE = 'synchrome/user/check_logged_in_user_failure';
+
 const CLEAR_ACTIVE_USER = 'synchrome/user/clear_active_user';
 
 export const userTypes = {
@@ -46,7 +50,10 @@ export const userTypes = {
   CLEAR_ACTIVE_USER,
   UPDATE_USER_FAILURE,
   UPDATE_USER_REQUEST,
-  UPDATE_USER_SUCCESS
+  UPDATE_USER_SUCCESS,
+  CHECK_LOGGED_IN_USER_FAILURE,
+  CHECK_LOGGED_IN_USER_REQUEST,
+  CHECK_LOGGED_IN_USER_SUCCESS
 };
 
 const getRoleRequest = () => ({
@@ -137,6 +144,31 @@ const clearActiveUser = () => ({
   type: CLEAR_ACTIVE_USER,
   payload: []
 });
+
+const checkLoggedInUserRequest = () => ({
+  type: CHECK_LOGGED_IN_USER_REQUEST
+});
+
+const checkLoggedInUserSuccess = payload => ({
+  type: CHECK_LOGGED_IN_USER_SUCCESS,
+  payload
+});
+
+const checkLoggedInUserFailure = payload => ({
+  type: CHECK_LOGGED_IN_USER_FAILURE,
+  payload
+});
+
+const checkLoggedInUser = () => (
+  dispatch => {
+    dispatch(checkLoggedInUserRequest());
+
+    const success = res => dispatch(checkLoggedInUserSuccess(res.data.data));
+    const failure = err => dispatch(checkLoggedInUserFailure(err.message));
+
+    http.get('/check-user', success, failure);
+  }
+);
 
 const getRole = () => (
   dispatch => {
@@ -245,14 +277,20 @@ export const userActions = {
   getUserById,
   getRole,
   deleteUser,
-  updateUser
+  updateUser,
+  checkLoggedInUser
 };
 
 const initialState = {
   error: '',
   role: [],
   data: [],
-  active: {}
+  active: {},
+  loggedIn: {
+    role: {
+      id: 2
+    }
+  }
 };
 
 const userReducer = (state = initialState, action) => {
@@ -318,6 +356,16 @@ const userReducer = (state = initialState, action) => {
         active: action.payload
       };
     case UPDATE_USER_FAILURE:
+      return {
+        ...state,
+        error: action.payload
+      };
+    case CHECK_LOGGED_IN_USER_SUCCESS:
+      return {
+        ...state,
+        loggedIn: action.payload
+      };
+    case CHECK_LOGGED_IN_USER_FAILURE:
       return {
         ...state,
         error: action.payload

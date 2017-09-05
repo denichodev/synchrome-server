@@ -33,8 +33,9 @@ class Calendar extends Component {
   }
 
   componentWillMount() {
-    const { edit, initialize } = this.props;
-
+    const { edit, initialize, clearActiveCalendar, clearActiveEvents  } = this.props;
+    clearActiveCalendar();
+    clearActiveEvents();
     if (!edit) {
       initialize({ status: 'published' });
     }
@@ -70,11 +71,16 @@ class Calendar extends Component {
   }
 
   handleSubmit = values => {
-    const { postCalendar, eventToPost, dispatch, edit, patchCalendar, activeCalendar } = this.props;
-    
-    if (!edit) { postCalendar(values, eventToPost); }
-    else {
-      patchCalendar(values, eventToPost, activeCalendar.deleted);
+    const { postCalendar, eventToPost, dispatch, edit, patchCalendar, activeCalendar, id } = this.props;
+    const updatedEvents = activeCalendar.data.events.filter(event => {
+      return event.updated === true;
+    });
+
+    if (!edit) {
+      postCalendar(values, eventToPost);
+    } else {
+      console.log(updatedEvents);
+      patchCalendar(id, values, eventToPost, activeCalendar.deleted, updatedEvents);
     }
 
     dispatch(reset('calendarForm'));
@@ -113,14 +119,6 @@ class Calendar extends Component {
     const events = activeCalendar.data.events
       ? activeCalendar.data.events.concat(eventToPost)
       : [];
-
-    // console.log(events);
-
-    // const editedEvents = events.map(ev => {
-    //   if (ev.originalId) {
-    //     ev.id = ev.originalId;
-    //   }
-    // });
 
     if (edit) {
       return (
@@ -229,10 +227,6 @@ const mapStateToProps = state => ({
   eventToPost: state.event.toPost
 });
 
-let clear = function clearDatepicker() {
-
-};
-
 const mapDispatchToProps = dispatch => ({
   fetchCalendarById: id => dispatch(calendarActions.fetchCalendarById(id)),
   selectDateFromCalendar: (start, end) => {
@@ -240,12 +234,14 @@ const mapDispatchToProps = dispatch => ({
   },
   postCalendar: (calendar, events) =>
     dispatch(calendarActions.postCalendar(calendar, events)),
-  patchCalendar: (calendar, newEvents, deletedList, updatedList) =>
-    dispatch(calendarActions.patchCalendar(calendar, newEvents, deletedList, updatedList)),
+  patchCalendar: (id, calendar, newEvents, deletedList, updatedList) =>
+    dispatch(calendarActions.patchCalendar(id, calendar, newEvents, deletedList, updatedList)),
   setEventEditStatus: data => {
     dispatch(reset('eventForm'));
     dispatch(eventActions.setEditStatus(data));
-  }
+  },
+  clearActiveCalendar: () => dispatch(calendarActions.clearActiveCalendar()),
+  clearActiveEvents: () => dispatch(eventActions.clarActiveEvents())
 });
 
 const validate = values => {

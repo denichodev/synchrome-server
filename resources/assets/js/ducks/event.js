@@ -11,8 +11,8 @@ const EDIT_EVENT_TO_POST = 'synchrome/event/edit_event_to_post';
 const REMOVE_EVENT_TO_POST = 'synchrome/event/remove_event_to_post';
 
 const CALENDAR_DATE_SELECTED = 'synchrome/event/calendar_date_selected';
-
 const SET_EDIT_STATUS = 'synchrome/event/set_edit_status';
+const CLEAR_ACTIVE_EVENT_LIST = 'synchrome/event/clear_active_event_list';
 
 export const eventTypes = {
   FETCH_EVENT_CATEGORY_REQUEST,
@@ -20,7 +20,8 @@ export const eventTypes = {
   FETCH_EVENT_CATEGORY_FAILURE,
   ADD_EVENT_TO_POST,
   CALENDAR_DATE_SELECTED,
-  SET_EDIT_STATUS
+  SET_EDIT_STATUS,
+  CLEAR_ACTIVE_EVENT_LIST
 };
 
 // Action Creators
@@ -81,6 +82,9 @@ const editEventToPost = payload => {
     payload
   };
 };
+const clarActiveEvents = () => ({
+  type: CLEAR_ACTIVE_EVENT_LIST
+});
 
 const fetchEventCategory = () => {
   return dispatch => {
@@ -124,7 +128,8 @@ export const eventActions = {
   calendarDateSelected,
   removeEventToPost,
   setEditStatus,
-  editEvent
+  editEvent,
+  clarActiveEvents
 };
 
 // Reducer
@@ -148,14 +153,14 @@ const reduxFormPlugin = {
             start: action.payload.start,
             end: action.payload.end
           }
-        }
+        };
       case ADD_EVENT_TO_POST:
         return undefined;
       default:
         return state;
     }
   }
-}
+};
 
 const filterEvent = (data = [], deleteId) => {
   return data.filter(event => {
@@ -194,7 +199,9 @@ const eventReducer = (state = initialState, action) => {
       return {
         ...state,
         toPost: action.payload
-      }  
+      };
+    case CLEAR_ACTIVE_EVENT_LIST:
+      return initialState;
     default:
       return state;
   };

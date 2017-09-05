@@ -19,6 +19,12 @@ const PATCH_CALENDAR_REQUEST = 'synchrome/calendar/patch_calendar_request';
 const PATCH_CALENDAR_SUCCESS = 'synchrome/calendar/patch_calendar_success';
 const PATCH_CALENDAR_FAILURE = 'synchrome/calendar/patch_calendar_failure';
 
+const DELETE_CALENDAR_REQUEST = 'synchrome/calendar/delete_calendar_request';
+const DELETE_CALENDAR_SUCCESS = 'synchrome/calendar/delete_calendar_success';
+const DELETE_CALENDAR_FAILURE = 'synchrome/calendar/delete_calendar_failure';
+
+const CLEAR_ACTIVE_CALENDAR = 'synchrome/calendar/clear_active_calendar';
+
 const ADD_DELETED_EVENT = 'synchrome/calendar/add_deleted_event';
 
 const EDIT_EVENT = 'synchrome/calendar/edit_event';
@@ -37,8 +43,12 @@ export const calendarTypes = {
   PATCH_CALENDAR_SUCCESS,
   PATCH_CALENDAR_FAILURE,
   ADD_DELETED_EVENT,
-  EDIT_EVENT
-}
+  EDIT_EVENT,
+  DELETE_CALENDAR_FAILURE,
+  DELETE_CALENDAR_REQUEST,
+  DELETE_CALENDAR_SUCCESS,
+  CLEAR_ACTIVE_CALENDAR
+};
 
 // Action Creators
 const fetchCalendarAllRequest = () => {
@@ -113,10 +123,47 @@ const patchCalendarFailure = payload => ({
   payload
 });
 
+const deleteCalendarRequest = () => {
+  return {
+    type: DELETE_CALENDAR_REQUEST
+  }
+};
+
+const deleteCalendarSuccess = payload => ({
+  type: DELETE_CALENDAR_SUCCESS,
+  payload
+});
+
+const deleteCalendarFailure = payload => ({
+  type: DELETE_CALENDAR_FAILURE,
+  payload
+});
+
 const addDeletedEvent = payload => ({
   type: ADD_DELETED_EVENT,
   payload
 });
+
+const clearActiveCalendar = () => ({
+  type: CLEAR_ACTIVE_CALENDAR
+});
+
+const deleteCalendar = id => {
+  return dispatch => {
+    dispatch(deleteCalendarRequest());
+
+    const success = res => {
+      dispatch(deleteCalendarSuccess(res.data.data));
+      dispatch(fetchAllCalendar());
+    };
+
+    const error = err => {
+      dispatch(deleteCalendarFailure(err.message));
+    };
+
+    http.delete(`/calendar/${id}`, success, error);
+  };
+};
 
 const editEvent = (events, editedEvent) => {
   const copy = events;
@@ -159,6 +206,7 @@ const fetchAllCalendar = () => {
 const fetchCalendarById = id => {
   return dispatch => {
     dispatch(fetchCalendarByIdRequest());
+    dispatch(clearActiveCalendar());
 
     const success = res => {
       dispatch(fetchCalendarByIdSuccess(res.data.data));
@@ -170,8 +218,8 @@ const fetchCalendarById = id => {
     };
 
     http.get(`/calendar/${id}`, success, error);
-  }
-}
+  };
+};
 
 const postCalendar = (calendar, events) => {
   // MANIPULATE HERE
@@ -179,7 +227,7 @@ const postCalendar = (calendar, events) => {
   const eventData = events.map(event => {
     event.start = moment(event.start).format('YYYY-MM-DD');
     event.end = moment(event.end).format('YYYY-MM-DD');
-    
+
     return event;
   });
 
@@ -194,12 +242,13 @@ const postCalendar = (calendar, events) => {
     dispatch(postCalendarRequest());
 
     const success = res => {
-      console.log(res);
       dispatch(postCalendarSuccess(res.data.data));
+      dispatch(push('/panel/calendars'));
     };
 
     const error = err => {
-      console.log(err);
+      const errCopy = { ...err };
+      console.log(errCopy);
       dispatch(postCalendarFailure(err.message));
     };
 
@@ -207,22 +256,36 @@ const postCalendar = (calendar, events) => {
   };
 };
 
-const patchCalendar = (calendar, newEvents, deletedList, updatedList) => {
+const patchCalendar = (id, calendar, newEvents, deletedList, updatedList) => {
   console.log('calendar', calendar);
   console.log('newEvents', newEvents);
   console.log('deletedList', deletedList);
+  console.log('updatedList', updatedList);
+
+  const data = {
+    ...calendar,
+    newEvents: [...newEvents],
+    deletedEvents: [...deletedList],
+    updatedEvents: [...updatedList]
+  };
+  console.log('data', data);
+
   return dispatch => {
     dispatch(patchCalendarRequest());
 
     const success = res => {
+      console.log(res);
       dispatch(patchCalendarSuccess(res.data.data));
+      dispatch(push('/panel/calendars'));
     };
 
     const error = err => {
+      const errCopy = { ...err };
+      console.log(errCopy);
       dispatch(patchCalendarFailure(err.message));
     };
 
-    // http.patch('/calendar', data, success, error);
+    http.patch(`/calendar/${id}`, data, success, error);
   };
 };
 
@@ -232,7 +295,9 @@ export const calendarActions = {
   postCalendar,
   addDeletedEvent,
   patchCalendar,
-  editEvent
+  editEvent,
+  deleteCalendar,
+  clearActiveCalendar
 };
 
 // All Calendar Reducer
@@ -256,7 +321,7 @@ const allCalendarReducer = (state = {}, action) => {
     default:
       return state;
   }
-}
+};
 
 // Active Calendar Reducer
 const activeCalendarInitialState = {
@@ -271,7 +336,7 @@ const filterEvent = (data = [], deleteId) => {
   });
 };
 
-const activeCalendarReducer = (state = {}, action) => {
+const activeCalendarReducer = (state = activeCalendarInitialState, action) => {
   switch (action.type) {
     case FETCH_CALENDAR_BYID_SUCCESS:
       return {
@@ -298,7 +363,7 @@ const activeCalendarReducer = (state = {}, action) => {
         ...state,
         data: {
           ...state.data,
-          events: filterEvent(state.data.events, action.payload)
+          events: filterEvent(state.data.events, action.payload.originalId)
         },
         deleted: state.deleted.concat(action.payload)
       };
@@ -309,7 +374,9 @@ const activeCalendarReducer = (state = {}, action) => {
           ...state.data,
           events: action.payload
         }
-      }  
+      };
+    case CLEAR_ACTIVE_CALENDAR:
+      return activeCalendarInitialState;
     default:
       return state;
   }
