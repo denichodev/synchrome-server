@@ -18,11 +18,13 @@ class Employee extends Model
     protected $fillable = [
         'id',
         'name',
-        'echelon_id'
+        'echelon_id',
+        'workshift_id'
     ];
 
     protected $hidden = [
-        'echelon_id'
+        'echelon_id',
+        'workshift_id'
     ];
 
     protected $dates = [
@@ -37,5 +39,10 @@ class Employee extends Model
     public function templates()
     {
         return $this->hasMany(Template::class);
+    }
+
+    public function workshift()
+    {
+        return $this->belongsTo(Workshift::class);
     }
 }

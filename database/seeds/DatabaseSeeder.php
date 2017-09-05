@@ -17,5 +17,6 @@ class DatabaseSeeder extends Seeder
         $this->call(AgencyTypesTableSeeder::class);
         $this->call(AgenciesTableSeeder::class);
         $this->call(EchelonsTableSeeder::class);
+        $this->call(WorkshiftsTableSeeder::class);
     }
 }
