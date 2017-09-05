@@ -54,7 +54,7 @@ class EmployeeController extends Controller
             return response()
                 ->json([
                     'result' => 'success',
-                    'data' => $employee
+                    'data' => Employee::with(['echelon', 'workshift'])->find($employee->id)
                 ]);
         } catch (\Exception $e) {
             DB::rollback();
