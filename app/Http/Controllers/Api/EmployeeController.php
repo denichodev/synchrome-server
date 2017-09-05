@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Employee;
+use App\Workshift;
 use Validator;
 use DB;
 
@@ -183,5 +184,16 @@ class EmployeeController extends Controller
                     'errors' => [$e->getMessage()]
                 ]);
         }
+    }
+
+    public function workshifts()
+    {
+        $workshifts = Workshift::get();
+
+        return response()
+            ->json([
+                'result' => 'success',
+                'data' => $workshifts
+            ]);
     }
 }

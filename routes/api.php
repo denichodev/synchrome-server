@@ -27,10 +27,9 @@ Route::group(['middleware' => ['api']], function () {
     Route::get('agency', 'Api\AgencyController@index')->name('api.agencies.index');
     Route::get('agency/{id}/echelons', 'Api\AgencyController@echelons')->name('api.agencies.echelons');
 
-    Route::get('workshift', 'Api\WorkshiftController@index')->name('api.workshifts.index');
-
     Route::get('employee', 'Api\EmployeeController@index')->name('api.employees.index');
     Route::post('employee', 'Api\EmployeeController@store')->name('api.employees.store');
+    Route::get('employee/workshifts', 'Api\EmployeeController@workshifts')->name('api.employees.workshifts');
     Route::get('employee/{id}', 'Api\EmployeeController@get')->name('api.employees.get');
     Route::patch('employee/{id}', 'Api\EmployeeController@update')->name('api.employees.update');
     Route::delete('employee/{id}', 'Api\EmployeeController@destroy')->name('api.employees.destroy');
