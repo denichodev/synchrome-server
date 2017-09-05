@@ -97,6 +97,58 @@ class EmployeeController extends Controller
             ]);
     }
 
+    public function update(Request $request, $id)
+    {
+        $validation = Validator::make($request->all(), [
+            'echelon_id' => 'required',
+            'workshift_id' => 'required',
+            'id' => 'required|unique:employees,id,' . $id,
+            'name' => 'required'
+        ]);
+
+        if ($validation->fails()) {
+            return response()
+                ->json([
+                    'result' => 'failed',
+                    'errors' => $validation->errors()
+                ]);
+        }
+
+        $employee = Employee::find($id);
+
+        if (is_null($employee)) {
+            return response()
+                ->json([
+                    'result' => 'failed',
+                    'errors' => ['employee_not_found']
+                ], 404);
+        }
+
+        try {
+            DB::beginTransaction();
+            $employee->update($request->except('id'));
+            DB::commit();
+
+            return response()
+                ->json([
+                    'result' => 'success',
+                    'data' => Employee::with(['echelon', 'workshift'])->find($employee->id)
+                ]);
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            if (\App::environment('local')) {
+                throw $e;
+            }
+
+            return response()
+                ->json([
+                    'result' => 'failed',
+                    'errors' => [$e->getMessage()]
+                ]);
+        }
+    }
+
     public function destroy($id)
     {
         $employee = Employee::find($id);
