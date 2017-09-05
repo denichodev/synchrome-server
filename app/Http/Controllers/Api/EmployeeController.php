@@ -33,6 +33,7 @@ class EmployeeController extends Controller
     {
         $validation = Validator::make($request->all(), [
             'echelon_id' => 'required',
+            'workshift_id' => 'required',
             'id' => 'required|unique:employees,id',
             'name' => 'required'
         ]);
