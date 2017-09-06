@@ -14,6 +14,10 @@ const POST_EMPLOYEE_REQUEST = 'synchrome/employee/post_employee_request';
 const POST_EMPLOYEE_SUCCESS = 'synchrome/employee/post_employee_success';
 const POST_EMPLOYEE_FAILURE = 'synchrome/employee/post_employee_failure';
 
+const DELETE_EMPLOYEE_REQUEST = 'synchrome/employee/delete_employee_request';
+const DELETE_EMPLOYEE_SUCCESS = 'synchrome/employee/delete_employee_success';
+const DELETE_EMPLOYEE_FAILURE = 'synchrome/employee/delete_employee_failure';
+
 export const employeeTypes = {
   FETCH_EMPLOYEE_ALL_REQUEST,
   FETCH_EMPLOYEE_ALL_SUCCESS,
@@ -23,7 +27,10 @@ export const employeeTypes = {
   FETCH_EMPLOYEE_BYID_FAILURE,
   POST_EMPLOYEE_REQUEST,
   POST_EMPLOYEE_SUCCESS,
-  POST_EMPLOYEE_FAILURE
+  POST_EMPLOYEE_FAILURE,
+  DELETE_EMPLOYEE_FAILURE,
+  DELETE_EMPLOYEE_REQUEST,
+  DELETE_EMPLOYEE_SUCCESS
 };
 
 // Action Creators
@@ -66,6 +73,20 @@ const postEmployeeSuccess = payload => ({
 
 const postEmployeeFailure = payload => ({
   type: POST_EMPLOYEE_FAILURE,
+  payload
+});
+
+const deleteEmployeeRequest = () => ({
+  type: DELETE_EMPLOYEE_REQUEST
+});
+
+const deleteEmployeeSuccess = payload => ({
+  type: DELETE_EMPLOYEE_SUCCESS,
+  payload
+});
+
+const deleteEmployeeFailure = payload => ({
+  type: DELETE_EMPLOYEE_FAILURE,
   payload
 });
 
@@ -115,14 +136,33 @@ const postEmployee = (data) => (
       dispatch(postEmployeeFailure(err.message));
     };
 
+
     http.post('/employee', data, success, error);
+  }
+);
+
+const deleteEmployee = id => (
+  dispatch => {
+    dispatch(deleteEmployeeRequest());
+
+    const success = res => {
+      dispatch(deleteEmployeeSuccess());
+      dispatch(fetchAllEmployee());
+    };
+
+    const error = err => {
+      dispatch(deleteEmployeeFailure(err.message));
+    };
+
+    http.delete(`/employee/${id}`, success, error);
   }
 );
 
 export const employeeActions = {
   fetchAllEmployee,
   fetchEmployeeById,
-  postEmployee
+  postEmployee,
+  deleteEmployee
 };
 
 // Reducer
@@ -149,6 +189,13 @@ const employeeReducer = (state = initialState, action) => {
         employee: action.payload
       };
     case POST_EMPLOYEE_FAILURE:
+      return {
+        ...state,
+        error: action.payload
+      };
+    case DELETE_EMPLOYEE_SUCCESS:
+      return state;
+    case DELETE_EMPLOYEE_FAILURE:
       return {
         ...state,
         error: action.payload

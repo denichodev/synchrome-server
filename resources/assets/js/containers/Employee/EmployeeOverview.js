@@ -30,11 +30,16 @@ class EmployeeOverview extends Component {
           <td>{emp.echelon.name}</td>
           <td>
             <Link to={`/panel/employees/${emp.id}`} className="btn btn-primary btn-xs">Edit</Link>&nbsp;
-            <button type="button" className="btn btn-danger btn-xs">Delete</button>
+            <button onClick={() => this.handleDeleteClick(emp.id)} type="button" className="btn btn-danger btn-xs">Delete</button>
           </td>
         </tr>
       ))
     );
+  }
+
+  handleDeleteClick = id => {
+    const { deleteEmployee } = this.props;
+    deleteEmployee(id);
   }
 
   render() {
@@ -74,7 +79,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   fetchAllEmployee: () => dispatch(employeeActions.fetchAllEmployee()),
-  fetchEmployeeById: (id) => dispatch(employeeActions.fetchEmployeeById(id))
+  fetchEmployeeById: (id) => dispatch(employeeActions.fetchEmployeeById(id)),
+  deleteEmployee: id => dispatch(employeeActions.deleteEmployee(id))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EmployeeOverview);
