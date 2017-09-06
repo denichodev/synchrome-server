@@ -72,14 +72,13 @@ class Calendar extends Component {
 
   handleSubmit = values => {
     const { postCalendar, eventToPost, dispatch, edit, patchCalendar, activeCalendar, id } = this.props;
-    const updatedEvents = activeCalendar.data.events.filter(event => {
-      return event.updated === true;
-    });
 
     if (!edit) {
       postCalendar(values, eventToPost);
     } else {
-      console.log(updatedEvents);
+      const updatedEvents = activeCalendar.data.events.filter(event => {
+        return event.updated === true;
+      });
       patchCalendar(id, values, eventToPost, activeCalendar.deleted, updatedEvents);
     }
 
