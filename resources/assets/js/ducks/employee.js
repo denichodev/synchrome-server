@@ -1,5 +1,6 @@
 import { push } from 'react-router-redux';
 import http from '../services/http';
+import { echelonActions } from './echelon';
 
 // Types
 const FETCH_EMPLOYEE_ALL_REQUEST = 'synchrome/employee/fetch_employee_all_request';
@@ -14,6 +15,10 @@ const POST_EMPLOYEE_REQUEST = 'synchrome/employee/post_employee_request';
 const POST_EMPLOYEE_SUCCESS = 'synchrome/employee/post_employee_success';
 const POST_EMPLOYEE_FAILURE = 'synchrome/employee/post_employee_failure';
 
+const PATCH_EMPLOYEE_REQUEST = 'synchrome/employee/patch_employee_request';
+const PATCH_EMPLOYEE_SUCCESS = 'synchrome/employee/patch_employee_success';
+const PATCH_EMPLOYEE_FAILURE = 'synchrome/employee/patch_employee_failure';
+
 const DELETE_EMPLOYEE_REQUEST = 'synchrome/employee/delete_employee_request';
 const DELETE_EMPLOYEE_SUCCESS = 'synchrome/employee/delete_employee_success';
 const DELETE_EMPLOYEE_FAILURE = 'synchrome/employee/delete_employee_failure';
@@ -22,6 +27,7 @@ const FETCH_WORKSHIFT_REQUEST = 'synchrome/employee/fetch_workshift_request';
 const FETCH_WORKSHIFT_SUCCESS = 'synchrome/employee/fetch_workshift_success';
 const FETCH_WORKSHIFT_FAILURE = 'synchrome/employee/fetch_workshift_failure';
 
+const CLEAR_ACTIVE_EMPLOYEE = 'synchrome/employee/clear_active_employee';
 
 export const employeeTypes = {
   FETCH_EMPLOYEE_ALL_REQUEST,
@@ -38,7 +44,11 @@ export const employeeTypes = {
   DELETE_EMPLOYEE_SUCCESS,
   FETCH_WORKSHIFT_FAILURE,
   FETCH_WORKSHIFT_REQUEST,
-  FETCH_WORKSHIFT_SUCCESS
+  FETCH_WORKSHIFT_SUCCESS,
+  PATCH_EMPLOYEE_FAILURE,
+  PATCH_EMPLOYEE_REQUEST,
+  PATCH_EMPLOYEE_SUCCESS,
+  CLEAR_ACTIVE_EMPLOYEE
 };
 
 // Action Creators
@@ -84,6 +94,20 @@ const postEmployeeFailure = payload => ({
   payload
 });
 
+const patchEmployeeRequest = () => ({
+  type: PATCH_EMPLOYEE_REQUEST
+});
+
+const patchEmployeeSuccess = payload => ({
+  type: PATCH_EMPLOYEE_SUCCESS,
+  payload
+});
+
+const patchEmployeeFailure = payload => ({
+  type: PATCH_EMPLOYEE_FAILURE,
+  payload
+});
+
 const deleteEmployeeRequest = () => ({
   type: DELETE_EMPLOYEE_REQUEST
 });
@@ -111,6 +135,10 @@ const fetchWorkshiftFailure = payload => ({
   type: FETCH_WORKSHIFT_FAILURE,
   payload
 });
+
+const clearActiveEmployee = () => ({
+  type: CLEAR_ACTIVE_EMPLOYEE
+})
 
 const fetchAllEmployee = () => (
   (dispatch) => {
@@ -163,6 +191,26 @@ const postEmployee = (data) => (
   }
 );
 
+const patchEmployee = (id, data) => (
+  // MANIPULATE data HERE IF YOU WANT TO
+  (dispatch) => {
+    dispatch(patchEmployeeRequest());
+
+    const success = res => {
+      dispatch(push('/panel/employees'));      
+      dispatch(patchEmployeeSuccess(res.data.data));
+      dispatch(clearActiveEmployee());
+      dispatch(echelonActions.clearActiveEchelon());
+    };
+
+    const error = err => {
+      dispatch(patchEmployeeFailure(err.message));
+    };
+
+    http.patch(`/employee/${id}`, data, success, error);
+  }
+);
+
 const deleteEmployee = id => (
   dispatch => {
     dispatch(deleteEmployeeRequest());
@@ -185,12 +233,10 @@ const fetchWorkshift = () => (
     dispatch(fetchWorkshiftRequest());
 
     const success = res => {
-      console.log(res);
       dispatch(fetchWorkshiftSuccess(res.data.data));
     };
 
     const error = err => {
-      console.log(err);
       dispatch(fetchWorkshiftFailure(err.message));
     };
 
@@ -203,14 +249,17 @@ export const employeeActions = {
   fetchEmployeeById,
   postEmployee,
   deleteEmployee,
-  fetchWorkshift
+  fetchWorkshift,
+  patchEmployee,
+  clearActiveEmployee
 };
 
 // Reducer
 const initialState = {
   error: '',
   data: [],
-  workshifts: []
+  workshifts: [],
+  active: {}
 };
 
 const employeeReducer = (state = initialState, action) => {
@@ -228,9 +277,19 @@ const employeeReducer = (state = initialState, action) => {
     case POST_EMPLOYEE_SUCCESS:
       return {
         ...state,
-        employee: action.payload
+        active: action.payload
       };
     case POST_EMPLOYEE_FAILURE:
+      return {
+        ...state,
+        error: action.payload
+      };
+    case PATCH_EMPLOYEE_SUCCESS:
+      return {
+        ...state,
+        active: action.payload
+      };
+    case PATCH_EMPLOYEE_FAILURE:
       return {
         ...state,
         error: action.payload
@@ -251,6 +310,21 @@ const employeeReducer = (state = initialState, action) => {
       return {
         ...state,
         error: action.payload
+      };
+    case FETCH_EMPLOYEE_BYID_SUCCESS:
+      return {
+        ...state,
+        active: action.payload
+      };
+    case FETCH_EMPLOYEE_BYID_FAILURE:
+      return {
+        ...state,
+        error: action.payload
+      };
+    case CLEAR_ACTIVE_EMPLOYEE:
+      return {
+        ...state,
+        active: {}
       };
     default:
       return state;
