@@ -18,6 +18,11 @@ const DELETE_EMPLOYEE_REQUEST = 'synchrome/employee/delete_employee_request';
 const DELETE_EMPLOYEE_SUCCESS = 'synchrome/employee/delete_employee_success';
 const DELETE_EMPLOYEE_FAILURE = 'synchrome/employee/delete_employee_failure';
 
+const FETCH_WORKSHIFT_REQUEST = 'synchrome/employee/fetch_workshift_request';
+const FETCH_WORKSHIFT_SUCCESS = 'synchrome/employee/fetch_workshift_success';
+const FETCH_WORKSHIFT_FAILURE = 'synchrome/employee/fetch_workshift_failure';
+
+
 export const employeeTypes = {
   FETCH_EMPLOYEE_ALL_REQUEST,
   FETCH_EMPLOYEE_ALL_SUCCESS,
@@ -30,7 +35,10 @@ export const employeeTypes = {
   POST_EMPLOYEE_FAILURE,
   DELETE_EMPLOYEE_FAILURE,
   DELETE_EMPLOYEE_REQUEST,
-  DELETE_EMPLOYEE_SUCCESS
+  DELETE_EMPLOYEE_SUCCESS,
+  FETCH_WORKSHIFT_FAILURE,
+  FETCH_WORKSHIFT_REQUEST,
+  FETCH_WORKSHIFT_SUCCESS
 };
 
 // Action Creators
@@ -90,6 +98,20 @@ const deleteEmployeeFailure = payload => ({
   payload
 });
 
+const fetchWorkshiftRequest = () => ({
+  type: FETCH_WORKSHIFT_REQUEST
+});
+
+const fetchWorkshiftSuccess = payload => ({
+  type: FETCH_WORKSHIFT_SUCCESS,
+  payload
+});
+
+const fetchWorkshiftFailure = payload => ({
+  type: FETCH_WORKSHIFT_FAILURE,
+  payload
+});
+
 const fetchAllEmployee = () => (
   (dispatch) => {
     dispatch(fetchEmployeeAllRequest());
@@ -146,7 +168,7 @@ const deleteEmployee = id => (
     dispatch(deleteEmployeeRequest());
 
     const success = res => {
-      dispatch(deleteEmployeeSuccess());
+      dispatch(deleteEmployeeSuccess(res.data.data));
       dispatch(fetchAllEmployee());
     };
 
@@ -158,17 +180,37 @@ const deleteEmployee = id => (
   }
 );
 
+const fetchWorkshift = () => (
+  dispatch => {
+    dispatch(fetchWorkshiftRequest());
+
+    const success = res => {
+      console.log(res);
+      dispatch(fetchWorkshiftSuccess(res.data.data));
+    };
+
+    const error = err => {
+      console.log(err);
+      dispatch(fetchWorkshiftFailure(err.message));
+    };
+
+    http.get('/employee/workshifts', success, error);
+  }
+);
+
 export const employeeActions = {
   fetchAllEmployee,
   fetchEmployeeById,
   postEmployee,
-  deleteEmployee
+  deleteEmployee,
+  fetchWorkshift
 };
 
 // Reducer
 const initialState = {
   error: '',
-  data: []
+  data: [],
+  workshifts: []
 };
 
 const employeeReducer = (state = initialState, action) => {
@@ -196,6 +238,16 @@ const employeeReducer = (state = initialState, action) => {
     case DELETE_EMPLOYEE_SUCCESS:
       return state;
     case DELETE_EMPLOYEE_FAILURE:
+      return {
+        ...state,
+        error: action.payload
+      };
+    case FETCH_WORKSHIFT_SUCCESS:
+      return {
+        ...state,
+        workshifts: action.payload
+      };
+    case FETCH_WORKSHIFT_FAILURE:
       return {
         ...state,
         error: action.payload

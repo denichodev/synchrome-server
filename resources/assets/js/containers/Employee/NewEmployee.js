@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, initialize } from 'redux-form';
 import { agencyActions } from '../../ducks/agency';
 import { echelonActions } from '../../ducks/echelon';
 import { employeeActions } from '../../ducks/employee';
+import { FormSelection } from '../../components/Forms';
 
 class NewEmployee extends Component {
   componentDidMount = () => {
-    const { fetchAllAgency } = this.props;
+    const { fetchAllAgency, fetchWorkshifts, dispatch } = this.props;
 
     fetchAllAgency();
+    fetchWorkshifts();
+    dispatch(initialize('newEmployeeForm', { workshift_id: 1 }));
   };
 
   renderTextField = field => {
@@ -97,7 +99,7 @@ class NewEmployee extends Component {
   };
 
   render() {
-    const { handleSubmit } = this.props;
+    const { handleSubmit, workshifts } = this.props;
 
     return (
       <div className="box">
@@ -109,6 +111,9 @@ class NewEmployee extends Component {
             <div className="row">
               <div className="col-md-3">
                 <Field label="ID" name="id" component={this.renderTextField} />
+              </div>
+              <div className="col-md-3">
+                <Field label="Workshift" name="workshift_id" component={FormSelection} optionsData={workshifts} />
               </div>
             </div>
             <div className="row">
@@ -166,13 +171,15 @@ const formOptions = {
 
 const mapStateToProps = state => ({
   agency: state.agency,
-  echelon: state.echelon
+  echelon: state.echelon,
+  workshifts: state.employee.workshifts
 });
 
 const mapDispatchToProps = dispatch => ({
   fetchAllAgency: () => dispatch(agencyActions.fetchAllAgency()),
   fetchEchelonsById: id => dispatch(echelonActions.fetchEchelonsById(id)),
-  postEmployee: data => dispatch(employeeActions.postEmployee(data))
+  postEmployee: data => dispatch(employeeActions.postEmployee(data)),
+  fetchWorkshifts: () => dispatch(employeeActions.fetchWorkshift())
 });
 
 const Connector = connect(mapStateToProps, mapDispatchToProps)(NewEmployee);
