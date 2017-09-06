@@ -80,7 +80,8 @@ class EmployeeController extends Controller
             }, 
             'echelon.agency' => function ($query) {
                 $query->select(['id', 'name']);
-            }
+            },
+            'workshift'
         ])->find($id);
 
         if (is_null($employee)) {
