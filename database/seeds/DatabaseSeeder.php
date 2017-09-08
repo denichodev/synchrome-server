@@ -18,5 +18,6 @@ class DatabaseSeeder extends Seeder
         $this->call(AgenciesTableSeeder::class);
         $this->call(EchelonsTableSeeder::class);
         $this->call(WorkshiftsTableSeeder::class);
+        $this->call(AbsenceTypesTableSeeder::class);
     }
 }
