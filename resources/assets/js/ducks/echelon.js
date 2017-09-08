@@ -5,10 +5,13 @@ const FETCH_ECHELON_BYID_REQUEST = 'synchrome/echelon/fetch_echelon_byid_request
 const FETCH_ECHELON_BYID_SUCCESS = 'synchrome/echelon/fetch_echelon_byid_success';
 const FETCH_ECHELON_BYID_FAILURE = 'synchrome/echelon/fetch_echelon_byid_failure';
 
+const CLEAR_ACTIVE_ECHELON = 'synchrome/echelon/clear_active_echelon';
+
 export const echelonTypes = {
   FETCH_ECHELON_BYID_REQUEST,
   FETCH_ECHELON_BYID_SUCCESS,
-  FETCH_ECHELON_BYID_FAILURE
+  FETCH_ECHELON_BYID_FAILURE,
+  CLEAR_ACTIVE_ECHELON
 };
 
 const fetchEchelonByIdRequest = () => {
@@ -31,6 +34,10 @@ const fetchEchelonByIdFailure = payload => {
   };
 };
 
+const clearActiveEchelon = () => ({
+  type: CLEAR_ACTIVE_ECHELON
+});
+
 const fetchEchelonsById = agencyId => {
   return dispatch => {
     dispatch(fetchEchelonByIdRequest());
@@ -40,7 +47,7 @@ const fetchEchelonsById = agencyId => {
     }
 
     const error = err => {
-      dispastch(fetchEchelonByIdFailure(res.data.data));
+      dispatch(fetchEchelonByIdFailure(res.data.data));
     }
 
     http.get(`/agency/${agencyId}/echelons`, success, error);
@@ -48,7 +55,8 @@ const fetchEchelonsById = agencyId => {
 }
 
 export const echelonActions = {
-  fetchEchelonsById
+  fetchEchelonsById,
+  clearActiveEchelon
 };
 
 // Reducer
@@ -69,9 +77,11 @@ const echelonReducer = (state = initialState, action) => {
         ...state,
         error: action.payload
       };
+    case CLEAR_ACTIVE_ECHELON:
+      return initialState;
     default:
       return state;
-  };
+  }
 };
 
 export default {
