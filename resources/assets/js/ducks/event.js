@@ -142,26 +142,6 @@ const initialState = {
   }
 };
 
-const reduxFormPlugin = {
-  eventForm: (state, action) => {
-    switch (action.type) {
-      case CALENDAR_DATE_SELECTED:
-        return {
-          ...state,
-          values: {
-            ...state.values,
-            start: action.payload.start,
-            end: action.payload.end
-          }
-        };
-      case ADD_EVENT_TO_POST:
-        return undefined;
-      default:
-        return state;
-    }
-  }
-};
-
 const filterEvent = (data = [], deleteId) => {
   return data.filter(event => {
     return event.id !== deleteId;
@@ -209,6 +189,5 @@ const eventReducer = (state = initialState, action) => {
 
 export default {
   eventReducer,
-  initialState,
-  reduxFormPlugin
+  initialState
 };
