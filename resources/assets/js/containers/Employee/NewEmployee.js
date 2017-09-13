@@ -208,15 +208,13 @@ class NewEmployee extends Component {
             </div>
             <div className="row">
               <div className="col-md-6">
-                <div className="col-md-3">
-                  <Field
-                    label="Echelon 2"
-                    name="echelon_id"
-                    optionsData={this.state.echelonOptions}
-                    defaultValue={''}
-                    component={FormSelectionWithSearch}
-                  />
-                </div>
+                <Field
+                  label="Echelon 2"
+                  name="echelon_id"
+                  optionsData={this.state.echelonOptions}
+                  defaultValue={''}
+                  component={FormSelectionWithSearch}
+                />
               </div>
             </div>
             <div className="form-group">
