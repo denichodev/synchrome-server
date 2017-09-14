@@ -44,15 +44,15 @@ const fetchEchelonsById = agencyId => {
 
     const success = res => {
       dispatch(fetchEchelonByIdSuccess(res.data.data));
-    }
+    };
 
     const error = err => {
-      dispatch(fetchEchelonByIdFailure(res.data.data));
-    }
+      dispatch(fetchEchelonByIdFailure(err.data.data));
+    };
 
     http.get(`/agency/${agencyId}/echelons`, success, error);
-  }
-}
+  };
+};
 
 export const echelonActions = {
   fetchEchelonsById,

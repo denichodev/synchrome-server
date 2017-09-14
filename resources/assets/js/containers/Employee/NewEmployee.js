@@ -4,15 +4,67 @@ import { Field, reduxForm, initialize } from 'redux-form';
 import { agencyActions } from '../../ducks/agency';
 import { echelonActions } from '../../ducks/echelon';
 import { employeeActions } from '../../ducks/employee';
-import { FormSelection } from '../../components/Forms';
+import { FormSelection, FormSelectionWithSearch } from '../../components/Forms';
 
 class NewEmployee extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      agencyOptions: [],
+      echelonOptions: []
+    };
+  }
+
   componentDidMount = () => {
     const { fetchAllAgency, fetchWorkshifts, dispatch } = this.props;
 
     fetchAllAgency();
     fetchWorkshifts();
     dispatch(initialize('newEmployeeForm', { workshift_id: 1 }));
+  };
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.agency.data.length > 0) {
+      this.setAgencyOptions(nextProps.agency.data);
+    }
+
+    if (!nextProps.echelon.data) {
+      this.setState({
+        echelonOptions: []
+      });
+      return;
+    }
+
+    if (nextProps.echelon.data.length > 0) {
+      this.setEchelonOptions(nextProps.echelon.data);
+    }
+  }
+
+  setAgencyOptions = agencyData => {
+    const agencyOptions = agencyData.map(agency => {
+      return {
+        value: agency.id,
+        label: agency.name
+      };
+    });
+
+    this.setState({
+      agencyOptions
+    });
+  };
+
+  setEchelonOptions = echelonData => {
+    const echelonOptions = echelonData.map(echelon => {
+      return {
+        value: echelon.id,
+        label: echelon.name
+      };
+    });
+
+    this.setState({
+      echelonOptions
+    });
   };
 
   renderTextField = field => {
@@ -37,8 +89,7 @@ class NewEmployee extends Component {
     const { meta: { touched, error } } = field;
     const className = `form-group ${touched && error ? 'has-danger' : ''}`;
     const { label, name, input } = field;
-    const { agency, onChange } = this.props;
-
+    const { agency } = this.props;
     return (
       <div className={className}>
         <label htmlFor={name}>{label}</label>
@@ -86,10 +137,23 @@ class NewEmployee extends Component {
     );
   };
 
-  handleAgencyChange = e => {
-    const { fetchEchelonsById } = this.props;
+  handleAgencyChange = value => {
+    const { fetchEchelonsById, clearSelectedEchelon } = this.props;
+    if (!value) {
+      clearSelectedEchelon();
+      return;
+    }
 
-    fetchEchelonsById(e.target.value);
+    const val = Object.keys(value)
+      .map(key => {
+        if (typeof value[key] === 'string') {
+          return value[key];
+        }
+        return null;
+      })
+      .join('');
+
+    fetchEchelonsById(val);
   };
 
   onSubmit = values => {
@@ -113,7 +177,12 @@ class NewEmployee extends Component {
                 <Field label="ID" name="id" component={this.renderTextField} />
               </div>
               <div className="col-md-3">
-                <Field label="Workshift" name="workshift_id" component={FormSelection} optionsData={workshifts} />
+                <Field
+                  label="Workshift"
+                  name="workshift_id"
+                  component={FormSelection}
+                  optionsData={workshifts}
+                />
               </div>
             </div>
             <div className="row">
@@ -126,19 +195,25 @@ class NewEmployee extends Component {
               </div>
             </div>
             <div className="row">
-              <div className="col-md-3">
+              <div className="col-md-6">
                 <Field
                   label="Agency"
                   name="agency_id"
-                  component={this.renderAgenciesDropdown}
+                  optionsData={this.state.agencyOptions}
                   onChange={this.handleAgencyChange}
+                  defaultValue={''}
+                  component={FormSelectionWithSearch}
                 />
               </div>
-              <div className="col-md-3">
+            </div>
+            <div className="row">
+              <div className="col-md-6">
                 <Field
-                  label="Echelon"
+                  label="Echelon 2"
                   name="echelon_id"
-                  component={this.renderEchelonsDropdown}
+                  optionsData={this.state.echelonOptions}
+                  defaultValue={''}
+                  component={FormSelectionWithSearch}
                 />
               </div>
             </div>
@@ -179,7 +254,8 @@ const mapDispatchToProps = dispatch => ({
   fetchAllAgency: () => dispatch(agencyActions.fetchAllAgency()),
   fetchEchelonsById: id => dispatch(echelonActions.fetchEchelonsById(id)),
   postEmployee: data => dispatch(employeeActions.postEmployee(data)),
-  fetchWorkshifts: () => dispatch(employeeActions.fetchWorkshift())
+  fetchWorkshifts: () => dispatch(employeeActions.fetchWorkshift()),
+  clearSelectedEchelon: () => dispatch(employeeActions.clearSelectedEchelon())
 });
 
 const Connector = connect(mapStateToProps, mapDispatchToProps)(NewEmployee);

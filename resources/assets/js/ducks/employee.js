@@ -28,6 +28,7 @@ const FETCH_WORKSHIFT_SUCCESS = 'synchrome/employee/fetch_workshift_success';
 const FETCH_WORKSHIFT_FAILURE = 'synchrome/employee/fetch_workshift_failure';
 
 const CLEAR_ACTIVE_EMPLOYEE = 'synchrome/employee/clear_active_employee';
+const CLEAR_SELECTED_ECHELON = 'synchrome/employee/clear_selected_echelon';
 
 export const employeeTypes = {
   FETCH_EMPLOYEE_ALL_REQUEST,
@@ -48,7 +49,8 @@ export const employeeTypes = {
   PATCH_EMPLOYEE_FAILURE,
   PATCH_EMPLOYEE_REQUEST,
   PATCH_EMPLOYEE_SUCCESS,
-  CLEAR_ACTIVE_EMPLOYEE
+  CLEAR_ACTIVE_EMPLOYEE,
+  CLEAR_SELECTED_ECHELON
 };
 
 // Action Creators
@@ -136,9 +138,13 @@ const fetchWorkshiftFailure = payload => ({
   payload
 });
 
+const clearSelectedEchelon = () => ({
+  type: CLEAR_SELECTED_ECHELON
+});
+
 const clearActiveEmployee = () => ({
   type: CLEAR_ACTIVE_EMPLOYEE
-})
+});
 
 const fetchAllEmployee = () => (
   (dispatch) => {
@@ -251,7 +257,8 @@ export const employeeActions = {
   deleteEmployee,
   fetchWorkshift,
   patchEmployee,
-  clearActiveEmployee
+  clearActiveEmployee,
+  clearSelectedEchelon
 };
 
 // Reducer

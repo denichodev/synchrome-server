@@ -10,6 +10,7 @@ import echelon from './echelon';
 import employee from './employee';
 import cluster from './cluster';
 import user from './user';
+import reduxFormPlugin from './reduxFormPlugin';
 
 export const initialState = {
   router: {},
@@ -25,7 +26,7 @@ export const initialState = {
 
 const rootReducer = combineReducers({
   router,
-  form: formReducer.plugin(event.reduxFormPlugin),
+  form: formReducer.plugin(reduxFormPlugin),
   activeCalendar: calendar.activeCalendarReducer,
   calendars: calendar.allCalendarReducer,
   event: event.eventReducer,
