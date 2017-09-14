@@ -43,6 +43,8 @@ Route::group(['middleware' => ['api']], function () {
     Route::post('cluster/{id}/keys', 'Api\ClusterController@generateKey')->name('api.clusters.generate_key');
     Route::post('cluster/keys/{key_id}/disable', 'Api\ClusterController@disablekey')->name('api.clusters.disable_key');
 
+    Route::get('religion', 'Api\ReligionController@index')->name('api.religions.index');
+
     Route::group(['middleware' => 'jwt_admin'], function () {
         Route::get('user/roles', 'Api\UserController@roles')->name('api.users.roles');
         Route::get('user', 'Api\UserController@index')->name('api.users.index');
