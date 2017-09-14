@@ -8,24 +8,42 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class ScanLog extends Model
 {
     use SoftDeletes;
-    
+
+    protected $casts = [
+        'status' => 'boolean'
+    ];
+
     protected $fillable = [
         'date',
         'employee_id',
         'workshift_in',
         'workshift_out',
-        'checkin_at',
-        'checkout_at',
+        'checkin',
+        'checkout',
         'absence_type_id',
+        'status',
+        'early_by',
+        'late_by',
+        'work_duration'
     ];
 
-    public function employee()
-    {
-        return $this->belongsTo(Employee::class);
-    }
+    protected $hidden = [
+        'employee_id',
+        'absence_type_id',
+        'deleted_at'
+    ];
+
+    protected $dates = [
+        'deleted_at'
+    ];
 
     public function absenceType()
     {
         return $this->belongsTo(AbsenceType::class);
+    }
+
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class);
     }
 }
