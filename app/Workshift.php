@@ -7,8 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 class Workshift extends Model
 {
     protected $fillable = [
-        'name',
-        'in',
-        'out'
+        'id',
+        'name'
     ];
+
+    public function details()
+    {
+        return $this->hasMany(Shift::class);
+    }
 }
