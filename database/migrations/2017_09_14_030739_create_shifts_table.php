@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAbsenceTypesTable extends Migration
+class CreateShiftsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,14 @@ class CreateAbsenceTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('absence_types', function (Blueprint $table) {
-            $table->string('id', 2);
-            $table->primary('id');
-            $table->string('name');
+        Schema::create('shifts', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('day', 3);
+            $table->unsignedInteger('workshift_id');
+            $table->foreign('workshift_id')
+                ->references('id')->on('workshifts');
+            $table->time('in');
+            $table->time('out');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -29,6 +33,6 @@ class CreateAbsenceTypesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('absence_types');
+        Schema::dropIfExists('shifts');
     }
 }

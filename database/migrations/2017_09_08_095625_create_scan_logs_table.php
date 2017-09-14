@@ -15,17 +15,21 @@ class CreateScanLogsTable extends Migration
     {
         Schema::create('scan_logs', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->date('date');
             $table->string('employee_id');
             $table->foreign('employee_id')
                 ->references('id')->on('employees');
+            $table->date('date');
             $table->time('workshift_in');
             $table->time('workshift_out');
-            $table->time('checkin_at');
-            $table->time('checkout_at');
+            $table->time('checkin')->nullable();
+            $table->time('checkout')->nullable();
             $table->string('absence_type_id', 2)->nullable();
             $table->foreign('absence_type_id')
                 ->references('id')->on('absence_types');
+            $table->boolean('status')->default(false);
+            $table->unsignedInteger('early_by')->nullable();
+            $table->unsignedInteger('late_by')->nullable();
+            $table->unsignedInteger('work_duration')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
