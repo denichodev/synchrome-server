@@ -19,12 +19,14 @@ class Employee extends Model
         'id',
         'name',
         'echelon_id',
-        'workshift_id'
+        'workshift_id',
+        'religion_id'
     ];
 
     protected $hidden = [
         'echelon_id',
-        'workshift_id'
+        'workshift_id',
+        'religion_id'
     ];
 
     protected $dates = [
@@ -44,5 +46,10 @@ class Employee extends Model
     public function workshift()
     {
         return $this->belongsTo(Workshift::class);
+    }
+
+    public function religion()
+    {
+        return $this->belongsTo(Religion::class);
     }
 }
