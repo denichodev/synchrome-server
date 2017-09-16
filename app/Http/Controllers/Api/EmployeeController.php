@@ -36,6 +36,11 @@ class EmployeeController extends Controller
             'echelon_id' => 'required',
             'workshift_id' => 'required',
             'religion_id' => 'required',
+            'married' => 'required|boolean',
+            'gender' => 'required',
+            'address' => 'required',
+            'phone' => 'required|max:12',
+            'rank_id' => 'sometimes',
             'id' => 'required|unique:employees,id',
             'name' => 'required'
         ]);
@@ -107,6 +112,11 @@ class EmployeeController extends Controller
             'echelon_id' => 'required',
             'workshift_id' => 'required',
             'religion_id' => 'required',
+            'married' => 'required|boolean',
+            'gender' => 'required',
+            'address' => 'required',
+            'phone' => 'required|max:12',
+            'rank_id' => 'sometimes',
             'id' => 'required|unique:employees,id,' . $id,
             'name' => 'required'
         ]);
