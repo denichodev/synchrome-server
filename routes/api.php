@@ -1,8 +1,4 @@
 <?php
-
-use Illuminate\Http\Request;
-use App\Key;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -14,7 +10,17 @@ use App\Key;
 |
 */
 
-Route::group(['middleware' => ['api']], function () {
+if (App::environment('local')) {
+    $config = [
+        'middleware' => ['api']
+    ];
+} else {
+    $config = [
+        'middleware' => ['api', 'jwt_auth']
+    ];
+}
+
+Route::group($config, function () {
     Route::get('check-user', 'Auth\AuthController@checkUser')->name('api.check_user');
 
     Route::get('calendar', 'Api\CalendarController@index')->name('api.calendars.index');
