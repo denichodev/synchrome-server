@@ -10,7 +10,8 @@ class Employee extends Model
     use SoftDeletes;
 
     protected $casts = [
-        'id' => 'string'
+        'id' => 'string',
+        'married' => 'boolean'
     ];
     
     public $incrementing = false;
@@ -20,7 +21,11 @@ class Employee extends Model
         'name',
         'echelon_id',
         'workshift_id',
-        'religion_id'
+        'religion_id',
+        'gender',
+        'married',
+        'address',
+        'phone'
     ];
 
     protected $hidden = [
@@ -51,5 +56,15 @@ class Employee extends Model
     public function religion()
     {
         return $this->belongsTo(Religion::class);
+    }
+
+    public function rankHistory()
+    {
+        return $this->belongsToMany(Rank::class, 'rank_histories');
+    }
+
+    public function currentRank()
+    {
+        return $this->rankHistory()->orderBy('created_at', 'DESC')->first();
     }
 }
