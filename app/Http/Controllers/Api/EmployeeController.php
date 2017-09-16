@@ -17,10 +17,10 @@ class EmployeeController extends Controller
             'echelon' => function ($query) {
                 $query->select(['id', 'name', 'agency_id']);
             }, 
-            
             'echelon.agency' => function ($query) {
                 $query->select(['id', 'name']);
-        }])
+            }
+        ])
         ->get(['id', 'name', 'echelon_id']);
 
         return response()
@@ -82,6 +82,7 @@ class EmployeeController extends Controller
             'echelon.agency' => function ($query) {
                 $query->select(['id', 'name']);
             },
+            'rankHistory',
             'workshift'
         ])->find($id);
 
