@@ -74,13 +74,15 @@ class NewEmployee extends Component {
 
     return (
       <div className={className}>
-        <label htmlFor={name}>{label}</label>
-        <input
-          type="text"
-          className="form-control"
-          placeholder={placeholder}
-          {...input}
-        />
+        <label className="col-sm-2 control-label" htmlFor={name}>{label}</label>
+        <div className="col-sm-10">
+          <input
+            type="text"
+            className="form-control"
+            placeholder={placeholder}
+            {...input}
+          />
+        </div>
       </div>
     );
   };
@@ -92,16 +94,18 @@ class NewEmployee extends Component {
     const { agency } = this.props;
     return (
       <div className={className}>
-        <label htmlFor={name}>{label}</label>
-        <select className="form-control" onChange {...input}>
-          {agency.data.map(row => {
-            return (
-              <option key={row.id} value={row.id}>
-                {row.name}
-              </option>
-            );
-          })}
-        </select>
+        <label className="col-sm-2 control-label" htmlFor={name}>{label}</label>
+        <div className="col-sm-10">
+          <select className="form-control" onChange {...input}>
+            {agency.data.map(row => {
+              return (
+                <option key={row.id} value={row.id}>
+                  {row.name}
+                </option>
+              );
+            })}
+          </select>
+        </div>
       </div>
     );
   };
@@ -115,24 +119,28 @@ class NewEmployee extends Component {
     if (echelon != null) {
       return (
         <div className={className}>
-          <label htmlFor={name}>{label}</label>
-          <select className="form-control" {...input}>
-            {echelon.data.map(row => {
-              return (
-                <option key={row.id} value={row.id}>
-                  {row.name}
-                </option>
-              );
-            })}
-          </select>
+          <label className="col-sm-2 control-label" htmlFor={name}>{label}</label>
+          <div className="col-sm-10">
+            <select className="form-control" {...input}>
+              {echelon.data.map(row => {
+                return (
+                  <option key={row.id} value={row.id}>
+                    {row.name}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
         </div>
       );
     }
 
     return (
       <div className={className}>
-        <label htmlFor={name}>{label}</label>
-        <select className="form-control" {...input} />
+        <label className="col-sm-2" htmlFor={name}>{label}</label>
+        <div className="col-sm-10">
+          <select className="form-control" {...input} />
+        </div>
       </div>
     );
   };
@@ -171,31 +179,49 @@ class NewEmployee extends Component {
           <h3 className="box-title">Add New Employee</h3>
         </div>
         <div className="box-body">
-          <form onSubmit={handleSubmit(this.onSubmit)}>
+          <form className="form-horizontal" onSubmit={handleSubmit(this.onSubmit)}>
             <div className="row">
-              <div className="col-md-3">
-                <Field label="ID" name="id" component={this.renderTextField} />
+              <div className="col-md-6">
+                <div className="row">
+                  <Field label="ID" name="id" component={this.renderTextField} />                
+                  <Field
+                    label="Name"
+                    name="name"
+                    component={this.renderTextField}
+                  />
+                  <Field
+                    label="Gender"
+                    name="gender"
+                    component={FormSelection}
+                  />
+                  <Field
+                    label="Address"
+                    name="address"
+                    component={this.renderTextField}
+                  />
+                  <Field
+                    label="Phone"
+                    name="phone"
+                    component={this.renderTextField}
+                  />
+                  <Field
+                    label="Religion"
+                    name="religion_id"
+                    component={FormSelection}
+                  />
+                  <Field
+                    label="Married"
+                    name="married"
+                    component={FormSelection}
+                  />
+                </div>
               </div>
-              <div className="col-md-3">
+              <div className="col-md-6">
                 <Field
-                  label="Workshift"
-                  name="workshift_id"
+                  label="Rank"
+                  name="rank_id"
                   component={FormSelection}
-                  optionsData={workshifts}
                 />
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-md-6">
-                <Field
-                  label="Name"
-                  name="name"
-                  component={this.renderTextField}
-                />
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-md-6">
                 <Field
                   label="Agency"
                   name="agency_id"
@@ -204,24 +230,24 @@ class NewEmployee extends Component {
                   defaultValue={''}
                   component={FormSelectionWithSearch}
                 />
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-md-6">
                 <Field
-                  label="Echelon 2"
+                  label="Echelon"
                   name="echelon_id"
                   optionsData={this.state.echelonOptions}
                   defaultValue={''}
                   component={FormSelectionWithSearch}
                 />
+                <Field
+                  label="Workshift"
+                  name="workshift_id"
+                  component={FormSelection}
+                  optionsData={workshifts}
+                />
               </div>
             </div>
-            <div className="form-group">
-              <button type="submit" className="btn btn-primary">
-                Save
-              </button>
-            </div>
+            <button type="submit" className="btn btn-primary">
+              Save
+            </button>
           </form>
         </div>
       </div>
