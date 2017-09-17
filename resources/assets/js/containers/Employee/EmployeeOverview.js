@@ -6,6 +6,58 @@ import { employeeActions } from '../../ducks/employee';
 import FilterableTable from '../../components/DataTable/FilterableTable';
 
 class EmployeeOverview extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      columns: [
+        {
+          Header: 'NIP',
+          accessor: 'id'
+        },
+        {
+          Header: 'Name',
+          accessor: 'name',
+          filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ['name'] }),
+          filterAll: true
+        },
+        {
+          Header: 'Agency',
+          accessor: 'agency',
+          filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ['agency'] }),
+          filterAll: true
+        },
+        {
+          Header: 'Echelon',
+          accessor: 'echelon',
+          filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ['echelon'] }),
+          filterAll: true
+        },
+        {
+          Header: 'Actions',
+          filterable: false,
+          Cell: cellProps => (
+            <div>
+              <Link
+                to={`/panel/employees/${cellProps.original.id}`}
+                className="btn btn-primary btn-xs"
+              >
+                Edit
+              </Link>&nbsp;
+              <button
+                onClick={() => this.handleDeleteClick(cellProps.original.id)}
+                type="button"
+                className="btn btn-danger btn-xs"
+              >
+                Delete
+              </button>
+            </div>
+          )
+        }
+      ]
+    };
+  }
+
   componentDidMount() {
     const { fetchAllEmployee } = this.props;
 
@@ -57,8 +109,8 @@ class EmployeeOverview extends Component {
       return {
         id: emp.id,
         name: emp.name,
-        agencyName: emp.echelon.agency.name,
-        echelonName: emp.echelon.name
+        agency: emp.echelon.agency.name,
+        echelon: emp.echelon.name
       };
     });
   }
@@ -69,7 +121,6 @@ class EmployeeOverview extends Component {
   };
 
   render() {
-    console.log('employee data', this.getEmployeeData());
     return (
       <div className="box">
         <div className="box-header">
@@ -97,8 +148,8 @@ class EmployeeOverview extends Component {
           </table> */}
           <div className="col-md-12">
             <FilterableTable
-              data={mockData}
-              columns={columns}
+              data={this.getEmployeeData()}
+              columns={this.state.columns}
             />
           </div>
         </div>
@@ -106,36 +157,6 @@ class EmployeeOverview extends Component {
     );
   }
 }
-
-const columns = [
-  {
-    Header: 'NIP',
-    accessor: 'id'
-  },
-  {
-    Header: 'Name',
-    accessor: 'name',
-    filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ['name'] }),
-    filterAll: true
-  },
-  {
-    Header: 'Agency',
-    accessor: 'agency'
-  },
-  {
-    Header: 'Echelon',
-    accessor: 'echelon'
-  },
-];
-
-const mockData = [
-  {
-    id: '123124',
-    name: 'Deni Cho',
-    agency: 'Hello Agency',
-    echelon: 'Hello Echelon'
-  }
-];
 
 const mapStateToProps = state => ({
   employeeData: state.employee.data,
