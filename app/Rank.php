@@ -21,4 +21,8 @@ class Rank extends Model
         'allowance',
         'meal_allowance'
     ];
+
+    protected $hidden = [
+        'pivot'
+    ];
 }
