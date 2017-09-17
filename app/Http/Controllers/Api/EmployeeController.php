@@ -213,6 +213,7 @@ class EmployeeController extends Controller
 
         try {
             DB::beginTransaction();
+            $employee->rankHistory()->detach();
             $employee->delete();
             DB::commit();
 
