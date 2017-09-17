@@ -65,6 +65,6 @@ class Employee extends Model
 
     public function currentRank()
     {
-        return $this->rankHistory()->orderBy('created_at', 'DESC')->first();
+        return $this->rankHistory()->orderBy('rank_histories.created_at', 'DESC')->first();
     }
 }

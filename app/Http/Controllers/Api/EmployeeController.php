@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Employee;
 use App\Workshift;
+use App\Rank;
+use Carbon\Carbon;
 use Validator;
 use DB;
 
@@ -53,15 +55,29 @@ class EmployeeController extends Controller
                 ]);
         }
 
+        $user_data = $request->all();
+
         try {
             DB::beginTransaction();
             $employee = Employee::create($request->all());
+            $employee->rankHistory()->attach($user_data['rank_id']);
             DB::commit();
+
+            $employee = Employee::with([
+                'echelon' => function ($query) {
+                    $query->select(['id', 'name', 'agency_id']);
+                }, 
+                'echelon.agency' => function ($query) {
+                    $query->select(['id', 'name']);
+                },
+                'workshift'
+            ])->find($employee->id);
+            $employee->rank = $employee->currentRank();
 
             return response()
                 ->json([
                     'result' => 'success',
-                    'data' => Employee::with(['echelon', 'workshift'])->find($employee->id)
+                    'data' => $employee
                 ]);
         } catch (\Exception $e) {
             DB::rollback();
@@ -98,7 +114,7 @@ class EmployeeController extends Controller
                 ], 404);
         }
 
-        $employee->rank = $employee->rankHistory()->orderBy('created_at', 'DESC')->first();
+        $employee->rank = $employee->currentRank();
 
         return response()
             ->json([
@@ -118,7 +134,6 @@ class EmployeeController extends Controller
             'address' => 'required',
             'phone' => 'required|max:12',
             'rank_id' => 'sometimes',
-            'id' => 'required|unique:employees,id,' . $id,
             'name' => 'required'
         ]);
 
@@ -131,6 +146,7 @@ class EmployeeController extends Controller
         }
 
         $employee = Employee::find($id);
+        $user_data = $request->except('id');
 
         if (is_null($employee)) {
             return response()
@@ -142,13 +158,31 @@ class EmployeeController extends Controller
 
         try {
             DB::beginTransaction();
-            $employee->update($request->except('id'));
+            $employee->update($user_data);
+
+            if ($employee->rankHistory()->orderBy('created_at', 'DESC')->first()->id !== $user_data['rank_id']) {
+                $now = Carbon::now();
+
+                $employee->rankHistory()->attach($user_data['rank_id'], ['created_at' => $now, 'updated_at' => $now]);
+            }
+
             DB::commit();
+
+            $employee = Employee::with([
+                'echelon' => function ($query) {
+                    $query->select(['id', 'name', 'agency_id']);
+                }, 
+                'echelon.agency' => function ($query) {
+                    $query->select(['id', 'name']);
+                },
+                'workshift'
+            ])->find($employee->id);
+            $employee->rank = $employee->currentRank();
 
             return response()
                 ->json([
                     'result' => 'success',
-                    'data' => Employee::with(['echelon', 'workshift'])->find($employee->id)
+                    'data' => $employee
                 ]);
         } catch (\Exception $e) {
             DB::rollback();
