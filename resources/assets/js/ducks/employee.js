@@ -233,7 +233,7 @@ const fetchAllRank = () => (
       dispatch(fetchRankFailure(err.message));
     };
 
-    http.get('/rank', success, error);
+    http.get('employee/ranks', success, error);
   }
 );
 
@@ -278,7 +278,8 @@ const patchEmployee = (id, data) => (
     dispatch(patchEmployeeRequest());
 
     const success = res => {
-      dispatch(push('/panel/employees'));      
+      console.log(res);
+      dispatch(push('/panel/employees'));
       dispatch(patchEmployeeSuccess(res.data.data));
       dispatch(clearActiveEmployee());
       dispatch(echelonActions.clearActiveEchelon());
