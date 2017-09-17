@@ -27,6 +27,14 @@ const FETCH_WORKSHIFT_REQUEST = 'synchrome/employee/fetch_workshift_request';
 const FETCH_WORKSHIFT_SUCCESS = 'synchrome/employee/fetch_workshift_success';
 const FETCH_WORKSHIFT_FAILURE = 'synchrome/employee/fetch_workshift_failure';
 
+const FETCH_RELIGION_REQUEST = 'synchrome/employee/fetch_religion_request';
+const FETCH_RELIGION_SUCCESS = 'synchrome/employee/fetch_religion_success';
+const FETCH_RELIGION_FAILURE = 'synchrome/employee/fetch_religion_failure';
+
+const FETCH_RANK_REQUEST = 'synchrome/employee/fetch_rank_request';
+const FETCH_RANK_SUCCESS = 'synchrome/employee/fetch_rank_success';
+const FETCH_RANK_FAILURE = 'synchrome/employee/fetch_rank_failure';
+
 const CLEAR_ACTIVE_EMPLOYEE = 'synchrome/employee/clear_active_employee';
 const CLEAR_SELECTED_ECHELON = 'synchrome/employee/clear_selected_echelon';
 
@@ -50,7 +58,13 @@ export const employeeTypes = {
   PATCH_EMPLOYEE_REQUEST,
   PATCH_EMPLOYEE_SUCCESS,
   CLEAR_ACTIVE_EMPLOYEE,
-  CLEAR_SELECTED_ECHELON
+  CLEAR_SELECTED_ECHELON,
+  FETCH_RELIGION_FAILURE,
+  FETCH_RELIGION_REQUEST,
+  FETCH_RELIGION_SUCCESS,
+  FETCH_RANK_REQUEST,
+  FETCH_RANK_FAILURE,
+  FETCH_RANK_SUCCESS
 };
 
 // Action Creators
@@ -138,6 +152,35 @@ const fetchWorkshiftFailure = payload => ({
   payload
 });
 
+const fetchReligionRequest = () => ({
+  type: FETCH_RELIGION_REQUEST
+});
+
+const fetchReligionSuccess = payload => ({
+  type: FETCH_RELIGION_SUCCESS,
+  payload
+});
+
+const fetchReligionFailure = payload => ({
+  type: FETCH_RELIGION_FAILURE,
+  payload
+});
+
+const fetchRankRequest = () => ({
+  type: FETCH_RANK_REQUEST
+});
+
+const fetchRankSuccess = payload => ({
+  type: FETCH_RANK_SUCCESS,
+  payload
+});
+
+const fetchRankFailure = payload => ({
+  type: FETCH_RANK_FAILURE,
+  payload
+});
+
+
 const clearSelectedEchelon = () => ({
   type: CLEAR_SELECTED_ECHELON
 });
@@ -162,6 +205,38 @@ const fetchAllEmployee = () => (
   }
 );
 
+const fetchAllReligion = () => (
+  (dispatch) => {
+    dispatch(fetchReligionRequest());
+
+    const success = (res) => {
+      dispatch(fetchReligionSuccess(res.data.data));
+    };
+
+    const error = (err) => {
+      dispatch(fetchReligionFailure(err.message));
+    };
+
+    http.get('/religion', success, error);
+  }
+);
+
+const fetchAllRank = () => (
+  (dispatch) => {
+    dispatch(fetchRankRequest());
+
+    const success = (res) => {
+      dispatch(fetchRankSuccess(res.data.data));
+    };
+
+    const error = (err) => {
+      dispatch(fetchRankFailure(err.message));
+    };
+
+    http.get('/rank', success, error);
+  }
+);
+
 const fetchEmployeeById = (id) => (
   (dispatch) => {
     dispatch(fetchEmployeeByIdRequest());
@@ -178,9 +253,9 @@ const fetchEmployeeById = (id) => (
   }
 );
 
-const postEmployee = (data) => (
+const postEmployee = (data) => {
   // MANIPULATE data HERE IF YOU WANT TO
-  (dispatch) => {
+  return (dispatch) => {
     dispatch(postEmployeeRequest());
 
     const success = res => {
@@ -194,8 +269,8 @@ const postEmployee = (data) => (
 
 
     http.post('/employee', data, success, error);
-  }
-);
+  };
+};
 
 const patchEmployee = (id, data) => (
   // MANIPULATE data HERE IF YOU WANT TO
@@ -258,7 +333,9 @@ export const employeeActions = {
   fetchWorkshift,
   patchEmployee,
   clearActiveEmployee,
-  clearSelectedEchelon
+  clearSelectedEchelon,
+  fetchAllReligion,
+  fetchAllRank
 };
 
 // Reducer
@@ -332,6 +409,26 @@ const employeeReducer = (state = initialState, action) => {
       return {
         ...state,
         active: {}
+      };
+    case FETCH_RELIGION_SUCCESS:
+      return {
+        ...state,
+        religions: action.payload
+      };
+    case FETCH_RELIGION_FAILURE:
+      return {
+        ...state,
+        error: action.payload
+      };
+    case FETCH_RANK_SUCCESS:
+      return {
+        ...state,
+        ranks: action.payload
+      };
+    case FETCH_RANK_FAILURE:
+      return {
+        ...state,
+        error: action.payload
       };
     default:
       return state;

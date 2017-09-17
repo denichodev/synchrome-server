@@ -7,6 +7,28 @@ import { employeeActions } from '../../ducks/employee';
 import { FormSelection, FormSelectionWithSearch } from '../../components/Forms';
 
 class NewEmployee extends Component {
+  static genderOptions = [
+    {
+      id: 'm',
+      name: 'Male'
+    },
+    {
+      id: 'f',
+      name: 'Female'
+    }
+  ];
+
+  static maritalStatusOptions = [
+    {
+      id: 0,
+      name: 'Unmarried'
+    },
+    {
+      id: 1,
+      name: 'Married'
+    }
+  ];
+
   constructor(props) {
     super(props);
 
@@ -17,11 +39,17 @@ class NewEmployee extends Component {
   }
 
   componentDidMount = () => {
-    const { fetchAllAgency, fetchWorkshifts, dispatch } = this.props;
+    const { fetchAllAgency, fetchWorkshifts, dispatch, fetchReligions, fetchRanks } = this.props;
 
     fetchAllAgency();
     fetchWorkshifts();
-    dispatch(initialize('newEmployeeForm', { workshift_id: 1 }));
+    fetchReligions();
+    fetchRanks();
+    dispatch(initialize('newEmployeeForm', {
+      workshift_id: 1,
+      gender: 'm',
+      married: false
+    }));
   };
 
   componentWillReceiveProps(nextProps) {
@@ -193,6 +221,7 @@ class NewEmployee extends Component {
                     label="Gender"
                     name="gender"
                     component={FormSelection}
+                    optionsData={NewEmployee.genderOptions}                    
                   />
                   <Field
                     label="Address"
@@ -207,12 +236,14 @@ class NewEmployee extends Component {
                   <Field
                     label="Religion"
                     name="religion_id"
+                    optionsData={this.props.religions}
                     component={FormSelection}
                   />
                   <Field
                     label="Married"
                     name="married"
                     component={FormSelection}
+                    optionsData={NewEmployee.maritalStatusOptions}
                   />
                 </div>
               </div>
@@ -221,6 +252,7 @@ class NewEmployee extends Component {
                   label="Rank"
                   name="rank_id"
                   component={FormSelection}
+                  optionsData={this.props.ranks}
                 />
                 <Field
                   label="Agency"
@@ -273,7 +305,9 @@ const formOptions = {
 const mapStateToProps = state => ({
   agency: state.agency,
   echelon: state.echelon,
-  workshifts: state.employee.workshifts
+  workshifts: state.employee.workshifts,
+  religions: state.employee.religions,
+  ranks: state.employee.ranks
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -281,7 +315,9 @@ const mapDispatchToProps = dispatch => ({
   fetchEchelonsById: id => dispatch(echelonActions.fetchEchelonsById(id)),
   postEmployee: data => dispatch(employeeActions.postEmployee(data)),
   fetchWorkshifts: () => dispatch(employeeActions.fetchWorkshift()),
-  clearSelectedEchelon: () => dispatch(employeeActions.clearSelectedEchelon())
+  clearSelectedEchelon: () => dispatch(employeeActions.clearSelectedEchelon()),
+  fetchReligions: () => dispatch(employeeActions.fetchAllReligion()),
+  fetchRanks: () => dispatch(employeeActions.fetchAllRank())
 });
 
 const Connector = connect(mapStateToProps, mapDispatchToProps)(NewEmployee);
