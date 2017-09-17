@@ -7,18 +7,20 @@ const FormSelection = field => {
   const { input, optionsData, defaultValue, label } = field;
   return (
     <div className={className}>
-      <label htmlFor="name">
+      <label className="col-sm-2 control-label" htmlFor="name">
         {label}
       </label>
-      <select className="form-control" value={defaultValue} {...input}>
-        {optionsData.map(opt => {
-          return (
-            <option key={opt.id} value={opt.id}>
-              {opt.name}
-            </option>
-          );
-        })}
-      </select>
+      <div className="col-sm-10">
+        <select className="form-control" value={defaultValue} {...input}>
+          {optionsData.map(opt => {
+            return (
+              <option key={opt.id} value={opt.id}>
+                {opt.name}
+              </option>
+            );
+          })}
+        </select>
+      </div>
     </div>
   );
 };

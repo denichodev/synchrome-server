@@ -9,16 +9,18 @@ const FormSelectionWithSearch = field => {
 
   return (
     <div className={className}>
-      <label htmlFor="name">
+      <label className="col-sm-2 control-label" htmlFor="name">
         {label}
       </label>
-      <Select
-        {...input}
-        options={optionsData}
-        onChange={(value) => { input.onChange(value ? value.value : null); }}
-        onBlur={() => { field.input.onBlur(field.input.value); }}
-        clearable={clearable}
-      />
+      <div className="col-sm-10">
+        <Select
+          {...input}
+          options={optionsData}
+          onChange={(value) => { input.onChange(value ? value.value : null); }}
+          onBlur={() => { field.input.onBlur(field.input.value); }}
+          clearable={clearable}
+        />
+      </div>
     </div>
   );
 };
