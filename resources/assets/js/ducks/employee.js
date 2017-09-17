@@ -27,6 +27,10 @@ const FETCH_WORKSHIFT_REQUEST = 'synchrome/employee/fetch_workshift_request';
 const FETCH_WORKSHIFT_SUCCESS = 'synchrome/employee/fetch_workshift_success';
 const FETCH_WORKSHIFT_FAILURE = 'synchrome/employee/fetch_workshift_failure';
 
+const FETCH_RELIGION_REQUEST = 'synchrome/employee/fetch_religion_request';
+const FETCH_RELIGION_SUCCESS = 'synchrome/employee/fetch_religion_success';
+const FETCH_RELIGION_FAILURE = 'synchrome/employee/fetch_religion_failure';
+
 const CLEAR_ACTIVE_EMPLOYEE = 'synchrome/employee/clear_active_employee';
 const CLEAR_SELECTED_ECHELON = 'synchrome/employee/clear_selected_echelon';
 
@@ -50,7 +54,10 @@ export const employeeTypes = {
   PATCH_EMPLOYEE_REQUEST,
   PATCH_EMPLOYEE_SUCCESS,
   CLEAR_ACTIVE_EMPLOYEE,
-  CLEAR_SELECTED_ECHELON
+  CLEAR_SELECTED_ECHELON,
+  FETCH_RELIGION_FAILURE,
+  FETCH_RELIGION_REQUEST,
+  FETCH_RELIGION_SUCCESS
 };
 
 // Action Creators
@@ -138,6 +145,20 @@ const fetchWorkshiftFailure = payload => ({
   payload
 });
 
+const fetchReligionRequest = () => ({
+  type: FETCH_RELIGION_REQUEST
+});
+
+const fetchReligionSuccess = payload => ({
+  type: FETCH_RELIGION_SUCCESS,
+  payload
+});
+
+const fetchReligionFailure = payload => ({
+  type: FETCH_RELIGION_FAILURE,
+  payload
+});
+
 const clearSelectedEchelon = () => ({
   type: CLEAR_SELECTED_ECHELON
 });
@@ -159,6 +180,22 @@ const fetchAllEmployee = () => (
     };
 
     http.get('/employee', success, error);
+  }
+);
+
+const fetchAllReligion = () => (
+  (dispatch) => {
+    dispatch(fetchReligionRequest());
+
+    const success = (res) => {
+      dispatch(fetchReligionSuccess(res.data.data));
+    };
+
+    const error = (err) => {
+      dispatch(fetchReligionFailure(err.message));
+    };
+
+    http.get('/religion', success, error);
   }
 );
 
@@ -258,7 +295,8 @@ export const employeeActions = {
   fetchWorkshift,
   patchEmployee,
   clearActiveEmployee,
-  clearSelectedEchelon
+  clearSelectedEchelon,
+  fetchAllReligion
 };
 
 // Reducer
@@ -332,6 +370,16 @@ const employeeReducer = (state = initialState, action) => {
       return {
         ...state,
         active: {}
+      };
+    case FETCH_RELIGION_SUCCESS:
+      return {
+        ...state,
+        religions: action.payload
+      };
+    case FETCH_RELIGION_FAILURE:
+      return {
+        ...state,
+        error: action.payload
       };
     default:
       return state;

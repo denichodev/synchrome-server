@@ -17,10 +17,11 @@ class NewEmployee extends Component {
   }
 
   componentDidMount = () => {
-    const { fetchAllAgency, fetchWorkshifts, dispatch } = this.props;
+    const { fetchAllAgency, fetchWorkshifts, dispatch, fetchReligions } = this.props;
 
     fetchAllAgency();
     fetchWorkshifts();
+    fetchReligions();
     dispatch(initialize('newEmployeeForm', { workshift_id: 1 }));
   };
 
@@ -207,6 +208,7 @@ class NewEmployee extends Component {
                   <Field
                     label="Religion"
                     name="religion_id"
+                    optionsData={this.props.religions}
                     component={FormSelection}
                   />
                   <Field
@@ -273,7 +275,8 @@ const formOptions = {
 const mapStateToProps = state => ({
   agency: state.agency,
   echelon: state.echelon,
-  workshifts: state.employee.workshifts
+  workshifts: state.employee.workshifts,
+  religions: state.employee.religions
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -281,7 +284,8 @@ const mapDispatchToProps = dispatch => ({
   fetchEchelonsById: id => dispatch(echelonActions.fetchEchelonsById(id)),
   postEmployee: data => dispatch(employeeActions.postEmployee(data)),
   fetchWorkshifts: () => dispatch(employeeActions.fetchWorkshift()),
-  clearSelectedEchelon: () => dispatch(employeeActions.clearSelectedEchelon())
+  clearSelectedEchelon: () => dispatch(employeeActions.clearSelectedEchelon()),
+  fetchReligions: () => dispatch(employeeActions.fetchAllReligion())
 });
 
 const Connector = connect(mapStateToProps, mapDispatchToProps)(NewEmployee);
