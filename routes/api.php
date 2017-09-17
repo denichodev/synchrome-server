@@ -33,6 +33,8 @@ Route::group($config, function () {
     Route::get('agency', 'Api\AgencyController@index')->name('api.agencies.index');
     Route::get('agency/{id}/echelons', 'Api\AgencyController@echelons')->name('api.agencies.echelons');
 
+    Route::get('rank', 'Api\RankController@index')->name('api.ranks.index');
+
     Route::get('employee', 'Api\EmployeeController@index')->name('api.employees.index');
     Route::post('employee', 'Api\EmployeeController@store')->name('api.employees.store');
     Route::get('employee/workshifts', 'Api\EmployeeController@workshifts')->name('api.employees.workshifts');

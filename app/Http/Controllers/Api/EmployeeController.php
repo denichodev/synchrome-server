@@ -87,7 +87,6 @@ class EmployeeController extends Controller
             'echelon.agency' => function ($query) {
                 $query->select(['id', 'name']);
             },
-            'rankHistory',
             'workshift'
         ])->find($id);
 
@@ -98,6 +97,8 @@ class EmployeeController extends Controller
                     'errors' => ['employee_not_found']
                 ], 404);
         }
+
+        $employee->rank = $employee->rankHistory()->orderBy('created_at', 'DESC')->first();
 
         return response()
             ->json([
