@@ -10,7 +10,9 @@ class Rank extends Model
     use SoftDeletes;
 
     protected $casts = [
-        'id' => 'string'
+        'id' => 'string',
+        'allowance' => 'double',
+        'meal_allowance' => 'double'
     ];
 
     protected $fillable = [
