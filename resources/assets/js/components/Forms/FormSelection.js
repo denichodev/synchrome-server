@@ -7,10 +7,10 @@ const FormSelection = field => {
   const { input, optionsData, defaultValue, label } = field;
   return (
     <div className={className}>
-      <label className="col-sm-2 control-label" htmlFor="name">
+      <label htmlFor="name">
         {label}
       </label>
-      <div className="col-sm-10">
+      <div>
         <select className="form-control" value={defaultValue} {...input}>
           {optionsData.map(opt => {
             return (

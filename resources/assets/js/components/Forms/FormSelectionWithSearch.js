@@ -9,10 +9,10 @@ const FormSelectionWithSearch = field => {
 
   return (
     <div className={className}>
-      <label className="col-sm-2 control-label" htmlFor="name">
+      <label className="control-label" htmlFor="name">
         {label}
       </label>
-      <div className="col-sm-10">
+      <div>
         <Select
           {...input}
           options={optionsData}

@@ -4,7 +4,7 @@ import { Field, reduxForm, initialize } from 'redux-form';
 import { agencyActions } from '../../ducks/agency';
 import { echelonActions } from '../../ducks/echelon';
 import { employeeActions } from '../../ducks/employee';
-import { FormSelection, FormSelectionWithSearch } from '../../components/Forms';
+import { FormSelection, FormSelectionWithSearch, FormText } from '../../components/Forms';
 
 class NewEmployee extends Component {
   static genderOptions = [
@@ -39,17 +39,25 @@ class NewEmployee extends Component {
   }
 
   componentDidMount = () => {
-    const { fetchAllAgency, fetchWorkshifts, dispatch, fetchReligions, fetchRanks } = this.props;
+    const {
+      fetchAllAgency,
+      fetchWorkshifts,
+      dispatch,
+      fetchReligions,
+      fetchRanks
+    } = this.props;
 
     fetchAllAgency();
     fetchWorkshifts();
     fetchReligions();
     fetchRanks();
-    dispatch(initialize('newEmployeeForm', {
-      workshift_id: 1,
-      gender: 'm',
-      married: false
-    }));
+    dispatch(
+      initialize('newEmployeeForm', {
+        workshift_id: 1,
+        gender: 'm',
+        married: false
+      })
+    );
   };
 
   componentWillReceiveProps(nextProps) {
@@ -102,7 +110,9 @@ class NewEmployee extends Component {
 
     return (
       <div className={className}>
-        <label className="col-sm-2 control-label" htmlFor={name}>{label}</label>
+        <label className="col-sm-2 control-label" htmlFor={name}>
+          {label}
+        </label>
         <div className="col-sm-10">
           <input
             type="text"
@@ -122,7 +132,9 @@ class NewEmployee extends Component {
     const { agency } = this.props;
     return (
       <div className={className}>
-        <label className="col-sm-2 control-label" htmlFor={name}>{label}</label>
+        <label className="col-sm-2 control-label" htmlFor={name}>
+          {label}
+        </label>
         <div className="col-sm-10">
           <select className="form-control" onChange {...input}>
             {agency.data.map(row => {
@@ -147,7 +159,9 @@ class NewEmployee extends Component {
     if (echelon != null) {
       return (
         <div className={className}>
-          <label className="col-sm-2 control-label" htmlFor={name}>{label}</label>
+          <label className="col-sm-2 control-label" htmlFor={name}>
+            {label}
+          </label>
           <div className="col-sm-10">
             <select className="form-control" {...input}>
               {echelon.data.map(row => {
@@ -165,7 +179,9 @@ class NewEmployee extends Component {
 
     return (
       <div className={className}>
-        <label className="col-sm-2" htmlFor={name}>{label}</label>
+        <label className="col-sm-2" htmlFor={name}>
+          {label}
+        </label>
         <div className="col-sm-10">
           <select className="form-control" {...input} />
         </div>
@@ -207,53 +223,79 @@ class NewEmployee extends Component {
           <h3 className="box-title">Add New Employee</h3>
         </div>
         <div className="box-body">
-          <form className="form-horizontal" onSubmit={handleSubmit(this.onSubmit)}>
+          <form onSubmit={handleSubmit(this.onSubmit)}>
+            <div className="row">
+              <div className="col-md-3">
+                <Field label="NIP" name="id" component={FormText} />
+              </div>
+              <div className="col-md-3">
+                <Field label="Name" name="name" component={FormText} />
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-md-3">
+                <Field
+                  label="Gender"
+                  name="gender"
+                  component={FormSelection}
+                  optionsData={NewEmployee.genderOptions}
+                />
+              </div>
+              <div className="col-md-3">
+                <Field
+                  label="Religion"
+                  name="religion_id"
+                  optionsData={this.props.religions}
+                  component={FormSelection}
+                />
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-md-3">
+                <Field
+                  label="Phone"
+                  name="phone"
+                  component={FormText}
+                />
+              </div>
+              <div className="col-md-3">
+                <Field
+                  label="Married"
+                  name="married"
+                  component={FormSelection}
+                  optionsData={NewEmployee.maritalStatusOptions}
+                />
+              </div>
+            </div>
             <div className="row">
               <div className="col-md-6">
-                <div className="row">
-                  <Field label="ID" name="id" component={this.renderTextField} />                
-                  <Field
-                    label="Name"
-                    name="name"
-                    component={this.renderTextField}
-                  />
-                  <Field
-                    label="Gender"
-                    name="gender"
-                    component={FormSelection}
-                    optionsData={NewEmployee.genderOptions}                    
-                  />
-                  <Field
-                    label="Address"
-                    name="address"
-                    component={this.renderTextField}
-                  />
-                  <Field
-                    label="Phone"
-                    name="phone"
-                    component={this.renderTextField}
-                  />
-                  <Field
-                    label="Religion"
-                    name="religion_id"
-                    optionsData={this.props.religions}
-                    component={FormSelection}
-                  />
-                  <Field
-                    label="Married"
-                    name="married"
-                    component={FormSelection}
-                    optionsData={NewEmployee.maritalStatusOptions}
-                  />
-                </div>
+                <Field
+                  label="Address"
+                  name="address"
+                  component={FormText}
+                />
               </div>
-              <div className="col-md-6">
+            </div>
+            <div className="row">
+              <div className="col-md-3">
                 <Field
                   label="Rank"
                   name="rank_id"
                   component={FormSelection}
                   optionsData={this.props.ranks}
                 />
+              </div>
+              <div className="col-md-3">
+                <Field
+                  label="Workshift"
+                  name="workshift_id"
+                  component={FormSelection}
+                  optionsData={workshifts}
+                />
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-md-6">
                 <Field
                   label="Agency"
                   name="agency_id"
@@ -262,18 +304,16 @@ class NewEmployee extends Component {
                   defaultValue={''}
                   component={FormSelectionWithSearch}
                 />
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-md-6">
                 <Field
                   label="Echelon"
                   name="echelon_id"
                   optionsData={this.state.echelonOptions}
                   defaultValue={''}
                   component={FormSelectionWithSearch}
-                />
-                <Field
-                  label="Workshift"
-                  name="workshift_id"
-                  component={FormSelection}
-                  optionsData={workshifts}
                 />
               </div>
             </div>
