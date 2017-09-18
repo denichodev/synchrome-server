@@ -4,7 +4,12 @@ import { Field, reduxForm, initialize } from 'redux-form';
 import { agencyActions } from '../../ducks/agency';
 import { echelonActions } from '../../ducks/echelon';
 import { employeeActions } from '../../ducks/employee';
-import { FormSelection, FormSelectionWithSearch, FormText } from '../../components/Forms';
+import validator from '../../helpers/validator';
+import {
+  FormSelection,
+  FormSelectionWithSearch,
+  FormText
+} from '../../components/Forms';
 
 class NewEmployee extends Component {
   static genderOptions = [
@@ -226,10 +231,10 @@ class NewEmployee extends Component {
           <form onSubmit={handleSubmit(this.onSubmit)}>
             <div className="row">
               <div className="col-md-3">
-                <Field label="NIP" name="id" component={FormText} />
+                <Field label="NIP" name="id" component={FormText} validate={[validator.required]} />
               </div>
               <div className="col-md-3">
-                <Field label="Name" name="name" component={FormText} />
+                <Field label="Name" name="name" component={FormText} validate={[validator.required]} />
               </div>
             </div>
             <div className="row">
@@ -239,6 +244,7 @@ class NewEmployee extends Component {
                   name="gender"
                   component={FormSelection}
                   optionsData={NewEmployee.genderOptions}
+                  validate={[validator.required]} 
                 />
               </div>
               <div className="col-md-3">
@@ -247,16 +253,13 @@ class NewEmployee extends Component {
                   name="religion_id"
                   optionsData={this.props.religions}
                   component={FormSelection}
+                  validate={[validator.required]} 
                 />
               </div>
             </div>
             <div className="row">
               <div className="col-md-3">
-                <Field
-                  label="Phone"
-                  name="phone"
-                  component={FormText}
-                />
+                <Field label="Phone" name="phone" component={FormText} validate={[validator.required, validator.number]} />
               </div>
               <div className="col-md-3">
                 <Field
@@ -264,16 +267,13 @@ class NewEmployee extends Component {
                   name="married"
                   component={FormSelection}
                   optionsData={NewEmployee.maritalStatusOptions}
+                  validate={[validator.required]} 
                 />
               </div>
             </div>
             <div className="row">
               <div className="col-md-6">
-                <Field
-                  label="Address"
-                  name="address"
-                  component={FormText}
-                />
+                <Field label="Address" name="address" component={FormText} validate={[validator.required]} />
               </div>
             </div>
             <div className="row">
@@ -283,6 +283,7 @@ class NewEmployee extends Component {
                   name="rank_id"
                   component={FormSelection}
                   optionsData={this.props.ranks}
+                  validate={[validator.required]}
                 />
               </div>
               <div className="col-md-3">
@@ -291,6 +292,7 @@ class NewEmployee extends Component {
                   name="workshift_id"
                   component={FormSelection}
                   optionsData={workshifts}
+                  validate={[validator.required]}
                 />
               </div>
             </div>
@@ -303,6 +305,7 @@ class NewEmployee extends Component {
                   onChange={this.handleAgencyChange}
                   defaultValue={''}
                   component={FormSelectionWithSearch}
+                  validate={[validator.required]}
                 />
               </div>
             </div>
@@ -314,6 +317,7 @@ class NewEmployee extends Component {
                   optionsData={this.state.echelonOptions}
                   defaultValue={''}
                   component={FormSelectionWithSearch}
+                  validate={[validator.required]}
                 />
               </div>
             </div>
@@ -327,19 +331,8 @@ class NewEmployee extends Component {
   }
 }
 
-const validate = values => {
-  const errors = {};
-
-  if (!values.name) {
-    errors.name = 'Nama tidak boleh kosong';
-  }
-
-  return errors;
-};
-
 const formOptions = {
-  form: 'newEmployeeForm',
-  validate
+  form: 'newEmployeeForm'
 };
 
 const mapStateToProps = state => ({
