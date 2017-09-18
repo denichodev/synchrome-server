@@ -252,4 +252,15 @@ class EmployeeController extends Controller
                 'data' => $workshifts
             ]);
     }
+
+    public function ranks()
+    {
+        $ranks = Rank::orderBy('id', 'ASC')->get();
+
+        return response()
+            ->json([
+                'result' => 'success',
+                'data' => $ranks
+            ]);
+    }
 }
