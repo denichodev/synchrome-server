@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import matchSorter from 'match-sorter';
 import { employeeActions } from '../../ducks/employee';
-import FilterableTable from '../../components/DataTable/FilterableTable';
+import { FilterableTable, ActionCell } from '../../components/DataTable';
 
 class EmployeeOverview extends Component {
   constructor(props) {
@@ -36,23 +36,7 @@ class EmployeeOverview extends Component {
         {
           Header: 'Actions',
           filterable: false,
-          Cell: cellProps => (
-            <div>
-              <Link
-                to={`/panel/employees/${cellProps.original.id}`}
-                className="btn btn-primary btn-xs"
-              >
-                Edit
-              </Link>&nbsp;
-              <button
-                onClick={() => this.handleDeleteClick(cellProps.original.id)}
-                type="button"
-                className="btn btn-danger btn-xs"
-              >
-                Delete
-              </button>
-            </div>
-          )
+          Cell: ActionCell
         }
       ]
     };
