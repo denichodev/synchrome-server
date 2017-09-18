@@ -23,6 +23,9 @@ class Rank extends Model
     ];
 
     protected $hidden = [
-        'pivot'
+        'pivot',
+        'created_at',
+        'updated_at',
+        'deleted_at'
     ];
 }
