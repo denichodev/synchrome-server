@@ -70,9 +70,13 @@ class EmployeeController extends Controller
                 'echelon.agency' => function ($query) {
                     $query->select(['id', 'name']);
                 },
-                'workshift',
-                'templates',
-                'religion'
+                'workshift' => function ($query) {
+                    $query->select(['id', 'name']);
+                },
+                'religion' => function ($query) {
+                    $query->select(['id', 'name']);
+                },
+                'templates'
             ])->find($employee->id);
             $employee->rank = $employee->currentRank();
 
@@ -105,9 +109,13 @@ class EmployeeController extends Controller
             'echelon.agency' => function ($query) {
                 $query->select(['id', 'name']);
             },
-            'workshift',
-            'templates',
-            'religion'
+            'workshift' => function ($query) {
+                $query->select(['id', 'name']);
+            },
+            'religion' => function ($query) {
+                $query->select(['id', 'name']);
+            },
+            'templates'
         ])->find($id);
 
         if (is_null($employee)) {
@@ -179,9 +187,13 @@ class EmployeeController extends Controller
                 'echelon.agency' => function ($query) {
                     $query->select(['id', 'name']);
                 },
-                'workshift',
-                'templates',
-                'religion'
+                'workshift' => function ($query) {
+                    $query->select(['id', 'name']);
+                },
+                'religion' => function ($query) {
+                    $query->select(['id', 'name']);
+                },
+                'templates'
             ])->find($employee->id);
             $employee->rank = $employee->currentRank();
 
