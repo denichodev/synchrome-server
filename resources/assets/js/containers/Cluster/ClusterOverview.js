@@ -106,7 +106,7 @@ class ClusterOverview extends Component {
           <div className="col-md-4">
             {this.renderClusterForm()}
           </div>
-          <div className="col-md-8">
+          <div className="col-md-8 clear-padding">
             <FilterableTable
               data={clusters}
               columns={this.state.columns}

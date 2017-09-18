@@ -80,7 +80,7 @@ class EmployeeOverview extends Component {
               Add New Employee
             </Link>
           </div>
-          <div className="col-md-12">
+          <div className="col-md-12 clear-padding">
             <FilterableTable
               data={this.getEmployeeData()}
               columns={this.state.columns}

@@ -82,7 +82,7 @@ class CalendarOverview extends Component {
           <div className="form-group pull-right">
             <Link className="btn btn-primary" to="/panel/calendars/add-new">Add New Calendar</Link>
           </div>
-          <div className="col-md-12">
+          <div className="col-md-12 clear-padding">
             <FilterableTable
               data={calendarData}
               columns={this.state.columns}

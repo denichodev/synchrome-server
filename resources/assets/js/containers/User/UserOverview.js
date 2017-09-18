@@ -101,7 +101,7 @@ class UserOverview extends Component {
               Add New User
             </Link>
           </div>
-          <div className="col-md-12">
+          <div className="col-md-12 clear-padding">
             <FilterableTable
               data={this.getUserData()}
               columns={this.state.columns}
