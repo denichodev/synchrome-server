@@ -35,8 +35,8 @@ class EmployeeOverview extends Component {
         },
         {
           Header: 'Actions',
-          filterable: false,
-          Cell: ActionCell
+          Cell: ActionCell,
+          filterable: false
         }
       ]
     };
