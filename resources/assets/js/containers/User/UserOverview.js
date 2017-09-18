@@ -32,6 +32,8 @@ class UserOverview extends Component {
         {
           Header: 'Action',
           Cell: ActionCell,
+          handleDelete: this.handleDeleteClick,
+          route: 'users',
           filterable: false
         }
       ]

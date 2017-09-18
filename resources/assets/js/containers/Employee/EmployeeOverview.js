@@ -35,6 +35,8 @@ class EmployeeOverview extends Component {
         },
         {
           Header: 'Actions',
+          route: 'employees',
+          handleDelete: this.handleDeleteClick,
           Cell: ActionCell,
           filterable: false
         }
@@ -46,44 +48,6 @@ class EmployeeOverview extends Component {
     const { fetchAllEmployee } = this.props;
 
     fetchAllEmployee();
-  }
-
-  renderEmployeeTable() {
-    const { employeeData } = this.props;
-
-    if (employeeData.length <= 0) {
-      return (
-        <tr>
-          <td colSpan="5">
-            <center>No employee added yet</center>
-          </td>
-        </tr>
-      );
-    }
-
-    return employeeData.map(emp => (
-      <tr key={emp.id}>
-        <td>{emp.id}</td>
-        <td>{emp.name}</td>
-        <td>{emp.echelon.agency.name}</td>
-        <td>{emp.echelon.name}</td>
-        <td>
-          <Link
-            to={`/panel/employees/${emp.id}`}
-            className="btn btn-primary btn-xs"
-          >
-            Edit
-          </Link>&nbsp;
-          <button
-            onClick={() => this.handleDeleteClick(emp.id)}
-            type="button"
-            className="btn btn-danger btn-xs"
-          >
-            Delete
-          </button>
-        </td>
-      </tr>
-    ));
   }
 
   getEmployeeData = () => {

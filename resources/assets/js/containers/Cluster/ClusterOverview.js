@@ -1,11 +1,43 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
+import matchSorter from 'match-sorter';
 import { Link } from 'react-router-dom';
 import { clusterActions } from '../../ducks/cluster';
 import { FormText } from '../../components/Forms';
+import { FilterableTable, ActionCell } from '../../components/DataTable';
 
 class ClusterOverview extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      columns: [
+        {
+          Header: 'ID',
+          id: 'id',
+          accessor: d => d.id,
+          filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ['id'] }),
+          filterAll: true
+        },
+        {
+          Header: 'Name',
+          id: 'name',
+          accessor: d => d.name,
+          filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ['name'] }),
+          filterAll: true
+        },
+        {
+          Header: 'Actions',
+          route: 'clusters',
+          handleDelete: this.deleteCluster,
+          Cell: ActionCell,
+          filterable: false
+        }
+      ]
+    }
+  }
+
   componentDidMount() {
     const { fetchAllCluster } = this.props;
 
@@ -46,23 +78,6 @@ class ClusterOverview extends Component {
     );
   }
 
-  renderClusterTable = () => {
-    return (
-      <table className="table table-striped table-bordered">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {this.renderClusterTableBody()}
-        </tbody>
-      </table>
-    );
-  }
-
   renderClusterForm = () => {
     const { handleSubmit } = this.props;
 
@@ -80,6 +95,8 @@ class ClusterOverview extends Component {
   }
 
   render() {
+    const { clusters } = this.props;
+
     return (
       <div className="box">
         <div className="box-header">
@@ -90,7 +107,10 @@ class ClusterOverview extends Component {
             {this.renderClusterForm()}
           </div>
           <div className="col-md-8">
-            {this.renderClusterTable()}
+            <FilterableTable
+              data={clusters}
+              columns={this.state.columns}
+            />
           </div>
         </div>
       </div>

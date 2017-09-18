@@ -5,13 +5,13 @@ const ActionCell = props => {
   return (
     <div>
       <Link
-        to={`/panel/employees/${props.original.id}`}
+        to={`/panel/${props.column.route}/${props.original.id}`}
         className="btn btn-primary btn-xs"
       >
         Edit
       </Link>&nbsp;
       <button
-        onClick={() => this.handleDeleteClick(props.original.id)}
+        onClick={() => props.column.handleDelete(props.original.id)}
         type="button"
         className="btn btn-danger btn-xs"
       >
