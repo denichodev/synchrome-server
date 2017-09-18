@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
+import matchSorter from 'match-sorter';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import matchSorter from 'match-sorter';
 import { employeeActions } from '../../ducks/employee';
 import { FilterableTable, ActionCell } from '../../components/DataTable';
 
@@ -116,20 +116,6 @@ class EmployeeOverview extends Component {
               Add New Employee
             </Link>
           </div>
-          {/* <table className="table table-striped table-bordered">
-            <thead>
-              <tr>
-                <th>NIP</th>
-                <th>Name</th>
-                <th>Agency</th>
-                <th>Echelon</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {this.renderEmployeeTable()}
-            </tbody>
-          </table> */}
           <div className="col-md-12">
             <FilterableTable
               data={this.getEmployeeData()}
