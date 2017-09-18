@@ -20,7 +20,8 @@ class CalendarOverview extends Component {
         {
           Header: 'Date Range',
           id: 'dateRange',
-          accessor: d => (<span><strong>{d.start}</strong> s/d <strong>{d.end}</strong></span>)
+          accessor: d => (<span><strong>{d.start}</strong> s/d <strong>{d.end}</strong></span>),
+          filterable: false
         },
         {
           Header: 'Action',
