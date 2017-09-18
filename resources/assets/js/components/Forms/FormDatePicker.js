@@ -14,8 +14,8 @@ const FormDatePicker = field => {
       <label htmlFor={name}>
         {label}
       </label>
-      <div className="input-group">
-        <div className="input-group-addon">
+      <div className="input-group fix-height">
+        <div className="input-group-addon fix-height">
           <i className="fa fa-calendar" />
         </div>
         <DatePicker

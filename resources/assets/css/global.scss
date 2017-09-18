@@ -28,6 +28,10 @@
   z-index: 999;
 }
 
+.react-datepicker-wrapper, .react-datepicker__input-container {
+  width: 100%;
+}
+
 .clear-padding {
   padding: 0;
 }
