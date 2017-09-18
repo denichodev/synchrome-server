@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
+import matchSorter from 'match-sorter';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import matchSorter from 'match-sorter';
 import { employeeActions } from '../../ducks/employee';
-import FilterableTable from '../../components/DataTable/FilterableTable';
+import { FilterableTable, ActionCell } from '../../components/DataTable';
 
 class EmployeeOverview extends Component {
   constructor(props) {
@@ -35,24 +35,10 @@ class EmployeeOverview extends Component {
         },
         {
           Header: 'Actions',
-          filterable: false,
-          Cell: cellProps => (
-            <div>
-              <Link
-                to={`/panel/employees/${cellProps.original.id}`}
-                className="btn btn-primary btn-xs"
-              >
-                Edit
-              </Link>&nbsp;
-              <button
-                onClick={() => this.handleDeleteClick(cellProps.original.id)}
-                type="button"
-                className="btn btn-danger btn-xs"
-              >
-                Delete
-              </button>
-            </div>
-          )
+          route: 'employees',
+          handleDelete: this.handleDeleteClick,
+          Cell: ActionCell,
+          filterable: false
         }
       ]
     };
@@ -62,44 +48,6 @@ class EmployeeOverview extends Component {
     const { fetchAllEmployee } = this.props;
 
     fetchAllEmployee();
-  }
-
-  renderEmployeeTable() {
-    const { employeeData } = this.props;
-
-    if (employeeData.length <= 0) {
-      return (
-        <tr>
-          <td colSpan="5">
-            <center>No employee added yet</center>
-          </td>
-        </tr>
-      );
-    }
-
-    return employeeData.map(emp => (
-      <tr key={emp.id}>
-        <td>{emp.id}</td>
-        <td>{emp.name}</td>
-        <td>{emp.echelon.agency.name}</td>
-        <td>{emp.echelon.name}</td>
-        <td>
-          <Link
-            to={`/panel/employees/${emp.id}`}
-            className="btn btn-primary btn-xs"
-          >
-            Edit
-          </Link>&nbsp;
-          <button
-            onClick={() => this.handleDeleteClick(emp.id)}
-            type="button"
-            className="btn btn-danger btn-xs"
-          >
-            Delete
-          </button>
-        </td>
-      </tr>
-    ));
   }
 
   getEmployeeData = () => {
@@ -132,21 +80,7 @@ class EmployeeOverview extends Component {
               Add New Employee
             </Link>
           </div>
-          {/* <table className="table table-striped table-bordered">
-            <thead>
-              <tr>
-                <th>NIP</th>
-                <th>Name</th>
-                <th>Agency</th>
-                <th>Echelon</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {this.renderEmployeeTable()}
-            </tbody>
-          </table> */}
-          <div className="col-md-12">
+          <div className="col-md-12 clear-padding">
             <FilterableTable
               data={this.getEmployeeData()}
               columns={this.state.columns}

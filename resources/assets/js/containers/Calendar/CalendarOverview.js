@@ -1,9 +1,39 @@
 import React, { Component } from 'react';
+import matchSorter from 'match-sorter';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { calendarActions } from '../../ducks/calendar';
+import { FilterableTable, ActionCell } from '../../components/DataTable';
 
 class CalendarOverview extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      columns: [
+        {
+          Header: 'Calendar Name',
+          accessor: 'name',
+          filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ['name'] }),
+          filterAll: true
+        },
+        {
+          Header: 'Date Range',
+          id: 'dateRange',
+          accessor: d => (<span><strong>{d.start}</strong> s/d <strong>{d.end}</strong></span>),
+          filterable: false
+        },
+        {
+          Header: 'Action',
+          Cell: ActionCell,
+          handleDelete: this.handleCalendarDelete,
+          route: 'calendars',
+          filterable: false
+        }
+      ]
+    };
+  }
+
   componentDidMount() {
     const { fetchAllCalendar } = this.props;
 
@@ -41,6 +71,8 @@ class CalendarOverview extends Component {
   };
 
   render() {
+    const { calendarData } = this.props;
+
     return (
       <div className="box">
         <div className="box-header">
@@ -50,18 +82,12 @@ class CalendarOverview extends Component {
           <div className="form-group pull-right">
             <Link className="btn btn-primary" to="/panel/calendars/add-new">Add New Calendar</Link>
           </div>
-          <table className="table table-striped table-bordered">
-            <thead>
-              <tr>
-                <th>Calendar Name</th>
-                <th>Date Range</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {this.renderCalendarTable()}
-            </tbody>
-          </table>
+          <div className="col-md-12 clear-padding">
+            <FilterableTable
+              data={calendarData}
+              columns={this.state.columns}
+            />
+          </div>
         </div>
       </div>
     );

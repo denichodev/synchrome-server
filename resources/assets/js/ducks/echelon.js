@@ -47,7 +47,7 @@ const fetchEchelonsById = agencyId => {
     };
 
     const error = err => {
-      dispatch(fetchEchelonByIdFailure(err.data.data));
+      dispatch(fetchEchelonByIdFailure(err.message));
     };
 
     http.get(`/agency/${agencyId}/echelons`, success, error);

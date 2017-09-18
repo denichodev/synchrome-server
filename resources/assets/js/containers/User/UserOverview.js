@@ -1,9 +1,45 @@
 import React, { Component } from 'react';
+import matchSorter from 'match-sorter';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { userActions } from '../../ducks/user';
+import { FilterableTable, ActionCell } from '../../components/DataTable';
 
 class UserOverview extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      columns: [
+        {
+          Header: 'Email',
+          accessor: 'email',
+          filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ['email'] }),
+          filterAll: true
+        },
+        {
+          Header: 'Name',
+          accessor: 'name',
+          filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ['name'] }),
+          filterAll: true
+        },
+        {
+          Header: 'Role',
+          accessor: 'role',
+          filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ['role'] }),
+          filterAll: true
+        },
+        {
+          Header: 'Action',
+          Cell: ActionCell,
+          handleDelete: this.handleDeleteClick,
+          route: 'users',
+          filterable: false
+        }
+      ]
+    };
+  }
+
   componentDidMount() {
     const { getUsers } = this.props;
 
@@ -14,6 +50,17 @@ class UserOverview extends Component {
     const { deleteUser } = this.props;
 
     deleteUser(id);
+  }
+
+  getUserData = () => {
+    const { user } = this.props;
+
+    return user.data.map(u => ({
+      id: u.id,
+      email: u.email,
+      name: u.name,
+      role: u.role.name
+    }));
   }
 
   renderUserTable = () => {
@@ -54,17 +101,12 @@ class UserOverview extends Component {
               Add New User
             </Link>
           </div>
-          <table className="table table-striped table-bordered">
-            <thead>
-              <tr>
-                <th>Email</th>
-                <th>Name</th>
-                <th>Role</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>{this.renderUserTable()}</tbody>
-          </table>
+          <div className="col-md-12 clear-padding">
+            <FilterableTable
+              data={this.getUserData()}
+              columns={this.state.columns}
+            />
+          </div>
         </div>
       </div>
     );
