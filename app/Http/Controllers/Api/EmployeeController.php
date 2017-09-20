@@ -56,11 +56,12 @@ class EmployeeController extends Controller
         }
 
         $user_data = $request->all();
+        $now = Carbon::now();
 
         try {
             DB::beginTransaction();
             $employee = Employee::create($request->all());
-            $employee->rankHistory()->attach($user_data['rank_id']);
+            $employee->rankHistory()->attach($user_data['rank_id'], ['created_at' => $now, 'updated_at' => $now]);
             DB::commit();
 
             $employee = Employee::with([
