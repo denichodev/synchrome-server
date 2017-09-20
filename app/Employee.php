@@ -25,14 +25,16 @@ class Employee extends Model
         'gender',
         'married',
         'address',
-        'phone'
+        'phone',
+        'allowance_id'
     ];
 
     protected $hidden = [
         'echelon_id',
         'workshift_id',
         'religion_id',
-        'deleted_at'
+        'deleted_at',
+        'allowance_id'
     ];
 
     protected $dates = [
@@ -67,5 +69,10 @@ class Employee extends Model
     public function currentRank()
     {
         return $this->rankHistory()->orderBy('rank_histories.created_at', 'DESC')->first();
+    }
+
+    public function allowance()
+    {
+        return $this->belongsTo(Allowance::class);
     }
 }
