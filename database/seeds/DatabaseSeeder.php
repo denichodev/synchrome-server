@@ -20,5 +20,6 @@ class DatabaseSeeder extends Seeder
         $this->call(WorkshiftsTableSeeder::class);
         $this->call(AbsenceTypesTableSeeder::class);
         $this->call(ReligionsTableSeeder::class);
+        $this->call(AllowancesTableSeeder::class);
     }
 }
