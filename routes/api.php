@@ -52,6 +52,12 @@ Route::group($config, function () {
 
     Route::get('religion', 'Api\ReligionController@index')->name('api.religions.index');
 
+    Route::get('allowance', 'Api\AllowanceController@index')->name('api.allowances.index');
+    Route::post('allowance', 'Api\AllowanceController@store')->name('api.allowances.store');
+    Route::get('allowance/{id}', 'Api\AllowanceController@get')->name('api.allowances.get');
+    Route::patch('allowance/{id}', 'Api\AllowanceController@update')->name('api.allowances.update');
+    Route::delete('allowance/{id}', 'Api\AllowanceController@destroy')->name('api.allowances.destroy');
+
     Route::group(['middleware' => 'jwt_admin'], function () {
         Route::get('user/roles', 'Api\UserController@roles')->name('api.users.roles');
         Route::get('user', 'Api\UserController@index')->name('api.users.index');

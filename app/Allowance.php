@@ -15,6 +15,8 @@ class Allowance extends Model
         'meal' => 'double'
     ];
 
+    public $incrementing = false;
+
     protected $fillable = [
         'id',
         'name',
