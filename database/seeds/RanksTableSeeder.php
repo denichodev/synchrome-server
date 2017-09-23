@@ -8,27 +8,19 @@ class RanksTableSeeder extends Seeder
     protected $ranks = [
         [
             'id' => '1A',
-            'name' => 'Juru Muda',
-            'allowance' => 2000000,
-            'meal_allowance' => 20000
+            'name' => 'Juru Muda'
         ],
         [
             'id' => '1B',
-            'name' => 'Juru Muda Tingkat I',
-            'allowance' => 2000000,
-            'meal_allowance' => 20000
+            'name' => 'Juru Muda Tingkat I'
         ],
         [
             'id' => '1C',
-            'name' => 'Juru',
-            'allowance' => 2000000,
-            'meal_allowance' => 20000
+            'name' => 'Juru'
         ],
         [
             'id' => '1D',
-            'name' => 'Juru Tingkat I',
-            'allowance' => 2000000,
-            'meal_allowance' => 20000
+            'name' => 'Juru Tingkat I'
         ],
     ];
 
