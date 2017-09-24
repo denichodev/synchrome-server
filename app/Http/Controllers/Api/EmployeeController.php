@@ -104,7 +104,24 @@ class EmployeeController extends Controller
 
     public function get($id)
     {
-        $employee = Employee::with(['templates'])->find($id);
+        $employee = Employee::with([
+            'echelon' => function ($query) {
+                $query->select(['id', 'name', 'agency_id']);
+            }, 
+            'echelon.agency' => function ($query) {
+                $query->select(['id', 'name']);
+            },
+            'workshift' => function ($query) {
+                $query->select(['id', 'name']);
+            },
+            'religion' => function ($query) {
+                $query->select(['id', 'name']);
+            },
+            'allowance' => function ($query) {
+                $query->select(['id', 'name']);
+            },
+            'templates'
+        ])->find($id);
 
         if (is_null($employee)) {
             return response()

@@ -30,7 +30,11 @@ class Employee extends Model
     ];
 
     protected $hidden = [
-        'deleted_at'
+        'echelon_id',
+        'workshift_id',
+        'religion_id',
+        'deleted_at',
+        'allowance_id'
     ];
 
     protected $dates = [
