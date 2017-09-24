@@ -5,6 +5,7 @@ import { Field, reduxForm } from 'redux-form';
 import { allowancesActions } from '../../ducks/allowances';
 import { FormText } from '../../components/Forms';
 import { FilterableTable, ActionCell } from '../../components/DataTable';
+import { required, number } from '../../helpers/validator';
 
 class AllowanceOverview extends Component {
   constructor(props) {
@@ -25,7 +26,7 @@ class AllowanceOverview extends Component {
           id: 'name',
           accessor: d => d.name,
           filterMethod: (filter, rows) =>
-            matchSorter(rows, filter.value, { keys: ['id'] }),
+            matchSorter(rows, filter.value, { keys: ['name'] }),
           filterAll: true
         },
         {
@@ -33,7 +34,7 @@ class AllowanceOverview extends Component {
           id: 'tpp',
           accessor: d => d.tpp,
           filterMethod: (filter, rows) =>
-            matchSorter(rows, filter.value, { keys: ['id'] }),
+            matchSorter(rows, filter.value, { keys: ['tpp'] }),
           filterAll: true
         },
         {
@@ -41,7 +42,7 @@ class AllowanceOverview extends Component {
           id: 'meal',
           accessor: d => d.meal,
           filterMethod: (filter, rows) =>
-            matchSorter(rows, filter.value, { keys: ['id'] }),
+            matchSorter(rows, filter.value, { keys: ['meal'] }),
           filterAll: true
         },
         {
@@ -71,24 +72,33 @@ class AllowanceOverview extends Component {
 
     return (
       <form onSubmit={handleSubmit(this.onSubmit)}>
-        <Field label="ID" name="id" placeholder="ID" component={FormText} />
+        <Field
+          label="ID"
+          name="id"
+          placeholder="ID"
+          component={FormText}
+          validate={[required]}
+        />
         <Field
           label="Name"
           name="name"
           placeholder="Name"
           component={FormText}
+          validate={[required]}
         />
         <Field
           label="TPP"
           name="tpp"
           placeholder="900000"
           component={FormText}
+          validate={[required, number]}
         />
         <Field
           label="Meal"
           name="meal"
           placeholder="30000"
           component={FormText}
+          validate={[required, number]}
         />
         <button className="btn btn-primary pull-right" type="submit">
           Add New Allowance

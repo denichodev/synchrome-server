@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Field, reduxForm, change, initialize } from 'redux-form';
+import { Field, reduxForm, change } from 'redux-form';
 import { FormText } from '../../components/Forms';
 import { allowancesActions } from '../../ducks/allowances';
+import { required, number } from '../../helpers/validator';
 
 class EditAllowance extends Component {
   componentDidMount() {
@@ -36,6 +37,7 @@ class EditAllowance extends Component {
           component={FormText}
           disabled
           defaultValue={active.id}
+          validate={[required]}
         />
         <Field
           label="Name"
@@ -43,18 +45,21 @@ class EditAllowance extends Component {
           placeholder="Name"
           component={FormText}
           defaultValue={active.name}
+          validate={[required]}
         />
         <Field
           label="TPP"
           name="tpp"
           placeholder="900000"
           component={FormText}
+          validate={[required, number]}
         />
         <Field
           label="Meal"
           name="meal"
           placeholder="30000"
           component={FormText}
+          validate={[required, number]}
         />
         <button className="btn btn-primary pull-right" type="submit">
           Edit Allowance {active.name}
