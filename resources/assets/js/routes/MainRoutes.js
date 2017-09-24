@@ -16,6 +16,8 @@ import NewUser from '../containers/User/NewUser';
 import EditUser from '../containers/User/EditUser';
 import Error404 from '../containers/Error/Error404';
 import AdminOnly from '../containers/Error/AdminOnly';
+import Allowances from '../containers/Allowances/AllowanceOverview';
+import EditAllowance from '../containers/Allowances/EditAllowance';
 
 export default () => (
   <Switch>
@@ -31,8 +33,10 @@ export default () => (
     <Route exact path="/panel/users/add-new" component={NewUser} />
     <Route path="/panel/users/:id" component={EditUser} />
     <AdminRoute exact path="/panel/users" component={UserOverview} />
+    <AdminRoute exact path="/panel/allowances" component={Allowances} />
+    <AdminRoute exact path="/panel/allowances/:id" component={EditAllowance} />
     <Route exact path="/not-found" component={Error404} />
     <Route exact path="/admin-only" component={AdminOnly} />
     <Redirect to="/not-found" />
   </Switch>
-)
+);

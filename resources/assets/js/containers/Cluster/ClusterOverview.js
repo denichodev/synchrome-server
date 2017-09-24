@@ -17,14 +17,16 @@ class ClusterOverview extends Component {
           Header: 'ID',
           id: 'id',
           accessor: d => d.id,
-          filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ['id'] }),
+          filterMethod: (filter, rows) =>
+            matchSorter(rows, filter.value, { keys: ['id'] }),
           filterAll: true
         },
         {
           Header: 'Name',
           id: 'name',
           accessor: d => d.name,
-          filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ['name'] }),
+          filterMethod: (filter, rows) =>
+            matchSorter(rows, filter.value, { keys: ['name'] }),
           filterAll: true
         },
         {
@@ -35,7 +37,7 @@ class ClusterOverview extends Component {
           filterable: false
         }
       ]
-    }
+    };
   }
 
   componentDidMount() {
@@ -48,35 +50,49 @@ class ClusterOverview extends Component {
     const { postCluster } = this.props;
 
     postCluster(values);
-  }
+  };
 
-  deleteCluster = (id) => {
+  deleteCluster = id => {
     const { deleteCluster } = this.props;
     deleteCluster(id);
-  }
+  };
 
   renderClusterTableBody = () => {
     const { clusters } = this.props;
 
     if (clusters.length <= 0) {
       return (
-        <tr><td colSpan="5"><center>No cluster added yet</center></td></tr>
+        <tr>
+          <td colSpan="5">
+            <center>No cluster added yet</center>
+          </td>
+        </tr>
       );
     }
 
-    return (
-      clusters.map(cluster => (
-        <tr key={cluster.id}>
-          <td>{cluster.id}</td>
-          <td>{cluster.name}</td>
-          <td>
-            <Link to={`/panel/clusters/${cluster.id}`} className="btn btn-primary btn-xs">Edit</Link>&nbsp;
-            <button data-id={cluster.id} type="button" className="btn btn-danger btn-xs" onClick={() => this.deleteCluster(cluster.id)}>Delete</button>
-          </td>
-        </tr>
-      ))
-    );
-  }
+    return clusters.map(cluster => (
+      <tr key={cluster.id}>
+        <td>{cluster.id}</td>
+        <td>{cluster.name}</td>
+        <td>
+          <Link
+            to={`/panel/clusters/${cluster.id}`}
+            className="btn btn-primary btn-xs"
+          >
+            Edit
+          </Link>&nbsp;
+          <button
+            data-id={cluster.id}
+            type="button"
+            className="btn btn-danger btn-xs"
+            onClick={() => this.deleteCluster(cluster.id)}
+          >
+            Delete
+          </button>
+        </td>
+      </tr>
+    ));
+  };
 
   renderClusterForm = () => {
     const { handleSubmit } = this.props;
@@ -89,10 +105,12 @@ class ClusterOverview extends Component {
           placeholder="Cluster 1"
           component={FormText}
         />
-        <button className="btn btn-primary pull-right" type="submit">Add New Cluster</button>
+        <button className="btn btn-primary pull-right" type="submit">
+          Add New Cluster
+        </button>
       </form>
     );
-  }
+  };
 
   render() {
     const { clusters } = this.props;
@@ -103,14 +121,9 @@ class ClusterOverview extends Component {
           <h3 className="box-title">Clusters</h3>
         </div>
         <div className="box-body">
-          <div className="col-md-4">
-            {this.renderClusterForm()}
-          </div>
+          <div className="col-md-4">{this.renderClusterForm()}</div>
           <div className="col-md-8 clear-padding">
-            <FilterableTable
-              data={clusters}
-              columns={this.state.columns}
-            />
+            <FilterableTable data={clusters} columns={this.state.columns} />
           </div>
         </div>
       </div>
@@ -143,6 +156,8 @@ const formOptions = {
   validate
 };
 
-const connectedComponent = connect(mapStateToProps, mapDispatchToProps)(ClusterOverview);
+const connectedComponent = connect(mapStateToProps, mapDispatchToProps)(
+  ClusterOverview
+);
 
 export default reduxForm(formOptions)(connectedComponent);

@@ -7,9 +7,12 @@ const FETCH_CLUSTER_ALL_REQUEST = 'synchrome/cluster/fetch_cluster_request';
 const FETCH_CLUSTER_ALL_SUCCESS = 'synchrome/cluster/fetch_cluster_success';
 const FETCH_CLUSTER_ALL_FAILURE = 'synchrome/cluster/fetch_cluster_failure';
 
-const FETCH_CLUSTER_BYID_REQUEST = 'synchrome/cluster/fetch_cluster_byid_request';
-const FETCH_CLUSTER_BYID_SUCCESS = 'synchrome/cluster/fetch_cluster_byid_success';
-const FETCH_CLUSTER_BYID_FAILURE = 'synchrome/cluster/fetch_cluster_byid_failure';
+const FETCH_CLUSTER_BYID_REQUEST =
+  'synchrome/cluster/fetch_cluster_byid_request';
+const FETCH_CLUSTER_BYID_SUCCESS =
+  'synchrome/cluster/fetch_cluster_byid_success';
+const FETCH_CLUSTER_BYID_FAILURE =
+  'synchrome/cluster/fetch_cluster_byid_failure';
 
 const FETCH_CLUSTER_KEY_REQUEST = 'synchrome/cluster/fetch_cluster_key_request';
 const FETCH_CLUSTER_KEY_SUCCESS = 'synchrome/cluster/fetch_cluster_key_success';
@@ -27,14 +30,19 @@ const DELETE_CLUSTER_REQUEST = 'synchrome/cluster/delete_cluster_request';
 const DELETE_CLUSTER_SUCCESS = 'synchrome/cluster/delete_cluster_success';
 const DELETE_CLUSTER_FAILURE = 'synchrome/cluster/delete_cluster_failure';
 
-const GENERATE_CLUSTER_KEY_REQUEST = 'synchrome/cluster/generate_cluster_key_request';
-const GENERATE_CLUSTER_KEY_SUCCESS = 'synchrome/cluster/generate_cluster_key_success';
-const GENERATE_CLUSTER_KEY_FAILURE = 'synchrome/cluster/generate_cluster_key_failure';
+const GENERATE_CLUSTER_KEY_REQUEST =
+  'synchrome/cluster/generate_cluster_key_request';
+const GENERATE_CLUSTER_KEY_SUCCESS =
+  'synchrome/cluster/generate_cluster_key_success';
+const GENERATE_CLUSTER_KEY_FAILURE =
+  'synchrome/cluster/generate_cluster_key_failure';
 
-const DISABLE_CLUSTER_KEY_REQUEST = 'synchrome/cluster/disable_cluster_key_request';
-const DISABLE_CLUSTER_KEY_SUCCESS = 'synchrome/cluster/disable_cluster_key_success';
-const DISABLE_CLUSTER_KEY_FAILURE = 'synchrome/cluster/disable_cluster_key_failure';
-
+const DISABLE_CLUSTER_KEY_REQUEST =
+  'synchrome/cluster/disable_cluster_key_request';
+const DISABLE_CLUSTER_KEY_SUCCESS =
+  'synchrome/cluster/disable_cluster_key_success';
+const DISABLE_CLUSTER_KEY_FAILURE =
+  'synchrome/cluster/disable_cluster_key_failure';
 
 export const clusterTypes = {
   FETCH_CLUSTER_ALL_FAILURE,
@@ -175,144 +183,131 @@ const fetchClusterKeyFailure = payload => ({
   payload
 });
 
-const disableClusterKey = (keyId, clusterId) => (
-  dispatch => {
-    dispatch(disableClusterKeyRequest());
+const disableClusterKey = (keyId, clusterId) => dispatch => {
+  dispatch(disableClusterKeyRequest());
 
-    const success = res => {
-      console.log(res);
-      dispatch(disableClusterKeySuccess());
-      dispatch(fetchClusterKey(clusterId));
-    };
+  const success = res => {
+    dispatch(disableClusterKeySuccess());
+    dispatch(fetchClusterKey(clusterId));
+  };
 
-    const error = err => {
-      console.log(err);
-      dispatch(disableClusterKeyFailure(err.message));
-      dispatch(fetchClusterKey(clusterId));
-    };
+  const error = err => {
+    dispatch(disableClusterKeyFailure(err.message));
+    dispatch(fetchClusterKey(clusterId));
+  };
 
-    http.post(`/cluster/keys/${keyId}/disable`, { id: clusterId }, success, error);
-  }
-);
+  http.post(
+    `/cluster/keys/${keyId}/disable`,
+    { id: clusterId },
+    success,
+    error
+  );
+};
 
-const fetchAllCluster = () => (
-  dispatch => {
-    dispatch(fetchClusterAllRequest());
+const fetchAllCluster = () => dispatch => {
+  dispatch(fetchClusterAllRequest());
 
-    const success = res => {
-      dispatch(fetchClusterAllSuccess(res.data.data));
-    };
+  const success = res => {
+    dispatch(fetchClusterAllSuccess(res.data.data));
+  };
 
-    const error = err => {
-      dispatch(fetchClusterAllFailure(err.message));
-    };
+  const error = err => {
+    dispatch(fetchClusterAllFailure(err.message));
+  };
 
-    http.get('/cluster', success, error);
-  }
-);
+  http.get('/cluster', success, error);
+};
 
-const fetchClusterById = id => (
-  dispatch => {
-    dispatch(fetchClusterByIdRequest());
+const fetchClusterById = id => dispatch => {
+  dispatch(fetchClusterByIdRequest());
 
-    const success = res => {
-      dispatch(fetchClusterByIdSuccess(res.data.data));
-    };
+  const success = res => {
+    dispatch(fetchClusterByIdSuccess(res.data.data));
+  };
 
-    const error = err => {
-      dispatch(fetchClusterByIdFailure(err.message));
-      dispatch(push('/not-found'));
-    };
+  const error = err => {
+    dispatch(fetchClusterByIdFailure(err.message));
+    dispatch(push('/not-found'));
+  };
 
-    http.get(`/cluster/${id}`, success, error);
-  }
-);
+  http.get(`/cluster/${id}`, success, error);
+};
 
-const fetchClusterKey = id => (
-  dispatch => {
-    dispatch(fetchClusterKeyRequest());
+const fetchClusterKey = id => dispatch => {
+  dispatch(fetchClusterKeyRequest());
 
-    const success = res => {
-      dispatch(fetchClusterKeySuccess(res.data.data));
-    };
+  const success = res => {
+    dispatch(fetchClusterKeySuccess(res.data.data));
+  };
 
-    const error = err => {
-      dispatch(fetchClusterKeyFailure(err.message));
-    };
+  const error = err => {
+    dispatch(fetchClusterKeyFailure(err.message));
+  };
 
-    http.get(`/cluster/${id}/keys`, success, error);
-  }
-);
+  http.get(`/cluster/${id}/keys`, success, error);
+};
 
-const postCluster = data => (
-  dispatch => {
-    dispatch(reset('clusterForm'));
-    dispatch(postClusterRequest());
+const postCluster = data => dispatch => {
+  dispatch(reset('clusterForm'));
+  dispatch(postClusterRequest());
 
-    const success = res => {
-      dispatch(postClusterSuccess(res.data.data));
-      dispatch(fetchAllCluster());
-    };
+  const success = res => {
+    dispatch(postClusterSuccess(res.data.data));
+    dispatch(fetchAllCluster());
+  };
 
-    const error = err => {
-      dispatch(postClusterFailure(err.message));
-    };
+  const error = err => {
+    dispatch(postClusterFailure(err.message));
+  };
 
-    http.post('/cluster', data, success, error);
-  }
-);
+  http.post('/cluster', data, success, error);
+};
 
-const patchCluster = (id, data) => (
-  dispatch => {
-    dispatch(patchClusterRequest());
+const patchCluster = (id, data) => dispatch => {
+  dispatch(patchClusterRequest());
 
-    const success = res => {
-      dispatch(patchClusterSuccess(res.data.data));
-      dispatch(reset('editClusterForm'));
-      dispatch(push('/panel/clusters'));
-    };
+  const success = res => {
+    dispatch(patchClusterSuccess(res.data.data));
+    dispatch(reset('editClusterForm'));
+    dispatch(push('/panel/clusters'));
+  };
 
-    const error = err => {
-      dispatch(patchClusterFailure(err.message));
-    };
+  const error = err => {
+    dispatch(patchClusterFailure(err.message));
+  };
 
-    http.patch(`/cluster/${id}`, data, success, error);
-  }
-);
+  http.patch(`/cluster/${id}`, data, success, error);
+};
 
-const deleteCluster = id => (
-  dispatch => {
-    dispatch(deleteClusterRequest());
+const deleteCluster = id => dispatch => {
+  dispatch(deleteClusterRequest());
 
-    const success = res => {
-      dispatch(deleteClusterSuccess(res.data.data));
-      dispatch(fetchAllCluster());
-    };
+  const success = res => {
+    dispatch(deleteClusterSuccess(res.data.data));
+    dispatch(fetchAllCluster());
+  };
 
-    const error = err => {
-      dispatch(deleteClusterFailure(err.message));
-    };
+  const error = err => {
+    dispatch(deleteClusterFailure(err.message));
+  };
 
-    http.delete(`/cluster/${id}`, success, error);
-  }
-);
+  http.delete(`/cluster/${id}`, success, error);
+};
 
-const generateClusterKey = id => (
-  dispatch => {
-    dispatch(generateClusterKeyRequest());
+const generateClusterKey = id => dispatch => {
+  dispatch(generateClusterKeyRequest());
 
-    const success = res => {
-      dispatch(generateClusterKeySuccess(res.data.data));
-      dispatch(fetchClusterKey(id));
-    };
+  const success = res => {
+    dispatch(generateClusterKeySuccess(res.data.data));
+    dispatch(fetchClusterKey(id));
+  };
 
-    const error = err => {
-      dispatch(generateClusterKeyFailure(err.message));
-    };
+  const error = err => {
+    dispatch(generateClusterKeyFailure(err.message));
+  };
 
-    http.post(`/cluster/${id}/keys`, id, success, error);
-  }
-)
+  http.post(`/cluster/${id}/keys`, id, success, error);
+};
 
 export const clusterActions = {
   fetchAllCluster,

@@ -10,6 +10,7 @@ import echelon from './echelon';
 import employee from './employee';
 import cluster from './cluster';
 import user from './user';
+import allowances from './allowances';
 import reduxFormPlugin from './reduxFormPlugin';
 
 export const initialState = {
@@ -21,7 +22,8 @@ export const initialState = {
   echelon: echelon.initialState,
   employee: employee.initialState,
   cluster: cluster.initialState,
-  user: user.initialState
+  user: user.initialState,
+  allowances: allowances.initialState
 };
 
 const rootReducer = combineReducers({
@@ -34,7 +36,8 @@ const rootReducer = combineReducers({
   echelon: echelon.echelonReducer,
   employee: employee.employeeReducer,
   cluster: cluster.clusterReducer,
-  user: user.userReducer
+  user: user.userReducer,
+  allowances: allowances.allowancesReducer
 });
 
 export default rootReducer;
