@@ -4,6 +4,7 @@ import { Field, reduxForm, initialize } from 'redux-form';
 import { agencyActions } from '../../ducks/agency';
 import { echelonActions } from '../../ducks/echelon';
 import { employeeActions } from '../../ducks/employee';
+import { allowancesActions } from '../../ducks/allowances';
 import validator from '../../helpers/validator';
 import {
   FormSelection,
@@ -25,12 +26,12 @@ class NewEmployee extends Component {
 
   static maritalStatusOptions = [
     {
-      id: 0,
-      name: 'Unmarried'
-    },
-    {
       id: 1,
       name: 'Married'
+    },
+    {
+      id: 0,
+      name: 'Unmarried'
     }
   ];
 
@@ -39,7 +40,8 @@ class NewEmployee extends Component {
 
     this.state = {
       agencyOptions: [],
-      echelonOptions: []
+      echelonOptions: [],
+      allowanceOptions: []
     };
   }
 
@@ -49,18 +51,21 @@ class NewEmployee extends Component {
       fetchWorkshifts,
       dispatch,
       fetchReligions,
-      fetchRanks
+      fetchRanks,
+      fetchAllowances
     } = this.props;
 
     fetchAllAgency();
     fetchWorkshifts();
     fetchReligions();
     fetchRanks();
+    fetchAllowances();
     dispatch(
       initialize('newEmployeeForm', {
         workshift_id: 1,
         gender: 'm',
-        married: false
+        married: 1,
+        religion_id: 1
       })
     );
   };
@@ -80,7 +85,24 @@ class NewEmployee extends Component {
     if (nextProps.echelon.data.length > 0) {
       this.setEchelonOptions(nextProps.echelon.data);
     }
+
+    if (nextProps.allowances.length > 0) {
+      this.setAllowanceOptions(nextProps.allowances);
+    }
   }
+
+  setAllowanceOptions = allowanceData => {
+    const allowanceOptions = allowanceData.map(alw => {
+      return {
+        value: alw.id,
+        label: `${alw.name} | TPP ${alw.tpp} | MEAL ${alw.meal}`
+      };
+    });
+
+    this.setState({
+      allowanceOptions
+    });
+  };
 
   setAgencyOptions = agencyData => {
     const agencyOptions = agencyData.map(agency => {
@@ -106,92 +128,6 @@ class NewEmployee extends Component {
     this.setState({
       echelonOptions
     });
-  };
-
-  renderTextField = field => {
-    const { meta: { touched, error } } = field;
-    const className = `form-group ${touched && error ? 'has-danger' : ''}`;
-    const { label, name, input, placeholder } = field;
-
-    return (
-      <div className={className}>
-        <label className="col-sm-2 control-label" htmlFor={name}>
-          {label}
-        </label>
-        <div className="col-sm-10">
-          <input
-            type="text"
-            className="form-control"
-            placeholder={placeholder}
-            {...input}
-          />
-        </div>
-      </div>
-    );
-  };
-
-  renderAgenciesDropdown = field => {
-    const { meta: { touched, error } } = field;
-    const className = `form-group ${touched && error ? 'has-danger' : ''}`;
-    const { label, name, input } = field;
-    const { agency } = this.props;
-    return (
-      <div className={className}>
-        <label className="col-sm-2 control-label" htmlFor={name}>
-          {label}
-        </label>
-        <div className="col-sm-10">
-          <select className="form-control" onChange {...input}>
-            {agency.data.map(row => {
-              return (
-                <option key={row.id} value={row.id}>
-                  {row.name}
-                </option>
-              );
-            })}
-          </select>
-        </div>
-      </div>
-    );
-  };
-
-  renderEchelonsDropdown = field => {
-    const { meta: { touched, error } } = field;
-    const className = `form-group ${touched && error ? 'has-danger' : ''}`;
-    const { label, name, input } = field;
-    const { echelon } = this.props;
-
-    if (echelon != null) {
-      return (
-        <div className={className}>
-          <label className="col-sm-2 control-label" htmlFor={name}>
-            {label}
-          </label>
-          <div className="col-sm-10">
-            <select className="form-control" {...input}>
-              {echelon.data.map(row => {
-                return (
-                  <option key={row.id} value={row.id}>
-                    {row.name}
-                  </option>
-                );
-              })}
-            </select>
-          </div>
-        </div>
-      );
-    }
-
-    return (
-      <div className={className}>
-        <label className="col-sm-2" htmlFor={name}>
-          {label}
-        </label>
-        <div className="col-sm-10">
-          <select className="form-control" {...input} />
-        </div>
-      </div>
-    );
   };
 
   handleAgencyChange = value => {
@@ -231,10 +167,20 @@ class NewEmployee extends Component {
           <form onSubmit={handleSubmit(this.onSubmit)}>
             <div className="row">
               <div className="col-md-3">
-                <Field label="NIP" name="id" component={FormText} validate={[validator.required]} />
+                <Field
+                  label="NIP"
+                  name="id"
+                  component={FormText}
+                  validate={[validator.required]}
+                />
               </div>
               <div className="col-md-3">
-                <Field label="Name" name="name" component={FormText} validate={[validator.required]} />
+                <Field
+                  label="Name"
+                  name="name"
+                  component={FormText}
+                  validate={[validator.required]}
+                />
               </div>
             </div>
             <div className="row">
@@ -244,7 +190,7 @@ class NewEmployee extends Component {
                   name="gender"
                   component={FormSelection}
                   optionsData={NewEmployee.genderOptions}
-                  validate={[validator.required]} 
+                  validate={[validator.required]}
                 />
               </div>
               <div className="col-md-3">
@@ -253,13 +199,18 @@ class NewEmployee extends Component {
                   name="religion_id"
                   optionsData={this.props.religions}
                   component={FormSelection}
-                  validate={[validator.required]} 
+                  validate={[validator.required]}
                 />
               </div>
             </div>
             <div className="row">
               <div className="col-md-3">
-                <Field label="Phone" name="phone" component={FormText} validate={[validator.required, validator.number]} />
+                <Field
+                  label="Phone"
+                  name="phone"
+                  component={FormText}
+                  validate={[validator.required, validator.number]}
+                />
               </div>
               <div className="col-md-3">
                 <Field
@@ -267,13 +218,18 @@ class NewEmployee extends Component {
                   name="married"
                   component={FormSelection}
                   optionsData={NewEmployee.maritalStatusOptions}
-                  validate={[validator.required]} 
+                  validate={[validator.required]}
                 />
               </div>
             </div>
             <div className="row">
               <div className="col-md-6">
-                <Field label="Address" name="address" component={FormText} validate={[validator.required]} />
+                <Field
+                  label="Address"
+                  name="address"
+                  component={FormText}
+                  validate={[validator.required]}
+                />
               </div>
             </div>
             <div className="row">
@@ -321,6 +277,18 @@ class NewEmployee extends Component {
                 />
               </div>
             </div>
+            <div className="row">
+              <div className="col-md-6">
+                <Field
+                  label="Allowance"
+                  name="alloawance_id"
+                  optionsData={this.state.allowanceOptions}
+                  defaultValue={''}
+                  component={FormSelectionWithSearch}
+                  validate={[validator.required]}
+                />
+              </div>
+            </div>
             <button type="submit" className="btn btn-primary">
               Save
             </button>
@@ -340,7 +308,8 @@ const mapStateToProps = state => ({
   echelon: state.echelon,
   workshifts: state.employee.workshifts,
   religions: state.employee.religions,
-  ranks: state.employee.ranks
+  ranks: state.employee.ranks,
+  allowances: state.allowances.data
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -350,7 +319,8 @@ const mapDispatchToProps = dispatch => ({
   fetchWorkshifts: () => dispatch(employeeActions.fetchWorkshift()),
   clearSelectedEchelon: () => dispatch(employeeActions.clearSelectedEchelon()),
   fetchReligions: () => dispatch(employeeActions.fetchAllReligion()),
-  fetchRanks: () => dispatch(employeeActions.fetchAllRank())
+  fetchRanks: () => dispatch(employeeActions.fetchAllRank()),
+  fetchAllowances: () => dispatch(allowancesActions.fetchAllowances())
 });
 
 const Connector = connect(mapStateToProps, mapDispatchToProps)(NewEmployee);
