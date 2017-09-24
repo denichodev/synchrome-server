@@ -44,7 +44,8 @@ class EmployeeController extends Controller
             'phone' => 'required|max:12',
             'rank_id' => 'sometimes',
             'id' => 'required|unique:employees,id',
-            'name' => 'required'
+            'name' => 'required',
+            'allowance_id' => 'required'
         ]);
 
         if ($validation->fails()) {
@@ -147,7 +148,8 @@ class EmployeeController extends Controller
             'address' => 'required',
             'phone' => 'required|max:12',
             'rank_id' => 'sometimes',
-            'name' => 'required'
+            'name' => 'required',
+            'allowance_id' => 'required'
         ]);
 
         if ($validation->fails()) {
