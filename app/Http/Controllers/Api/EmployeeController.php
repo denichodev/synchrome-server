@@ -117,6 +117,9 @@ class EmployeeController extends Controller
             'religion' => function ($query) {
                 $query->select(['id', 'name']);
             },
+            'allowance' => function ($query) {
+                $query->select(['id', 'name']);
+            },
             'templates'
         ])->find($id);
 
