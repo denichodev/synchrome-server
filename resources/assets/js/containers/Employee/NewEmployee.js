@@ -65,7 +65,8 @@ class NewEmployee extends Component {
         workshift_id: 1,
         gender: 'm',
         married: 1,
-        religion_id: 1
+        religion_id: 1,
+        rank_id: '1A'
       })
     );
   };

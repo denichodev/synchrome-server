@@ -4,6 +4,7 @@ import { Field, reduxForm, initialize } from 'redux-form';
 import { agencyActions } from '../../ducks/agency';
 import { echelonActions } from '../../ducks/echelon';
 import { employeeActions } from '../../ducks/employee';
+import validator from '../../helpers/validator';
 import {
   FormSelection,
   FormText,
@@ -76,7 +77,7 @@ class EditEmployee extends Component {
 
     if (nextProps.echelon.data.length > 0 && !this.state.echelonsFetched) {
       this.setState({ echelonsFetched: true });
-      console.log(nextProps.activeEmployee);
+
       dispatch(
         initialize('editEmployeeForm', {
           name: nextProps.activeEmployee.name,
@@ -89,7 +90,8 @@ class EditEmployee extends Component {
           phone: nextProps.activeEmployee.phone,
           address: nextProps.activeEmployee.address,
           gender: nextProps.activeEmployee.gender,
-          workshift_id: nextProps.activeEmployee.workshift.id
+          workshift_id: nextProps.activeEmployee.workshift.id,
+          allowance_id: nextProps.activeEmployee.allowance_id
         })
       );
     }
@@ -232,6 +234,7 @@ class EditEmployee extends Component {
                   label="NIP"
                   name="id"
                   component={FormText}
+                  validate={[validator.required]}
                 />
               </div>
               <div className="col-md-3">
@@ -239,6 +242,7 @@ class EditEmployee extends Component {
                   label="Name"
                   name="name"
                   component={FormText}
+                  validate={[validator.required]}
                 />
               </div>
             </div>
@@ -248,7 +252,8 @@ class EditEmployee extends Component {
                   label="Gender"
                   name="gender"
                   component={FormSelection}
-                  optionsData={EditEmployee.genderOptions}                    
+                  optionsData={EditEmployee.genderOptions}
+                  validate={[validator.required]}
                 />
               </div>
               <div className="col-md-3">
@@ -257,6 +262,7 @@ class EditEmployee extends Component {
                   name="religion_id"
                   optionsData={this.props.religions}
                   component={FormSelection}
+                  validate={[validator.required]}
                 />
               </div>
             </div>
@@ -266,6 +272,7 @@ class EditEmployee extends Component {
                   label="Phone"
                   name="phone"
                   component={FormText}
+                  validate={[validator.required, validator.number]}
                 />
               </div>
               <div className="col-md-3">
@@ -274,6 +281,7 @@ class EditEmployee extends Component {
                   name="married"
                   component={FormSelection}
                   optionsData={EditEmployee.maritalStatusOptions}
+                  validate={[validator.required]}
                 />
               </div>
             </div>
@@ -283,6 +291,7 @@ class EditEmployee extends Component {
                   label="Address"
                   name="address"
                   component={FormText}
+                  validate={[validator.required]}
                 />
               </div>
             </div>
@@ -293,6 +302,7 @@ class EditEmployee extends Component {
                   name="rank_id"
                   component={FormSelection}
                   optionsData={this.props.ranks}
+                  validate={[validator.required]}
                 />
               </div>
               <div className="col-md-3">
@@ -301,6 +311,7 @@ class EditEmployee extends Component {
                   name="workshift_id"
                   component={FormSelection}
                   optionsData={workshifts}
+                  validate={[validator.required]}
                 />
               </div>
             </div>
@@ -313,6 +324,7 @@ class EditEmployee extends Component {
                   onChange={this.handleAgencyChange}
                   defaultValue={''}
                   component={FormSelectionWithSearch}
+                  validate={[validator.required]}
                 />
               </div>
             </div>
@@ -324,6 +336,19 @@ class EditEmployee extends Component {
                   optionsData={this.state.echelonOptions}
                   defaultValue={''}
                   component={FormSelectionWithSearch}
+                  validate={[validator.required]}
+                />
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-md-6">
+                <Field
+                  label="Allowance"
+                  name="allowance_id"
+                  optionsData={this.state.allowanceOptions}
+                  defaultValue={''}
+                  component={FormSelectionWithSearch}
+                  validate={[validator.required]}
                 />
               </div>
             </div>
