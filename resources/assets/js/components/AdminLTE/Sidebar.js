@@ -31,6 +31,11 @@ export default class Sidebar extends Component {
                 <i className="fa fa-users" /> <span>Users</span>
               </Link>
             </li>
+            <li className="treeview">
+              <Link to="/panel/allowances">
+                <i className="fa fa-money" /> <span>Allowances</span>
+              </Link>
+            </li>
           </ul>
         </section>
       </aside>
