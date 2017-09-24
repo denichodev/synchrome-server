@@ -4,6 +4,7 @@ import { Field, reduxForm, initialize } from 'redux-form';
 import { agencyActions } from '../../ducks/agency';
 import { echelonActions } from '../../ducks/echelon';
 import { employeeActions } from '../../ducks/employee';
+import { allowancesActions } from '../../ducks/allowances';
 import validator from '../../helpers/validator';
 import {
   FormSelection,
@@ -40,7 +41,8 @@ class EditEmployee extends Component {
     this.state = {
       echelonsFetched: false,
       agencyOptions: [],
-      echelonOptions: []
+      echelonOptions: [],
+      allowanceOptions: []
     };
   }
 
@@ -50,13 +52,15 @@ class EditEmployee extends Component {
       fetchWorkshifts,
       fetchEmployeeById,
       fetchReligions,
-      fetchRanks
+      fetchRanks,
+      fetchAllowances
     } = this.props;
     const id = this.props.match.params.id;
     fetchAllAgency();
     fetchWorkshifts();
     fetchReligions();
     fetchRanks();
+    fetchAllowances();
     fetchEmployeeById(id);
   };
 
@@ -75,6 +79,10 @@ class EditEmployee extends Component {
       fetchEchelonsById(nextProps.activeEmployee.echelon.agency.id);
     }
 
+    if (nextProps.allowances.length > 0) {
+      this.setAllowanceOptions(nextProps.allowances);
+    }
+
     if (nextProps.echelon.data.length > 0 && !this.state.echelonsFetched) {
       this.setState({ echelonsFetched: true });
 
@@ -91,7 +99,7 @@ class EditEmployee extends Component {
           address: nextProps.activeEmployee.address,
           gender: nextProps.activeEmployee.gender,
           workshift_id: nextProps.activeEmployee.workshift.id,
-          allowance_id: nextProps.activeEmployee.allowance_id
+          allowance_id: nextProps.activeEmployee.allowance.id
         })
       );
     }
@@ -107,6 +115,19 @@ class EditEmployee extends Component {
 
     this.setState({
       agencyOptions
+    });
+  };
+
+  setAllowanceOptions = allowanceData => {
+    const allowanceOptions = allowanceData.map(alw => {
+      return {
+        value: alw.id,
+        label: `${alw.name} | TPP ${alw.tpp} | MEAL ${alw.meal}`
+      };
+    });
+
+    this.setState({
+      allowanceOptions
     });
   };
 
@@ -383,7 +404,8 @@ const mapStateToProps = state => ({
   workshifts: state.employee.workshifts,
   activeEmployee: state.employee.active,
   religions: state.employee.religions,
-  ranks: state.employee.ranks
+  ranks: state.employee.ranks,
+  allowances: state.allowances.data
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -396,7 +418,8 @@ const mapDispatchToProps = dispatch => ({
     dispatch(employeeActions.patchEmployee(id, data));
   },
   fetchReligions: () => dispatch(employeeActions.fetchAllReligion()),
-  fetchRanks: () => dispatch(employeeActions.fetchAllRank())
+  fetchRanks: () => dispatch(employeeActions.fetchAllRank()),
+  fetchAllowances: () => dispatch(allowancesActions.fetchAllowances())
 });
 
 const Decorated = reduxForm(formOptions)(EditEmployee);
