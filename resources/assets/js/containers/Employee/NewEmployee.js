@@ -281,7 +281,7 @@ class NewEmployee extends Component {
               <div className="col-md-6">
                 <Field
                   label="Allowance"
-                  name="alloawance_id"
+                  name="allowance_id"
                   optionsData={this.state.allowanceOptions}
                   defaultValue={''}
                   component={FormSelectionWithSearch}
