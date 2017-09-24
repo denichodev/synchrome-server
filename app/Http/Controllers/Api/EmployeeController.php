@@ -53,7 +53,7 @@ class EmployeeController extends Controller
                 ->json([
                     'result' => 'failed',
                     'errors' => $validation->errors()
-                ]);
+                ], 422);
         }
 
         $user_data = $request->all();
@@ -157,7 +157,7 @@ class EmployeeController extends Controller
                 ->json([
                     'result' => 'failed',
                     'errors' => $validation->errors()
-                ]);
+                ], 422);
         }
 
         $employee = Employee::find($id);
