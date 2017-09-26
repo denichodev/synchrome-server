@@ -22,9 +22,9 @@ class ScanLog extends Model
         'checkout',
         'absence_type_id',
         'status',
-        'early_by',
-        'late_by',
-        'work_duration'
+        'work_duration',
+        'off_duration',
+        'workshift_work_duration'
     ];
 
     protected $hidden = [
