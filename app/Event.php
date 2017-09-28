@@ -18,7 +18,9 @@ class Event extends Model
         'event_category_id'
     ];
     protected $dates = [
-        'deleted_at'
+        'deleted_at',
+        'start',
+        'end'
     ];
 
     public function category()
