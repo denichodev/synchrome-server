@@ -22,4 +22,9 @@ class Workshift extends Model
     {
         return $this->hasMany(Shift::class);
     }
+
+    public function isSaturdayWorkday()
+    {
+        return $this->details->where('day', 'Sat')->count() === 1;
+    }
 }
