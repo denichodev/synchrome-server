@@ -14,16 +14,11 @@ const FormDatePicker = field => {
       <label htmlFor={name}>
         {label}
       </label>
-      <div className="input-group fix-height">
-        <div className="input-group-addon fix-height">
-          <i className="fa fa-calendar" />
-        </div>
-        <DatePicker
-          selected={input.value}
-          onChange={input.onChange}
-          className={'form-control'}
-        />
-      </div>
+      <DatePicker
+        selected={input.value}
+        onChange={input.onChange}
+        className={'form-control'}
+      />
       <span className="help-block" style={errorHelpBlockStyle}>{error}</span>
     </div>
   );
