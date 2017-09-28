@@ -7,11 +7,6 @@ class EventCategoriesTableSeeder extends Seeder
 {
     private $categories = [
         [
-            'id' => 1,
-            'name' => 'Workday',
-            'color' => '#3c8dbc'
-        ],
-        [
             'id' => 2,
             'name' => 'Holiday',
             'color' => '#e74c3c'
