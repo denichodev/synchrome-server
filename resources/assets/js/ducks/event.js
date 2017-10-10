@@ -2,9 +2,12 @@ import moment from 'moment';
 import http from '../services/http';
 
 // Types
-const FETCH_EVENT_CATEGORY_REQUEST = 'synchrome/event/fetch_event_category_request';
-const FETCH_EVENT_CATEGORY_SUCCESS = 'synchrome/event/fetch_event_category_success';
-const FETCH_EVENT_CATEGORY_FAILURE = 'synchrome/event/fetch_event_category_failure';
+const FETCH_EVENT_CATEGORY_REQUEST =
+  'synchrome/event/fetch_event_category_request';
+const FETCH_EVENT_CATEGORY_SUCCESS =
+  'synchrome/event/fetch_event_category_success';
+const FETCH_EVENT_CATEGORY_FAILURE =
+  'synchrome/event/fetch_event_category_failure';
 
 const ADD_EVENT_TO_POST = 'synchrome/event/add_event_to_post';
 const EDIT_EVENT_TO_POST = 'synchrome/event/edit_event_to_post';
@@ -42,13 +45,23 @@ const fetchEventCategoryFailure = payload => {
   return {
     type: FETCH_EVENT_CATEGORY_FAILURE,
     payload
-  }
-}
+  };
+};
 
 const addEventToPost = payload => {
+  // TODO: Fetch color of the category from server.
+  let color = '#9b59b6';
+
+  if (payload.event_category_id === '1') {
+    color = '#e74c3c';
+  }
+
   return {
     type: ADD_EVENT_TO_POST,
-    payload
+    payload: {
+      ...payload,
+      color
+    }
   };
 };
 
@@ -119,7 +132,7 @@ const editEvent = (events, editedEvent) => {
 
   return dispatch => {
     dispatch(editEventToPost(newEvents));
-  }
+  };
 };
 
 export const eventActions = {
@@ -184,7 +197,7 @@ const eventReducer = (state = initialState, action) => {
       return initialState;
     default:
       return state;
-  };
+  }
 };
 
 export default {
