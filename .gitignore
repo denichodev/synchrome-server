@@ -14,6 +14,9 @@
 Homestead.json
 Homestead.yaml
 npm-debug.log
+Vagrantfile
+after.sh
+aliases
 .env
 
 public/

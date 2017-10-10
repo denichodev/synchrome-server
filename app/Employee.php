@@ -26,7 +26,8 @@ class Employee extends Model
         'married',
         'address',
         'phone',
-        'allowance_id'
+        'allowance_id',
+        'calendar_id'
     ];
 
     protected $hidden = [
@@ -34,7 +35,8 @@ class Employee extends Model
         'workshift_id',
         'religion_id',
         'deleted_at',
-        'allowance_id'
+        'allowance_id',
+        'calendar_id'
     ];
 
     protected $dates = [
@@ -74,5 +76,10 @@ class Employee extends Model
     public function allowance()
     {
         return $this->belongsTo(Allowance::class);
+    }
+
+    public function calendar()
+    {
+        return $this->belongsTo(Calendar::class);
     }
 }
