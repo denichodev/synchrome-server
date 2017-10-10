@@ -120,7 +120,10 @@ class EmployeeController extends Controller
             'allowance' => function ($query) {
                 $query->select(['id', 'name']);
             },
-            'templates'
+            'calendar' => function ($query) {
+                $query->select(['id', 'name']);
+            },
+            'templates',
         ])->find($id);
 
         if (is_null($employee)) {
