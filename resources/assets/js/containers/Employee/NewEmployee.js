@@ -5,6 +5,7 @@ import { agencyActions } from '../../ducks/agency';
 import { echelonActions } from '../../ducks/echelon';
 import { employeeActions } from '../../ducks/employee';
 import { allowancesActions } from '../../ducks/allowances';
+import { calendarActions } from '../../ducks/calendar';
 import validator from '../../helpers/validator';
 import {
   FormSelection,
@@ -41,7 +42,8 @@ class NewEmployee extends Component {
     this.state = {
       agencyOptions: [],
       echelonOptions: [],
-      allowanceOptions: []
+      allowanceOptions: [],
+      calendarOptions: []
     };
   }
 
@@ -52,7 +54,8 @@ class NewEmployee extends Component {
       dispatch,
       fetchReligions,
       fetchRanks,
-      fetchAllowances
+      fetchAllowances,
+      fetchAllCalendar
     } = this.props;
 
     fetchAllAgency();
@@ -60,6 +63,8 @@ class NewEmployee extends Component {
     fetchReligions();
     fetchRanks();
     fetchAllowances();
+    fetchAllCalendar();
+
     dispatch(
       initialize('newEmployeeForm', {
         workshift_id: 1,
@@ -90,6 +95,10 @@ class NewEmployee extends Component {
     if (nextProps.allowances.length > 0) {
       this.setAllowanceOptions(nextProps.allowances);
     }
+
+    if (nextProps.calendar.data.length > 0) {
+      this.setCalendarOptions(nextProps.calendar.data);
+    }
   }
 
   setAllowanceOptions = allowanceData => {
@@ -115,6 +124,19 @@ class NewEmployee extends Component {
 
     this.setState({
       agencyOptions
+    });
+  };
+
+  setCalendarOptions = calendarData => {
+    const calendarOptions = calendarData.map(calendar => {
+      return {
+        value: calendar.id,
+        label: calendar.name
+      };
+    });
+
+    this.setState({
+      calendarOptions
     });
   };
 
@@ -256,6 +278,18 @@ class NewEmployee extends Component {
             <div className="row">
               <div className="col-md-6">
                 <Field
+                  label="Calendar"
+                  name="calendar_id"
+                  optionsData={this.state.calendarOptions}
+                  defaultValue={''}
+                  component={FormSelectionWithSearch}
+                  validate={[validator.required]}
+                />
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-md-6">
+                <Field
                   label="Agency"
                   name="agency_id"
                   optionsData={this.state.agencyOptions}
@@ -310,7 +344,8 @@ const mapStateToProps = state => ({
   workshifts: state.employee.workshifts,
   religions: state.employee.religions,
   ranks: state.employee.ranks,
-  allowances: state.allowances.data
+  allowances: state.allowances.data,
+  calendar: state.calendars
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -321,7 +356,8 @@ const mapDispatchToProps = dispatch => ({
   clearSelectedEchelon: () => dispatch(employeeActions.clearSelectedEchelon()),
   fetchReligions: () => dispatch(employeeActions.fetchAllReligion()),
   fetchRanks: () => dispatch(employeeActions.fetchAllRank()),
-  fetchAllowances: () => dispatch(allowancesActions.fetchAllowances())
+  fetchAllowances: () => dispatch(allowancesActions.fetchAllowances()),
+  fetchAllCalendar: () => dispatch(calendarActions.fetchAllCalendar())
 });
 
 const Connector = connect(mapStateToProps, mapDispatchToProps)(NewEmployee);

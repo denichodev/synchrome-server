@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Field, reduxForm, reset, change } from 'redux-form';
-import DatePicker from 'react-bootstrap-date-picker';
-import { withRouter } from 'react-router-dom';
-import $ from 'jquery';
+import { Field, reduxForm, reset } from 'redux-form';
 
 import { calendarActions } from '../../ducks/calendar';
 import { eventActions } from '../../ducks/event';
@@ -33,7 +30,12 @@ class Calendar extends Component {
   }
 
   componentWillMount() {
-    const { edit, initialize, clearActiveCalendar, clearActiveEvents  } = this.props;
+    const {
+      edit,
+      initialize,
+      clearActiveCalendar,
+      clearActiveEvents
+    } = this.props;
     clearActiveCalendar();
     clearActiveEvents();
     if (!edit) {
@@ -71,7 +73,15 @@ class Calendar extends Component {
   }
 
   handleSubmit = values => {
-    const { postCalendar, eventToPost, dispatch, edit, patchCalendar, activeCalendar, id } = this.props;
+    const {
+      postCalendar,
+      eventToPost,
+      dispatch,
+      edit,
+      patchCalendar,
+      activeCalendar,
+      id
+    } = this.props;
 
     if (!edit) {
       postCalendar(values, eventToPost);
@@ -79,7 +89,13 @@ class Calendar extends Component {
       const updatedEvents = activeCalendar.data.events.filter(event => {
         return event.updated === true;
       });
-      patchCalendar(id, values, eventToPost, activeCalendar.deleted, updatedEvents);
+      patchCalendar(
+        id,
+        values,
+        eventToPost,
+        activeCalendar.deleted,
+        updatedEvents
+      );
     }
 
     dispatch(reset('calendarForm'));
@@ -94,10 +110,7 @@ class Calendar extends Component {
       target: {}
     });
 
-    this.props.selectDateFromCalendar(
-      start,
-      end.add(-1, 'days')
-    );
+    this.props.selectDateFromCalendar(start, end.add(-1, 'days'));
   };
 
   renderEventCalendar = () => {
@@ -142,8 +155,8 @@ class Calendar extends Component {
             <div className="box-header">
               {this.props.edit
                 ? `Edit ${activeCalendar.data.name
-                  ? activeCalendar.data.name
-                  : ''}`
+                    ? activeCalendar.data.name
+                    : ''}`
                 : 'Add New Calendar'}
             </div>
             <div className="box-body">
@@ -152,7 +165,7 @@ class Calendar extends Component {
                   <Field
                     name="name"
                     placeholder="Calendar Title"
-                    defaultValue="kontlooooo"
+                    defaultValue="Kalender"
                     component={FormText}
                   />
                 </div>
@@ -161,6 +174,13 @@ class Calendar extends Component {
                 <div className="col-md-12">
                   {/* this.renderCalendarTitle() */}
                   {this.renderEventCalendar()}
+                  <div className="pull-right">
+                    <i
+                      className="fa fa-info-circle"
+                      style={{ color: '#3482b4' }}
+                    />{' '}
+                    Shift + Click to remove event
+                  </div>
                 </div>
               </div>
             </div>
@@ -234,7 +254,15 @@ const mapDispatchToProps = dispatch => ({
   postCalendar: (calendar, events) =>
     dispatch(calendarActions.postCalendar(calendar, events)),
   patchCalendar: (id, calendar, newEvents, deletedList, updatedList) =>
-    dispatch(calendarActions.patchCalendar(id, calendar, newEvents, deletedList, updatedList)),
+    dispatch(
+      calendarActions.patchCalendar(
+        id,
+        calendar,
+        newEvents,
+        deletedList,
+        updatedList
+      )
+    ),
   setEventEditStatus: data => {
     dispatch(reset('eventForm'));
     dispatch(eventActions.setEditStatus(data));

@@ -18,7 +18,6 @@ const FormText = field => {
         placeholder={placeholder}
         value={defaultValue}
         disabled={disabled}
-        defaultValue={defaultValue}
         {...input}
       />
       <span className="help-block" style={errorHelpBlockStyle}>

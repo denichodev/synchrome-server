@@ -3,13 +3,19 @@ import { push } from 'react-router-redux';
 import http from '../services/http';
 
 // Types
-const FETCH_CALENDAR_ALL_REQUEST = 'synchrome/calendar/fetch_calendar_all_request';
-const FETCH_CALENDAR_ALL_SUCCESS = 'synchrome/calendar/fetch_calendar_all_success';
-const FETCH_CALENDAR_ALL_FAILURE = 'synchrome/calendar/fetch_calendar_all_failure';
+const FETCH_CALENDAR_ALL_REQUEST =
+  'synchrome/calendar/fetch_calendar_all_request';
+const FETCH_CALENDAR_ALL_SUCCESS =
+  'synchrome/calendar/fetch_calendar_all_success';
+const FETCH_CALENDAR_ALL_FAILURE =
+  'synchrome/calendar/fetch_calendar_all_failure';
 
-const FETCH_CALENDAR_BYID_REQUEST = 'synchrome/calendar/fetch_calendar_byid_request';
-const FETCH_CALENDAR_BYID_SUCCESS = 'synchrome/calendar/fetch_calendar_byid_success';
-const FETCH_CALENDAR_BYID_FAILURE = 'synchrome/calendar/fetch_calendar_byid_failure';
+const FETCH_CALENDAR_BYID_REQUEST =
+  'synchrome/calendar/fetch_calendar_byid_request';
+const FETCH_CALENDAR_BYID_SUCCESS =
+  'synchrome/calendar/fetch_calendar_byid_success';
+const FETCH_CALENDAR_BYID_FAILURE =
+  'synchrome/calendar/fetch_calendar_byid_failure';
 
 const POST_CALENDAR_REQUEST = 'synchrome/calendar/post_calendar_request';
 const POST_CALENDAR_SUCCESS = 'synchrome/calendar/post_calendar_all_success';
@@ -88,8 +94,8 @@ const fetchCalendarByIdFailure = error => {
   return {
     type: FETCH_CALENDAR_BYID_FAILURE,
     payload: error
-  }
-}
+  };
+};
 
 const postCalendarRequest = () => {
   return {
@@ -110,7 +116,7 @@ const postCalendarFailure = payload => ({
 const patchCalendarRequest = () => {
   return {
     type: PATCH_CALENDAR_REQUEST
-  }
+  };
 };
 
 const patchCalendarSuccess = payload => ({
@@ -126,7 +132,7 @@ const patchCalendarFailure = payload => ({
 const deleteCalendarRequest = () => {
   return {
     type: DELETE_CALENDAR_REQUEST
-  }
+  };
 };
 
 const deleteCalendarSuccess = payload => ({
@@ -200,7 +206,6 @@ const fetchAllCalendar = () => {
 
     http.get('/calendar', success, error);
   };
-
 };
 
 const fetchCalendarById = id => {
@@ -236,8 +241,6 @@ const postCalendar = (calendar, events) => {
     events: [...eventData]
   };
 
-  console.log('CALENDAR API DATA :', data);
-
   return dispatch => {
     dispatch(postCalendarRequest());
 
@@ -257,18 +260,12 @@ const postCalendar = (calendar, events) => {
 };
 
 const patchCalendar = (id, calendar, newEvents, deletedList, updatedList) => {
-  console.log('calendar', calendar);
-  console.log('newEvents', newEvents);
-  console.log('deletedList', deletedList);
-  console.log('updatedList', updatedList);
-
   const data = {
     ...calendar,
     newEvents: [...newEvents],
     deletedEvents: [...deletedList],
     updatedEvents: [...updatedList]
   };
-  console.log('data', data);
 
   return dispatch => {
     dispatch(patchCalendarRequest());
@@ -312,7 +309,7 @@ const allCalendarReducer = (state = {}, action) => {
       return {
         ...state,
         data: action.payload
-      }
+      };
     case FETCH_CALENDAR_ALL_FAILURE:
       return {
         ...state,
@@ -352,7 +349,7 @@ const activeCalendarReducer = (state = activeCalendarInitialState, action) => {
       return {
         ...state,
         data: action.payload
-      }
+      };
     case POST_CALENDAR_FAILURE:
       return {
         ...state,
@@ -380,11 +377,11 @@ const activeCalendarReducer = (state = activeCalendarInitialState, action) => {
     default:
       return state;
   }
-}
+};
 
 export default {
   allCalendarReducer,
   activeCalendarReducer,
   activeCalendarInitialState,
   allCalendarInitialState
-}
+};
