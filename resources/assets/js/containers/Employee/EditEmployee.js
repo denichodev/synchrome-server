@@ -5,6 +5,7 @@ import { agencyActions } from '../../ducks/agency';
 import { echelonActions } from '../../ducks/echelon';
 import { employeeActions } from '../../ducks/employee';
 import { allowancesActions } from '../../ducks/allowances';
+import { calendarActions } from '../../ducks/calendar';
 import validator from '../../helpers/validator';
 import {
   FormSelection,
@@ -42,7 +43,8 @@ class EditEmployee extends Component {
       echelonsFetched: false,
       agencyOptions: [],
       echelonOptions: [],
-      allowanceOptions: []
+      allowanceOptions: [],
+      calendarOptions: []
     };
   }
 
@@ -53,7 +55,8 @@ class EditEmployee extends Component {
       fetchEmployeeById,
       fetchReligions,
       fetchRanks,
-      fetchAllowances
+      fetchAllowances,
+      fetchAllCalendar
     } = this.props;
     const id = this.props.match.params.id;
     fetchAllAgency();
@@ -61,6 +64,7 @@ class EditEmployee extends Component {
     fetchReligions();
     fetchRanks();
     fetchAllowances();
+    fetchAllCalendar();
     fetchEmployeeById(id);
   };
 
@@ -83,6 +87,10 @@ class EditEmployee extends Component {
       this.setAllowanceOptions(nextProps.allowances);
     }
 
+    if (nextProps.calendar.data.length > 0) {
+      this.setCalendarOptions(nextProps.calendar.data);
+    }
+
     if (nextProps.echelon.data.length > 0 && !this.state.echelonsFetched) {
       this.setState({ echelonsFetched: true });
 
@@ -99,7 +107,8 @@ class EditEmployee extends Component {
           address: nextProps.activeEmployee.address,
           gender: nextProps.activeEmployee.gender,
           workshift_id: nextProps.activeEmployee.workshift.id,
-          allowance_id: nextProps.activeEmployee.allowance.id
+          allowance_id: nextProps.activeEmployee.allowance.id,
+          calendar_id: nextProps.activeEmployee.calendar.id
         })
       );
     }
@@ -128,6 +137,19 @@ class EditEmployee extends Component {
 
     this.setState({
       allowanceOptions
+    });
+  };
+
+  setCalendarOptions = calendarData => {
+    const calendarOptions = calendarData.map(calendar => {
+      return {
+        value: calendar.id,
+        label: calendar.name
+      };
+    });
+
+    this.setState({
+      calendarOptions
     });
   };
 
@@ -339,6 +361,18 @@ class EditEmployee extends Component {
             <div className="row">
               <div className="col-md-6">
                 <Field
+                  label="Calendar"
+                  name="calendar_id"
+                  optionsData={this.state.calendarOptions}
+                  defaultValue={''}
+                  component={FormSelectionWithSearch}
+                  validate={[validator.required]}
+                />
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-md-6">
+                <Field
                   label="Agency"
                   name="agency_id"
                   optionsData={this.state.agencyOptions}
@@ -405,7 +439,8 @@ const mapStateToProps = state => ({
   activeEmployee: state.employee.active,
   religions: state.employee.religions,
   ranks: state.employee.ranks,
-  allowances: state.allowances.data
+  allowances: state.allowances.data,
+  calendar: state.calendars
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -419,7 +454,8 @@ const mapDispatchToProps = dispatch => ({
   },
   fetchReligions: () => dispatch(employeeActions.fetchAllReligion()),
   fetchRanks: () => dispatch(employeeActions.fetchAllRank()),
-  fetchAllowances: () => dispatch(allowancesActions.fetchAllowances())
+  fetchAllowances: () => dispatch(allowancesActions.fetchAllowances()),
+  fetchAllCalendar: () => dispatch(calendarActions.fetchAllCalendar())
 });
 
 const Decorated = reduxForm(formOptions)(EditEmployee);
