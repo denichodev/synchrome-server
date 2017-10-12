@@ -69,7 +69,7 @@ class Employee extends Model
 
     public function rank()
     {
-        return $this->belongsToMany(Rank::class);
+        return $this->belongsTo(Rank::class);
     }
 
     public function currentRank()
