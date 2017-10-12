@@ -13,8 +13,9 @@ use DB;
 
 class EmployeeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $user_data = $request->all();
         $employees = Employee::with([
             'echelon' => function ($query) {
                 $query->select(['id', 'name', 'agency_id']);
@@ -22,13 +23,16 @@ class EmployeeController extends Controller
             'echelon.agency' => function ($query) {
                 $query->select(['id', 'name']);
             }
-        ])
-        ->get(['id', 'name', 'echelon_id']);
+        ]);
+
+        if (! empty($request->get('agency_id'))) {
+            $employees = $employees->where('agency_id', $user_data['agency_id']);
+        }
 
         return response()
             ->json([
                 'result' => 'success',
-                'data' => $employees
+                'data' => $employees->get(['id', 'name', 'echelon_id'])
             ]);
     }
 
@@ -62,7 +66,6 @@ class EmployeeController extends Controller
         try {
             DB::beginTransaction();
             $employee = Employee::create($request->all());
-            $employee->rankHistory()->attach($user_data['rank_id'], ['created_at' => $now, 'updated_at' => $now]);
             DB::commit();
 
             $employee = Employee::with([
@@ -80,7 +83,6 @@ class EmployeeController extends Controller
                 },
                 'templates'
             ])->find($employee->id);
-            $employee->rank = $employee->currentRank();
 
             return response()
                 ->json([
@@ -180,13 +182,6 @@ class EmployeeController extends Controller
         try {
             DB::beginTransaction();
             $employee->update($user_data);
-
-            if ($employee->rankHistory()->orderBy('created_at', 'DESC')->first()->id !== $user_data['rank_id']) {
-                $now = Carbon::now();
-
-                $employee->rankHistory()->attach($user_data['rank_id'], ['created_at' => $now, 'updated_at' => $now]);
-            }
-
             DB::commit();
 
             $employee = Employee::with([
@@ -204,7 +199,6 @@ class EmployeeController extends Controller
                 },
                 'templates'
             ])->find($employee->id);
-            $employee->rank = $employee->currentRank();
 
             return response()
                 ->json([
@@ -240,7 +234,6 @@ class EmployeeController extends Controller
 
         try {
             DB::beginTransaction();
-            $employee->rankHistory()->detach();
             $employee->delete();
             DB::commit();
 
