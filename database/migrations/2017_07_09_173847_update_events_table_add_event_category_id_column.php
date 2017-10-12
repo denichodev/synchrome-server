@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateEventsTableAddSoftDeletesField extends Migration
+class UpdateEventsTableAddEventCategoryIdColumn extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,9 @@ class UpdateEventsTableAddSoftDeletesField extends Migration
     public function up()
     {
         Schema::table('events', function (Blueprint $table) {
-            $table->softDeletes();
+            $table->integer('event_category_id')->unsigned();
+            $table->foreign('event_category_id')
+                ->references('id')->on('event_categories');
         });
     }
 
@@ -26,7 +28,7 @@ class UpdateEventsTableAddSoftDeletesField extends Migration
     public function down()
     {
         Schema::table('events', function (Blueprint $table) {
-            $table->dropColumn('deleted_at');
+            $table->dropForeign(['event_category_id']);
         });
     }
 }

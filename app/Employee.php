@@ -27,7 +27,9 @@ class Employee extends Model
         'address',
         'phone',
         'allowance_id',
-        'calendar_id'
+        'calendar_id',
+        'rank_id',
+        'agency_id'
     ];
 
     protected $hidden = [
@@ -36,7 +38,9 @@ class Employee extends Model
         'religion_id',
         'deleted_at',
         'allowance_id',
-        'calendar_id'
+        'calendar_id',
+        'rank_id',
+        'agency_id'
     ];
 
     protected $dates = [
@@ -63,9 +67,9 @@ class Employee extends Model
         return $this->belongsTo(Religion::class);
     }
 
-    public function rankHistory()
+    public function rank()
     {
-        return $this->belongsToMany(Rank::class, 'rank_histories');
+        return $this->belongsToMany(Rank::class);
     }
 
     public function currentRank()
@@ -81,5 +85,10 @@ class Employee extends Model
     public function calendar()
     {
         return $this->belongsTo(Calendar::class);
+    }
+
+    public function agency()
+    {
+        return $this->belongsTo(Agency::class);
     }
 }

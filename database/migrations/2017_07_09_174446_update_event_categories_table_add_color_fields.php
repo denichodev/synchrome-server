@@ -15,7 +15,7 @@ class UpdateEventCategoriesTableAddColorFields extends Migration
     {
         Schema::table('event_categories', function (Blueprint $table) {
             $table->string('color', 7);
-            $table->string('textColor', 7)->default('#000000');
+            $table->string('text_color', 7)->default('#000000');
         });
     }
 
@@ -28,7 +28,7 @@ class UpdateEventCategoriesTableAddColorFields extends Migration
     {
         Schema::table('event_categories', function (Blueprint $table) {
             $table->dropColumn('color');
-            $table->dropColumn('textColor');
+            $table->dropColumn('text_color');
         });
     }
 }

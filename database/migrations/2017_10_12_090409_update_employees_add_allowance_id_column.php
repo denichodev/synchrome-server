@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateEmployeesTableRev1 extends Migration
+class UpdateEmployeesAddAllowanceIdColumn extends Migration
 {
     /**
      * Run the migrations.
@@ -14,10 +14,9 @@ class UpdateEmployeesTableRev1 extends Migration
     public function up()
     {
         Schema::table('employees', function (Blueprint $table) {
-            $table->enum('gender', ['m', 'f']);
-            $table->boolean('married');
-            $table->text('address');
-            $table->string('phone', 12);
+            $table->string('allowance_id');
+            $table->foreign('allowance_id')
+                ->references('id')->on('allowances');
         });
     }
 
@@ -29,10 +28,8 @@ class UpdateEmployeesTableRev1 extends Migration
     public function down()
     {
         Schema::table('employees', function (Blueprint $table) {
-            $table->dropColumn('gender');
-            $table->dropColumn('married');
-            $table->dropColumn('address');
-            $table->dropColumn('phone');
+            $table->dropForeign(['allowance_id']);
+            $table->dropColumn('allowance_id');
         });
     }
 }

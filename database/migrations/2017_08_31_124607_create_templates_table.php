@@ -15,7 +15,7 @@ class CreateTemplatesTable extends Migration
     {
         Schema::create('templates', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('template');
+            $table->text('template');
             $table->integer('index');
             $table->integer('alg_ver');
             $table->string('employee_id');

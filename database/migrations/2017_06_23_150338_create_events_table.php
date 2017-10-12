@@ -18,9 +18,11 @@ class CreateEventsTable extends Migration
             $table->string('title');
             $table->date('start');
             $table->date('end')->nullable();
-            $table->smallInteger('isWeekday')->nullable();
-            $table->smallInteger('numOfDay')->nullable();
+            $table->integer('calendar_id')->unsigned();
+            $table->foreign('calendar_id')
+                ->references('id')->on('calendars');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

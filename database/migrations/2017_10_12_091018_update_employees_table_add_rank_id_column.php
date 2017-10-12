@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateEmployeesAddCalendarIdField extends Migration
+class UpdateEmployeesTableAddRankIdColumn extends Migration
 {
     /**
      * Run the migrations.
@@ -14,9 +14,9 @@ class UpdateEmployeesAddCalendarIdField extends Migration
     public function up()
     {
         Schema::table('employees', function (Blueprint $table) {
-            $table->unsignedInteger('calendar_id');
-            $table->foreign('calendar_id')
-                ->references('id')->on('calendars');
+            $table->string('rank_id');
+            $table->foreign('rank_id')
+                ->references('id')->on('ranks');
         });
     }
 
@@ -28,8 +28,8 @@ class UpdateEmployeesAddCalendarIdField extends Migration
     public function down()
     {
         Schema::table('employees', function (Blueprint $table) {
-            $table->dropForeign(['calendar_id']);
-            $table->dropColumn('calendar_id');
+            $table->dropForeign(['rank_id']);
+            $table->dropColumn('rank_id');
         });
     }
 }

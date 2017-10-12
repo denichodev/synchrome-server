@@ -16,8 +16,6 @@ class CreateWorkshiftsTable extends Migration
         Schema::create('workshifts', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->time('in');
-            $table->time('out');
             $table->timestamps();
         });
     }

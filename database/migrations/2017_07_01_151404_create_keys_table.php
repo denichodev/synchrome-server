@@ -21,6 +21,7 @@ class CreateKeysTable extends Migration
             $table->foreign('cluster_id')
                 ->references('id')->on('clusters');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

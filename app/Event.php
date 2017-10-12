@@ -13,8 +13,6 @@ class Event extends Model
         'title',
         'start',
         'end',
-        'is_weekday',
-        'num_of_day',
         'event_category_id'
     ];
     protected $dates = [

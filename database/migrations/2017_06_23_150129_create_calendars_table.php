@@ -18,7 +18,9 @@ class CreateCalendarsTable extends Migration
             $table->string('name');
             $table->date('start');
             $table->date('end');
+            $table->enum('status', ['draft', 'published']);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

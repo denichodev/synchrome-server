@@ -17,10 +17,21 @@ class CreateEmployeesTable extends Migration
             $table->string('id');
             $table->primary('id');
             $table->string('name');
-            $table->string('echelon_id');
+            $table->string('agency_id');
+            $table->foreign('agency_id')
+                ->references('id')->on('agencies');
+            $table->string('echelon_id')->nullable();
             $table->foreign('echelon_id')
                 ->references('id')->on('echelons');
+            $table->unsignedInteger('calendar_id');
+            $table->foreign('calendar_id')
+                ->references('id')->on('calendars');
+            $table->enum('gender', ['m', 'f']);
+            $table->boolean('married');
+            $table->text('address');
+            $table->string('phone', 12);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

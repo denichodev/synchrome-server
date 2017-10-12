@@ -17,8 +17,6 @@ class CreateRanksTable extends Migration
             $table->string('id', 2);
             $table->primary('id');
             $table->string('name');
-            $table->decimal('allowance', 15, 2);
-            $table->decimal('meal_allowance', 15, 2);
             $table->timestamps();
             $table->softDeletes();
         });

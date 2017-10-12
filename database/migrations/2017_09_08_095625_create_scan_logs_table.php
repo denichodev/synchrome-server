@@ -27,9 +27,9 @@ class CreateScanLogsTable extends Migration
             $table->foreign('absence_type_id')
                 ->references('id')->on('absence_types');
             $table->boolean('status')->default(false);
-            $table->unsignedInteger('early_by')->nullable();
-            $table->unsignedInteger('late_by')->nullable();
+            $table->unsignedInteger('workshift_work_duration');
             $table->unsignedInteger('work_duration')->nullable();
+            $table->unsignedInteger('off_duration')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });
