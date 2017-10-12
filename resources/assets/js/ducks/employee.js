@@ -3,13 +3,26 @@ import http from '../services/http';
 import { echelonActions } from './echelon';
 
 // Types
-const FETCH_EMPLOYEE_ALL_REQUEST = 'synchrome/employee/fetch_employee_all_request';
-const FETCH_EMPLOYEE_ALL_SUCCESS = 'synchrome/employee/fetch_employee_all_success';
-const FETCH_EMPLOYEE_ALL_FAILURE = 'synchrome/employee/fetch_employee_all_failure';
+const FETCH_EMPLOYEE_ALL_REQUEST =
+  'synchrome/employee/fetch_employee_all_request';
+const FETCH_EMPLOYEE_ALL_SUCCESS =
+  'synchrome/employee/fetch_employee_all_success';
+const FETCH_EMPLOYEE_ALL_FAILURE =
+  'synchrome/employee/fetch_employee_all_failure';
 
-const FETCH_EMPLOYEE_BYID_REQUEST = 'synchrome/employee/fetch_employee_byid_request';
-const FETCH_EMPLOYEE_BYID_SUCCESS = 'synchrome/employee/fetch_employee_byid_success';
-const FETCH_EMPLOYEE_BYID_FAILURE = 'synchrome/employee/fetch_employee_byid_failure';
+const FETCH_EMPLOYEE_BYID_REQUEST =
+  'synchrome/employee/fetch_employee_byid_request';
+const FETCH_EMPLOYEE_BYID_SUCCESS =
+  'synchrome/employee/fetch_employee_byid_success';
+const FETCH_EMPLOYEE_BYID_FAILURE =
+  'synchrome/employee/fetch_employee_byid_failure';
+
+const FETCH_EMPLOYEE_BYAGENCY_REQUEST =
+  'synchrome/employee/fetch_employee_byagency_request';
+const FETCH_EMPLOYEE_BYAGENCY_SUCCESS =
+  'synchrome/employee/fetch_employee_byagency_success';
+const FETCH_EMPLOYEE_BYAGENCY_FAILURE =
+  'synchrome/employee/fetch_employee_byagency_failure';
 
 const POST_EMPLOYEE_REQUEST = 'synchrome/employee/post_employee_request';
 const POST_EMPLOYEE_SUCCESS = 'synchrome/employee/post_employee_success';
@@ -64,7 +77,10 @@ export const employeeTypes = {
   FETCH_RELIGION_SUCCESS,
   FETCH_RANK_REQUEST,
   FETCH_RANK_FAILURE,
-  FETCH_RANK_SUCCESS
+  FETCH_RANK_SUCCESS,
+  FETCH_EMPLOYEE_BYAGENCY_REQUEST,
+  FETCH_EMPLOYEE_BYAGENCY_SUCCESS,
+  FETCH_EMPLOYEE_BYAGENCY_FAILURE
 };
 
 // Action Creators
@@ -72,12 +88,12 @@ const fetchEmployeeAllRequest = () => ({
   type: FETCH_EMPLOYEE_ALL_REQUEST
 });
 
-const fetchEmployeeAllSuccess = (payload) => ({
+const fetchEmployeeAllSuccess = payload => ({
   type: FETCH_EMPLOYEE_ALL_SUCCESS,
   payload
 });
 
-const fetchEmployeeAllFailure = (error) => ({
+const fetchEmployeeAllFailure = error => ({
   type: FETCH_EMPLOYEE_ALL_FAILURE,
   error
 });
@@ -86,13 +102,27 @@ const fetchEmployeeByIdRequest = () => ({
   type: FETCH_EMPLOYEE_BYID_REQUEST
 });
 
-const fetchEmployeeByIdSuccess = (payload) => ({
+const fetchEmployeeByIdSuccess = payload => ({
   type: FETCH_EMPLOYEE_BYID_SUCCESS,
   payload
 });
 
-const fetchEmployeeByIdFailure = (error) => ({
+const fetchEmployeeByIdFailure = error => ({
   type: FETCH_EMPLOYEE_BYID_FAILURE,
+  error
+});
+
+const fetchEmployeeByAgencyRequest = () => ({
+  type: FETCH_EMPLOYEE_BYAGENCY_REQUEST
+});
+
+const fetchEmployeeByAgencySuccess = payload => ({
+  type: FETCH_EMPLOYEE_BYAGENCY_SUCCESS,
+  payload
+});
+
+const fetchEmployeeByAgencyFailure = error => ({
+  type: FETCH_EMPLOYEE_BYAGENCY_FAILURE,
   error
 });
 
@@ -180,7 +210,6 @@ const fetchRankFailure = payload => ({
   payload
 });
 
-
 const clearSelectedEchelon = () => ({
   type: CLEAR_SELECTED_ECHELON
 });
@@ -189,73 +218,79 @@ const clearActiveEmployee = () => ({
   type: CLEAR_ACTIVE_EMPLOYEE
 });
 
-const fetchAllEmployee = () => (
-  (dispatch) => {
-    dispatch(fetchEmployeeAllRequest());
+const fetchAllEmployee = () => dispatch => {
+  dispatch(fetchEmployeeAllRequest());
 
-    const success = (res) => {
-      dispatch(fetchEmployeeAllSuccess(res.data.data));
-    };
+  const success = res => {
+    dispatch(fetchEmployeeAllSuccess(res.data.data));
+  };
 
-    const error = (err) => {
-      dispatch(fetchEmployeeAllFailure(err.message));
-    };
+  const error = err => {
+    dispatch(fetchEmployeeAllFailure(err.message));
+  };
 
-    http.get('/employee', success, error);
-  }
-);
+  http.get('/employee', success, error);
+};
 
-const fetchAllReligion = () => (
-  (dispatch) => {
-    dispatch(fetchReligionRequest());
+const fetchAllReligion = () => dispatch => {
+  dispatch(fetchReligionRequest());
 
-    const success = (res) => {
-      dispatch(fetchReligionSuccess(res.data.data));
-    };
+  const success = res => {
+    dispatch(fetchReligionSuccess(res.data.data));
+  };
 
-    const error = (err) => {
-      dispatch(fetchReligionFailure(err.message));
-    };
+  const error = err => {
+    dispatch(fetchReligionFailure(err.message));
+  };
 
-    http.get('/religion', success, error);
-  }
-);
+  http.get('/religion', success, error);
+};
 
-const fetchAllRank = () => (
-  (dispatch) => {
-    dispatch(fetchRankRequest());
+const fetchAllRank = () => dispatch => {
+  dispatch(fetchRankRequest());
 
-    const success = (res) => {
-      dispatch(fetchRankSuccess(res.data.data));
-    };
+  const success = res => {
+    dispatch(fetchRankSuccess(res.data.data));
+  };
 
-    const error = (err) => {
-      dispatch(fetchRankFailure(err.message));
-    };
+  const error = err => {
+    dispatch(fetchRankFailure(err.message));
+  };
 
-    http.get('employee/ranks', success, error);
-  }
-);
+  http.get('employee/ranks', success, error);
+};
 
-const fetchEmployeeById = (id) => (
-  (dispatch) => {
-    dispatch(fetchEmployeeByIdRequest());
+const fetchEmployeeById = id => dispatch => {
+  dispatch(fetchEmployeeByIdRequest());
 
-    const success = (res) => {
-      dispatch(fetchEmployeeByIdSuccess(res.data.data));
-    };
+  const success = res => {
+    dispatch(fetchEmployeeByIdSuccess(res.data.data));
+  };
 
-    const error = (err) => {
-      dispatch(fetchEmployeeByIdFailure(err.message));
-    };
+  const error = err => {
+    dispatch(fetchEmployeeByIdFailure(err.message));
+  };
 
-    http.get(`/employee/${id}`, success, error);
-  }
-);
+  http.get(`/employee/${id}`, success, error);
+};
 
-const postEmployee = (data) => {
+const fetchEmployeeByAgency = agencyId => dispatch => {
+  dispatch(fetchEmployeeByAgencyRequest());
+
+  const success = res => {
+    dispatch(fetchEmployeeByAgencySuccess(res.data.data));
+  };
+
+  const error = err => {
+    dispatch(fetchEmployeeByAgencyFailure(err.message));
+  };
+
+  http.get(`/employee?agency_id=${agencyId}`, success, error);
+};
+
+const postEmployee = data => {
   // MANIPULATE data HERE IF YOU WANT TO
-  return (dispatch) => {
+  return dispatch => {
     dispatch(postEmployeeRequest());
 
     const success = res => {
@@ -267,18 +302,16 @@ const postEmployee = (data) => {
       dispatch(postEmployeeFailure(err.message));
     };
 
-
     http.post('/employee', data, success, error);
   };
 };
 
-const patchEmployee = (id, data) => (
+const patchEmployee = (id, data) =>
   // MANIPULATE data HERE IF YOU WANT TO
-  (dispatch) => {
+  dispatch => {
     dispatch(patchEmployeeRequest());
 
     const success = res => {
-      console.log(res);
       dispatch(push('/panel/employees'));
       dispatch(patchEmployeeSuccess(res.data.data));
       dispatch(clearActiveEmployee());
@@ -290,41 +323,36 @@ const patchEmployee = (id, data) => (
     };
 
     http.patch(`/employee/${id}`, data, success, error);
-  }
-);
+  };
 
-const deleteEmployee = id => (
-  dispatch => {
-    dispatch(deleteEmployeeRequest());
+const deleteEmployee = id => dispatch => {
+  dispatch(deleteEmployeeRequest());
 
-    const success = res => {
-      dispatch(deleteEmployeeSuccess(res.data.data));
-      dispatch(fetchAllEmployee());
-    };
+  const success = res => {
+    dispatch(deleteEmployeeSuccess(res.data.data));
+    dispatch(fetchAllEmployee());
+  };
 
-    const error = err => {
-      dispatch(deleteEmployeeFailure(err.message));
-    };
+  const error = err => {
+    dispatch(deleteEmployeeFailure(err.message));
+  };
 
-    http.delete(`/employee/${id}`, success, error);
-  }
-);
+  http.delete(`/employee/${id}`, success, error);
+};
 
-const fetchWorkshift = () => (
-  dispatch => {
-    dispatch(fetchWorkshiftRequest());
+const fetchWorkshift = () => dispatch => {
+  dispatch(fetchWorkshiftRequest());
 
-    const success = res => {
-      dispatch(fetchWorkshiftSuccess(res.data.data));
-    };
+  const success = res => {
+    dispatch(fetchWorkshiftSuccess(res.data.data));
+  };
 
-    const error = err => {
-      dispatch(fetchWorkshiftFailure(err.message));
-    };
+  const error = err => {
+    dispatch(fetchWorkshiftFailure(err.message));
+  };
 
-    http.get('/employee/workshifts', success, error);
-  }
-);
+  http.get('/employee/workshifts', success, error);
+};
 
 export const employeeActions = {
   fetchAllEmployee,
@@ -336,7 +364,8 @@ export const employeeActions = {
   clearActiveEmployee,
   clearSelectedEchelon,
   fetchAllReligion,
-  fetchAllRank
+  fetchAllRank,
+  fetchEmployeeByAgency
 };
 
 // Reducer
@@ -427,6 +456,16 @@ const employeeReducer = (state = initialState, action) => {
         ranks: action.payload
       };
     case FETCH_RANK_FAILURE:
+      return {
+        ...state,
+        error: action.payload
+      };
+    case FETCH_EMPLOYEE_BYAGENCY_SUCCESS:
+      return {
+        ...state,
+        data: action.payload
+      };
+    case FETCH_EMPLOYEE_BYAGENCY_FAILURE:
       return {
         ...state,
         error: action.payload
