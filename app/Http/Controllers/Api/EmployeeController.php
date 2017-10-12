@@ -125,6 +125,9 @@ class EmployeeController extends Controller
             'calendar' => function ($query) {
                 $query->select(['id', 'name']);
             },
+            'rank' => function ($query) {
+                $query->select(['id', 'name']);
+            },
             'templates',
         ])->find($id);
 
