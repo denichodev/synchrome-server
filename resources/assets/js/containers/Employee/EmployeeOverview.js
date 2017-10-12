@@ -3,6 +3,7 @@ import matchSorter from 'match-sorter';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { employeeActions } from '../../ducks/employee';
+import { agencyActions } from '../../ducks/agency';
 import { FilterableTable, ActionCell } from '../../components/DataTable';
 
 class EmployeeOverview extends Component {
@@ -45,9 +46,27 @@ class EmployeeOverview extends Component {
   }
 
   componentDidMount() {
-    const { fetchAllEmployee } = this.props;
+    const { fetchAllAgency } = this.props;
 
-    fetchAllEmployee();
+    fetchAllAgency();
+  }
+
+  getAgencyData = () => {
+    const { agencyData } = this.props;
+
+    const data = agencyData.map(agency => {
+      return {
+        value: agency.id,
+        label: agency.name
+      };
+    });
+
+    data.unshift({
+      value: null,
+      label: 'Choose Agency'
+    });
+
+    return data;
   }
 
   getEmployeeData = () => {
@@ -68,13 +87,28 @@ class EmployeeOverview extends Component {
     deleteEmployee(id);
   };
 
+  handleAgencyChange = event => {
+    const { fetchEmployeeByAgency } = this.props;
+    fetchEmployeeByAgency(event.target.value);
+  }
+
   render() {
+    const { agencyData } = this.props;
+
     return (
       <div className="box">
         <div className="box-header">
           <h3 className="box-title">Employees</h3>
         </div>
         <div className="box-body">
+          <div className="form-group pull-left">
+            <select className="form-control" onChange={this.handleAgencyChange}>
+              <option value="" disabled selected>Choose Agency</option>
+              {agencyData.map(agency => (
+                <option key={agency.id} value={agency.id}>{agency.name}</option>
+              ))}
+            </select>
+          </div>
           <div className="form-group pull-right">
             <Link className="btn btn-primary" to="/panel/employees/add-new">
               Add New Employee
@@ -93,13 +127,16 @@ class EmployeeOverview extends Component {
 }
 
 const mapStateToProps = state => ({
+  agencyData: state.agency.data,
   employeeData: state.employee.data,
   employeeError: state.employee.error
 });
 
 const mapDispatchToProps = dispatch => ({
+  fetchAllAgency: () => dispatch(agencyActions.fetchAllAgency()),
   fetchAllEmployee: () => dispatch(employeeActions.fetchAllEmployee()),
   fetchEmployeeById: id => dispatch(employeeActions.fetchEmployeeById(id)),
+  fetchEmployeeByAgency: id => dispatch(employeeActions.fetchEmployeeByAgency(id)),
   deleteEmployee: id => dispatch(employeeActions.deleteEmployee(id))
 });
 

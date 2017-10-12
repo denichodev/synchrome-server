@@ -11,6 +11,10 @@ const FETCH_EMPLOYEE_BYID_REQUEST = 'synchrome/employee/fetch_employee_byid_requ
 const FETCH_EMPLOYEE_BYID_SUCCESS = 'synchrome/employee/fetch_employee_byid_success';
 const FETCH_EMPLOYEE_BYID_FAILURE = 'synchrome/employee/fetch_employee_byid_failure';
 
+const FETCH_EMPLOYEE_BYAGENCY_REQUEST = 'synchrome/employee/fetch_employee_byagency_request';
+const FETCH_EMPLOYEE_BYAGENCY_SUCCESS = 'synchrome/employee/fetch_employee_byagency_success';
+const FETCH_EMPLOYEE_BYAGENCY_FAILURE = 'synchrome/employee/fetch_employee_byagency_failure';
+
 const POST_EMPLOYEE_REQUEST = 'synchrome/employee/post_employee_request';
 const POST_EMPLOYEE_SUCCESS = 'synchrome/employee/post_employee_success';
 const POST_EMPLOYEE_FAILURE = 'synchrome/employee/post_employee_failure';
@@ -45,6 +49,9 @@ export const employeeTypes = {
   FETCH_EMPLOYEE_BYID_REQUEST,
   FETCH_EMPLOYEE_BYID_SUCCESS,
   FETCH_EMPLOYEE_BYID_FAILURE,
+  FETCH_EMPLOYEE_BYAGENCY_REQUEST,
+  FETCH_EMPLOYEE_BYAGENCY_SUCCESS,
+  FETCH_EMPLOYEE_BYAGENCY_FAILURE,
   POST_EMPLOYEE_REQUEST,
   POST_EMPLOYEE_SUCCESS,
   POST_EMPLOYEE_FAILURE,
@@ -93,6 +100,20 @@ const fetchEmployeeByIdSuccess = (payload) => ({
 
 const fetchEmployeeByIdFailure = (error) => ({
   type: FETCH_EMPLOYEE_BYID_FAILURE,
+  error
+});
+
+const fetchEmployeeByAgencyRequest = () => ({
+  type: FETCH_EMPLOYEE_BYAGENCY_REQUEST
+});
+
+const fetchEmployeeByAgencySuccess = (payload) => ({
+  type: FETCH_EMPLOYEE_BYAGENCY_SUCCESS,
+  payload
+});
+
+const fetchEmployeeByAgencyFailure = (error) => ({
+  type: FETCH_EMPLOYEE_BYAGENCY_FAILURE,
   error
 });
 
@@ -253,6 +274,22 @@ const fetchEmployeeById = (id) => (
   }
 );
 
+const fetchEmployeeByAgency = id => (
+  dispatch => {
+    dispatch(fetchEmployeeByAgencyRequest());
+
+    const success = res => {
+      dispatch(fetchEmployeeByAgencySuccess(res.data.data));
+    };
+
+    const error = err => {
+      dispatch(fetchEmployeeByAgencyFailure(err.message));
+    };
+
+    http.get(`/employee?agency_id=${id}`, success, error);
+  }
+);
+
 const postEmployee = (data) => {
   // MANIPULATE data HERE IF YOU WANT TO
   return (dispatch) => {
@@ -329,6 +366,7 @@ const fetchWorkshift = () => (
 export const employeeActions = {
   fetchAllEmployee,
   fetchEmployeeById,
+  fetchEmployeeByAgency,
   postEmployee,
   deleteEmployee,
   fetchWorkshift,
@@ -402,6 +440,16 @@ const employeeReducer = (state = initialState, action) => {
         active: action.payload
       };
     case FETCH_EMPLOYEE_BYID_FAILURE:
+      return {
+        ...state,
+        error: action.payload
+      };
+    case FETCH_EMPLOYEE_BYAGENCY_SUCCESS:
+      return {
+        ...state,
+        data: action.payload
+      };
+    case FETCH_EMPLOYEE_BYAGENCY_FAILURE:
       return {
         ...state,
         error: action.payload
