@@ -136,8 +136,6 @@ class EmployeeController extends Controller
                 ], 404);
         }
 
-        $employee->rank = $employee->currentRank();
-
         return response()
             ->json([
                 'result' => 'success',
