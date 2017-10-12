@@ -19,7 +19,8 @@ class Importer
         'address' => 'Test',
         'phone' => '082333444555',
         'allowance_id' => 'E4B3',
-        'calendar_id' => 4
+        'calendar_id' => 1,
+        'rank_id' => '1A'
     ];
 
     protected $selected_columns = [
@@ -56,7 +57,8 @@ class Importer
                                 'phone' => $this->defaults['phone'],
                                 'allowance_id' => $this->defaults['allowance_id'],
                                 'calendar_id' => $this->defaults['calendar_id'],
-                                'gender' => ! empty($data->KDJENKEL) ? $this->gender($data->KDJENKEL) : 'm'
+                                'gender' => ! empty($data->KDJENKEL) ? $this->gender($data->KDJENKEL) : 'm',
+                                'rank_id' => $this->defaults['rank_id']
                             ]);
                             echo "Employee $employee->id created" . PHP_EOL;
                         }
